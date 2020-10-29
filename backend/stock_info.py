@@ -4,49 +4,64 @@
 
 import requests as rq
 import config as cfg
-from bs4 import BeautifulSoup as bsp
+import pandas as pd
+from bs4 import BeautifulSoup as bs
 
-# ** Description:
+# ** Description **:
 # Requests the TD Ameritrade Quotes API for the stock's attributes that will
 # eventually be displayed to the user on the frontend and returns a dictionary
 # with each attribute and its corresponding value.  These attributes are
 # the stock's: Symbol, Name, Current Market Value, Exchange, Asset Type,
 # Volume, Dividend (Amt, yield, next date), and Value Change in both decimal and percent
 #
-# ** Prequesites:
+# ** Prequesites **:
 # sym is a symbol 1 to 5 characters A-Z case-insensitive but not necessarily an
-# exisiting market symbol (this is handled within this method)
+# exisiting market symbol
 #
-# ** Returns:
-# dict of {attribute: value}
+# ** Returns **:
+# dict of {attribute: value} of string attributes and various value types
 def getBySymbol(sym):
+    # TODO: Reduce/specify attributes for when sym is an index
     sym = sym.upper()
     url = r"https://api.tdameritrade.com/v1/marketdata/{}/quotes".format(sym)
     params = {"apikey": cfg.apikey}
     content = rq.get(url, params).json()
     data = {}
 
-    for attr in cfg.infoAttrs:
-        data[attr] = content.get(sym).get(attr)
+    if len(content) == 0:
+        return None
+    else:
+        for attr in cfg.infoAttrs:
+            data[attr] = content.get(sym).get(attr)
 
-    return data
+        return data
 
-# ** Description:
+# ** Description **:
 # Searching by stock name requires a symbol lookup on an exchange's symbol
-# list via a GET Request to each exchange's website until a match is found.
-# This function scrapes (in order, until found) the symbol-company name listing
-# of the NYSE, NASDAQ, and AMEX.  After finding the symbol match, it then
-# returns getBySymbol(symbol) in order to avoid redundant code.  This data
-# is sourced from http://www.advfn.com.
+# list via a GET Request to TD Ameritrade's symbol lookup page with
+# appropriate url parameters to generate a table of all stock names containing
+# name.  If there is only one table entrym then this function returns the
+# result of getBySymbol(symbol).  Otherwise, it will return a dictionary of
+# all search results with symbol keys and stock name values.
 #
-# ** Prequesites:
+# ** Prequesites **:
 # name is a case-insenstive string containing a potentially matchable stock
 # name with or withouth whitespace (this will be trimmed)
 #
-# ** Returns:
-# dict of {atrribute: value}
+# ** Returns **:
+# dict of {atrribute: value} or dict of {symbol: stock name}
 def getByName(name):
-    symbol = ""
-    return getBySymbol(symbol)
+    url = r"https://research.tdameritrade.com/grid/public/symbollookup/symbollookup.asp?text={}".format(name)
+    req = rq.get(url)
+    root = bs(req.content, "lxml")
+    html = root.find_all(class_ = "dataBackground")
 
-print(getBySymbol("TSLA"))
+    if len(html) == 0:
+        return None
+    else:
+        df = pd.read_html(str(html[0]))[0]
+        
+        if len(df) == 1:
+            return getBySymbol(df.iloc[0]["Symbol"])
+        else:
+            return df
