@@ -12,9 +12,10 @@ from bs4 import BeautifulSoup as bs
 # eventually be displayed to the user on the frontend and returns a dictionary
 # with each attribute and its corresponding value.  These attributes are
 # the stock's: Symbol, Name, Current Market Value, Exchange, Asset Type,
-# Volume, Dividend (Amt, yield, next date), and Value Change in both decimal and percent
+# Volume, Dividend (Amt, yield, next date), and Value Change in both decimal
+# and percent
 #
-# ** Prequesites **:
+# ** Parameters **:
 # sym is a symbol 1 to 5 characters A-Z case-insensitive but not necessarily an
 # exisiting market symbol
 #
@@ -44,7 +45,7 @@ def getBySymbol(sym):
 # result of getBySymbol(symbol).  Otherwise, it will return a dictionary of
 # all search results with symbol keys and stock name values.
 #
-# ** Prequesites **:
+# ** Parameters **:
 # name is a case-insenstive string containing a potentially matchable stock
 # name with or withouth whitespace (this will be trimmed)
 #

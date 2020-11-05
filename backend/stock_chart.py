@@ -6,8 +6,6 @@
 
 import requests as rq
 import config as cfg
-import pandas as pd
-import datetime as dt
 
 # This code based off of using canvas.js in front end later, do documentation
 # for this method after deciding.  Data will be formatted in a way to make
