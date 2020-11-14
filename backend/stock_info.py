@@ -66,3 +66,4 @@ def getByName(name):
             return getBySymbol(df.iloc[0]["Symbol"])
         else:
             return df
+print(getByName("LKNCY"))
