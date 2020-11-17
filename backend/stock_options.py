@@ -6,9 +6,9 @@
 # and more streamlined for the front-end to read and display.
 
 import requests as rq
-import config as cfg
 import pandas as pd
 import json as js 
+from backend import bd_config as cfg
 
 def getOptionChain(sym, conType, numStrikes, hasQuotes, strike, rng, expFrom,
                    expTo, expMonth, optType):
@@ -63,5 +63,5 @@ def getOptionChain(sym, conType, numStrikes, hasQuotes, strike, rng, expFrom,
     return info
 
 
-getOptionChain("TSLA", "ALL", 10, "FALSE", None, "ALL", None, None, "NOV", "ALL")
+#getOptionChain("TSLA", "ALL", 10, "FALSE", None, "ALL", None, None, "NOV", "ALL")
 

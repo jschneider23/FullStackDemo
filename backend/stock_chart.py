@@ -5,7 +5,7 @@
 # canvas.js.
 
 import requests as rq
-import config as cfg
+from backend import bd_config as cfg
 
 # This code based off of using canvas.js in front end later, do documentation
 # for this method after deciding.  Data will be formatted in a way to make
@@ -59,5 +59,3 @@ def newGraph(sym, timeOption = "10d", hasExtHrs = True):
                 "dataPoints": dataPoints
             }]}
     return info
-
-print(newGraph("TSLA"))

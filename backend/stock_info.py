@@ -3,8 +3,8 @@
 # used in other areas of the app based on a given symbol or stock name.
 
 import requests as rq
-import config as cfg
 import pandas as pd
+from backend import bd_config as cfg
 from bs4 import BeautifulSoup as bs
 
 # ** Description **:
@@ -66,4 +66,3 @@ def getByName(name):
             return getBySymbol(df.iloc[0]["Symbol"])
         else:
             return df
-print(getByName("LKNCY"))

@@ -4,8 +4,8 @@
 # be accessed and manipulated when displaying to the front-end.
 
 import requests as rq
-import config as cfg
 import pandas as pd
+from backend import bd_config as cfg
 
 # ** Description **:
 # Requests TD Ameritrade's Movers API to retrieve mover information based on
