@@ -5,7 +5,37 @@
 {% endblock %}
 
 {% block body %}
-<h1>Market at a glance...</h1>
-<i>Last updated at *time goes here</i>
-{{ data }}
+<h2>Market at a glance...</h2>
+<div class="row">
+    <div class="col-sm-4">
+        <div class="card bg-light text-dark">
+            <h5 class="card-header">$DJI</h5>
+            <div class="card-body">
+                <h5 class="card-title">Dow Jones Industrial Average</h5>
+                <p class="card-text">{{context.DJI}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="card bg-light text-dark">
+            <h5 class="card-header">$SPX.X</h5>
+            <div class="card-body">
+                <h5 class="card-title">S&P 500</h5>
+                <p class="card-text">{{context.SPXX}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="card bg-light text-dark">
+            <h5 class="card-header">$COMPX</h5>
+            <div class="card-body">
+                <h5 class="card-title">NASDAQ Composite</h5>
+                <p class="card-text">{{context.COMPX}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+<i id="test">Last Updated... *time here*</i>
+<hr>
+<h1>Search goes here</h1>
 {% endblock %}

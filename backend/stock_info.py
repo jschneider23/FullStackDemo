@@ -21,7 +21,7 @@ from bs4 import BeautifulSoup as bs
 #
 # ** Returns **:
 # dict of {attribute: value} of string attributes and various value types
-def getBySymbol(sym):
+def getBySymbol(sym, symType = ""):
     # TODO: Reduce/specify attributes for when sym is an index
     sym = sym.upper()
     url = r"https://api.tdameritrade.com/v1/marketdata/{}/quotes".format(sym)
@@ -32,9 +32,15 @@ def getBySymbol(sym):
     if len(content) == 0:
         return None
     else:
-        for attr in cfg.infoAttrs:
-            data[attr] = content.get(sym).get(attr)
-
+        if symType == "indexCard":
+            for attr in cfg.cardAttrs:
+                data[attr] = content.get(sym).get(attr)
+        elif symType == "indexFull":
+            for attr in cfg.indexAttrs:
+                data[attr] = content.get(sym).get(attr)
+        else:
+            for attr in cfg.infoAttrs:
+                data[attr] = content.get(sym).get(attr)
         return data
 
 # ** Description **:

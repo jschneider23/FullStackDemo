@@ -1,7 +1,15 @@
 # Defines the apikey used to interact with registered TD Ameritrade App
 apikey = "RMSSTUCHMW9W04BBKRM7EMIP9OGFVYAE"
 
-# Defines the attributes retrieved in stock_info.py functions
+# Defines the attributes retrieved in getBySymbol() for an index card
+cardAttrs = ["lastPrice", "closePrice", "netChange", 
+             "netPercentChangeInDouble"]
+
+# Defines the ttributes retrieved in getBySymbol() for an index in full
+indexAttrs = ["symbol", "description", "lastPrice", "openPrice", "lowPrice",
+              "closePrice", "netChange", "netPercentChangeInDouble"]
+
+# Defines the attributes retrieved in getBySymbol() if it is not an index
 infoAttrs = ["symbol", "description", "mark", "exchangeName", "assetType",
              "totalVolume", "divAmount", "divYield", "divDate", "netChange",
              "netPercentChangeInDouble"]

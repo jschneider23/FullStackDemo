@@ -1,12 +1,15 @@
 from flask import Flask, render_template
 from backend import stock_info, stock_chart, stock_movers, stock_options
+import html_generator as hg
 
 app = Flask(__name__)
 
 @app.route("/")
 def home():
-    data = stock_movers.getMovers("$DJI", "up", "percent")
-    return render_template("home.html", data = data)
+    context = {"DJI": hg.htmlIndexCard("$DJI"),
+               "SPXX": hg.htmlIndexCard("$SPX.X"),
+               "COMPX": hg.htmlIndexCard("$COMPX")}
+    return render_template("home.html", context = context)
 
 @app.route("/options")
 def options():
