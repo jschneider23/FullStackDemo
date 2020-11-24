@@ -1,18 +1,27 @@
 {% extends 'base_layout.html' %}
 
 {% block head %}
-
+<script>
+    function test() {
+        document.getElementById("DJI").innerHTML = "test"
+    }
+    //window.onload = test
+</script>
 {% endblock %}
 
 {% block body %}
-<h2>Market at a glance...</h2>
-<div class="row">
+<h1 class="text-center">Markets at a Glance...</h1>
+<div class="row text-center" style="padding-bottom: 15px">
     <div class="col-sm-4">
         <div class="card bg-light text-dark">
             <h5 class="card-header">$DJI</h5>
             <div class="card-body">
-                <h5 class="card-title">Dow Jones Industrial Average</h5>
-                <p class="card-text">{{context.DJI}}</p>
+                <h4 class="card-title">Dow Jones Industrial Average</h4>
+                <p class="card-text" id="DJI">{{context.DJI}}</p>
+            </div>
+            <div class="card-footer">
+                <a href="#" class="btn btn-dark">More info (todo)</a>
+                <a href="#" class="btn btn-dark">Manual Refresh(todo)</a>
             </div>
         </div>
     </div>
@@ -20,8 +29,12 @@
         <div class="card bg-light text-dark">
             <h5 class="card-header">$SPX.X</h5>
             <div class="card-body">
-                <h5 class="card-title">S&P 500</h5>
-                <p class="card-text">{{context.SPXX}}</p>
+                <h4 class="card-title">S&P 500</h4>
+                <p class="card-text" id="SPXX">{{context.SPXX}}</p>
+            </div>
+            <div class="card-footer">
+                <a href="#" class="btn btn-dark">More info (todo)</a>
+                <a href="#" class="btn btn-dark">Manual Refresh(todo)</a>
             </div>
         </div>
     </div>
@@ -29,13 +42,22 @@
         <div class="card bg-light text-dark">
             <h5 class="card-header">$COMPX</h5>
             <div class="card-body">
-                <h5 class="card-title">NASDAQ Composite</h5>
-                <p class="card-text">{{context.COMPX}}</p>
+                <h4 class="card-title">NASDAQ Composite</h4>
+                <p class="card-text" id="COMPX">{{context.COMPX}}</p>
+            </div>
+            <div class="card-footer">
+                <a href="#" class="btn btn-dark">More info (todo)</a>
+                <a href="#" class="btn btn-dark">Manual Refresh(todo)</a>
             </div>
         </div>
     </div>
 </div>
-<i id="test">Last Updated... *time here*</i>
+<p class="text-center text-muted"><i>Auto-refreshes every 10 seconds</i></p>
 <hr>
-<h1>Search goes here</h1>
+<h1 class="text-center">Stock Quote & Information Lookup</h1>
+<form class="form-inline" onsubmit="test()">
+    <label for="search">Search:</label>
+    <input type="text" class="form-control form-control-lg" placeholder="example" id="search">
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
 {% endblock %}
