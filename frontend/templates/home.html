@@ -1,53 +1,35 @@
 {% extends 'base_layout.html' %}
 
 {% block head %}
-<script>
-    function test() {
-        document.getElementById("DJI").innerHTML = "test"
-    }
-    //window.onload = test
-</script>
 {% endblock %}
 
 {% block body %}
-<h1 class="text-center">Markets at a Glance...</h1>
+<h1 class="text-center">Markets at a Glance</h1>
 <div class="row text-center" style="padding-bottom: 15px">
     <div class="col-sm-4">
-        <div class="card bg-light text-dark">
+        <div class="card {{context.clrDJI}} text-white">
             <h5 class="card-header">$DJI</h5>
             <div class="card-body">
                 <h4 class="card-title">Dow Jones Industrial Average</h4>
                 <p class="card-text" id="DJI">{{context.DJI}}</p>
             </div>
-            <div class="card-footer">
-                <a href="#" class="btn btn-dark">More info (todo)</a>
-                <a href="#" class="btn btn-dark">Manual Refresh(todo)</a>
-            </div>
         </div>
     </div>
     <div class="col-sm-4">
-        <div class="card bg-light text-dark">
+        <div class="card {{context.clrSPXX}} text-white">
             <h5 class="card-header">$SPX.X</h5>
             <div class="card-body">
                 <h4 class="card-title">S&P 500</h4>
                 <p class="card-text" id="SPXX">{{context.SPXX}}</p>
             </div>
-            <div class="card-footer">
-                <a href="#" class="btn btn-dark">More info (todo)</a>
-                <a href="#" class="btn btn-dark">Manual Refresh(todo)</a>
-            </div>
         </div>
     </div>
     <div class="col-sm-4">
-        <div class="card bg-light text-dark">
+        <div class="card {{context.clrCOMPX}} text-white">
             <h5 class="card-header">$COMPX</h5>
             <div class="card-body">
                 <h4 class="card-title">NASDAQ Composite</h4>
                 <p class="card-text" id="COMPX">{{context.COMPX}}</p>
-            </div>
-            <div class="card-footer">
-                <a href="#" class="btn btn-dark">More info (todo)</a>
-                <a href="#" class="btn btn-dark">Manual Refresh(todo)</a>
             </div>
         </div>
     </div>
@@ -55,9 +37,45 @@
 <p class="text-center text-muted"><i>Auto-refreshes every 10 seconds</i></p>
 <hr>
 <h1 class="text-center">Stock Quote & Information Lookup</h1>
-<form class="form-inline" onsubmit="test()">
-    <label for="search">Search:</label>
-    <input type="text" class="form-control form-control-lg" placeholder="example" id="search">
-    <button type="submit" class="btn btn-primary">Search</button>
-</form>
+<div class="row text-center">
+    <div class="col-md-8 offset-md-2">
+        <div class="card bg-light text-dark">
+            <h5 class="card-header">Direct Lookup by Symbol or Search TD's Database by Name</h5>
+            <div class="card-body">
+                <form method="post" onsubmit="{{url_for('home')}}">
+                    <input type="text" class="form-control form-control-lg" placeholder="Direct Ex: TSLA | Name Search Ex: Tesla or Tesla, Inc. - Common Stock" id="search" name="search"required><br>
+                    <button type="submit" class="btn btn-primary w-25">Search</button>
+                    <button type="reset" class="btn btn-primary w-25">Clear</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="viewStock" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">{{context.modalTitle}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {{context.modalBody}}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+{{context.modalScript}}
+<script>
+    function test() {
+        var loc = "/viewStock/" + document.getElementById("search").value
+        window.location.href = loc
+    }
+    //window.onload = test
+</script>
 {% endblock %}
