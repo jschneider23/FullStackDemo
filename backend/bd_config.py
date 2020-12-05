@@ -5,14 +5,36 @@ apikey = "RMSSTUCHMW9W04BBKRM7EMIP9OGFVYAE"
 cardAttrs = ["lastPrice", "closePrice", "netChange", 
              "netPercentChangeInDouble"]
 
-# Defines the ttributes retrieved in getBySymbol() for an index in full
-indexAttrs = ["symbol", "description", "lastPrice", "openPrice", "lowPrice",
-              "closePrice", "netChange", "netPercentChangeInDouble"]
+# Defines the attributes retrieved in getBySymbol() for an index in full
+indexAttrs = ["symbol", "description", "lastPrice", "netChange",
+              "netPercentChangeInDouble", "openPrice", "lowPrice",
+              "highPrice", "closePrice"]
 
 # Defines the attributes retrieved in getBySymbol() if it is not an index
-infoAttrs = ["symbol", "description", "mark", "exchangeName", "assetType",
-             "totalVolume", "divAmount", "divYield", "divDate", "netChange",
-             "netPercentChangeInDouble"]
+infoAttrs = ["symbol", "description", "mark", "netChange",
+             "netPercentChangeInDouble", "exchangeName", "assetType",
+             "totalVolume", "divAmount", "divYield", "divDate"]
+
+# Dictionary that maps the TD API attribute names to readable english form
+engAttrs = {
+    "lastPrice": "Last",
+    "closePrice": "Close",
+    "netChange": "Day Change (Value)",
+    "netPercentChangeInDouble": "Day Change (%)",
+    "symbol": "Symbol",
+    "description": "Name",
+    "openPrice": "Open",
+    "lowPrice": "Low",
+    "highPrice": "High",
+    "mark": "Market Price",
+    "exchangeName": "Exchange",
+    "assetType": "Stock Type",
+    "totalVolume": "Volume",
+    "divAmount": "Dividend $",
+    "divYield": "Dividend Yield",
+    "divDate": "Next Dividend Date"
+}
+
 
 # Defines the mapping of all chart time options (ex. "1y", "3m", "5d" meaning
 # "1 year", "3 month", and "5 day" history respectively) to appropriate

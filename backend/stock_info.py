@@ -47,7 +47,7 @@ def getBySymbol(sym, symType = ""):
 # Searching by stock name requires a symbol lookup on an exchange's symbol
 # list via a GET Request to TD Ameritrade's symbol lookup page with
 # appropriate url parameters to generate a table of all stock names containing
-# name.  If there is only one table entrym then this function returns the
+# name.  If there is only one table entry then this function returns the
 # result of getBySymbol(symbol).  Otherwise, it will return a dictionary of
 # all search results with symbol keys and stock name values.
 #
@@ -72,3 +72,4 @@ def getByName(name):
             return getBySymbol(df.iloc[0]["Symbol"])
         else:
             return df
+print(getByName("schneider"))

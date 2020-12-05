@@ -7,27 +7,34 @@ app = Flask(__name__)
 
 @app.route("/", methods = ["POST", "GET"])
 def home():
-    errorMsg = None
     context = {}
     if request.method == "POST":
-        formInput = request.form["search"]
-        modalScript = flask.Markup("""
-            <script>
-                $('#viewStock').modal('show');
-                console.log($('#viewStock'))
-            </script>
-        """)
-        modalTitle = formInput + " Title"
-        modalBody = formInput + " Data would go here"
-        context.update({"modalScript": modalScript, "modalTitle": modalTitle,
-                        "modalBody": modalBody})
+        formInput = request.form["search"].strip().upper()
+        modal = hg.htmlModalData(formInput)
+        if modal is None:
+            formInput = formInput.capitalize()
+            nameResults = hg.htmlNameResults(formInput)
+            if "h5" not in str(nameResults):
+                context["nameResults"] = nameResults
+            else:
+                errorMsg = f"""
+                    <i>{formInput}</i> doesn't exist as a valid symbol in TD's
+                    Database.  Please enter a valid symbol or search for a
+                    name or name fragment.
+                """
+                context["errorMsg"] = flask.Markup(errorMsg)
+        else:
+            context.update({"modalScript": modal["script"], 
+                            "modalTitle": modal["title"],
+                            "modalQuote": modal["quote"],
+                            "modalChart": modal["chart"],
+                            "modalInfo": modal["info"]})
     tupDJI = hg.htmlIndexCard("$DJI")
     tupSPXX = hg.htmlIndexCard("$SPX.X")
     tupCOMPX = hg.htmlIndexCard("$COMPX")
     context.update({"clrDJI": tupDJI[0], "DJI": tupDJI[1], 
                     "clrSPXX": tupSPXX[0], "SPXX": tupSPXX[1],
                     "clrCOMPX": tupCOMPX[0], "COMPX": tupCOMPX[1]})
-    print("Context: " + str(context))
     return render_template("home.html", context = context)
 
 @app.route("/options")
