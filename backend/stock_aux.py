@@ -1,0 +1,36 @@
+# This file contains auxiliary and helper functions used in the backend to
+# clean up code, increase readability, and improve performance
+
+from backend import bd_config as cfg
+
+# Formats the value of an attribute to have necessary symbols before or after
+# the value, such as $ <value> for money amounts or <value> % for percentages.
+# Also handles rounding and date formatting.
+# This applies to any data on frontend that will use data from one of the two
+# functions above.  Does not apply to movers as this requires extra formatting.
+def attrFormat(sym, attr, value):
+    # Format Datetime into format "Jan 1 2020".  Returns early as no other
+    # formatting is required if the value is for divDate.
+    if attr == "divDate":
+        try:
+            dtObj = dt.datetime.strptime(value, "%Y-%m-%d %H:%M:%S.%f")
+            return dtObj.strftime("%b %d %Y")
+        except:
+            return "N/A (No Dividends)"
+    # Attributes that need rounding (regardless of whether index or stock)
+    if attr in cfg.roundedAttrs:
+        value = round(value, 2) if str(round(value, 2)) != "0.0" else "0.00"
+    # Attributes that need commas added between thousands for readability
+    if attr in cfg.commaAttrs:
+        if "." in str(value):
+            if str(value) != "0.00":
+                value = "{:,}".format(float(value))
+        else:
+            value = "{:,}".format(int(value))
+    # Attributes that need a % afterhand
+    if attr in cfg.percentAttrs:
+        value = f"{value}%"
+    # Attributes that need a $ beforehand
+    if "$" not in sym and attr in cfg.moneyAttrs:
+        value = f"${value}"
+    return value

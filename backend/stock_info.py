@@ -4,9 +4,9 @@
 
 import requests as rq
 import pandas as pd
-from backend import bd_config as cfg
+from backend import bd_config as cfg, stock_aux as aux
 from bs4 import BeautifulSoup as bs
-
+import datetime as dt
 # ** Description **:
 # Requests the TD Ameritrade Quotes API for the stock's attributes that will
 # eventually be displayed to the user on the frontend and returns a dictionary
@@ -24,7 +24,7 @@ from bs4 import BeautifulSoup as bs
 def getBySymbol(sym, symType = ""):
     # TODO: Reduce/specify attributes for when sym is an index
     sym = sym.upper()
-    url = r"https://api.tdameritrade.com/v1/marketdata/{}/quotes".format(sym)
+    url = f"https://api.tdameritrade.com/v1/marketdata/{sym}/quotes"
     params = {"apikey": cfg.apikey}
     content = rq.get(url, params).json()
     data = {}
@@ -34,13 +34,13 @@ def getBySymbol(sym, symType = ""):
     else:
         if symType == "indexCard":
             for attr in cfg.cardAttrs:
-                data[attr] = content.get(sym).get(attr)
+                data[attr] = aux.attrFormat(sym, attr, content[sym][attr])
         elif symType == "indexFull":
             for attr in cfg.indexAttrs:
-                data[attr] = content.get(sym).get(attr)
+                data[attr] = aux.attrFormat(sym, attr, content[sym][attr])
         else:
             for attr in cfg.infoAttrs:
-                data[attr] = content.get(sym).get(attr)
+                data[attr] = aux.attrFormat(sym, attr, content[sym][attr])
         return data
 
 # ** Description **:
@@ -58,7 +58,7 @@ def getBySymbol(sym, symType = ""):
 # ** Returns **:
 # dict of {atrribute: value} or dict of {symbol: stock name}
 def getByName(name):
-    url = r"https://research.tdameritrade.com/grid/public/symbollookup/symbollookup.asp?text={}".format(name)
+    url = f"https://research.tdameritrade.com/grid/public/symbollookup/symbollookup.asp?text={name}"
     req = rq.get(url)
     root = bs(req.content, "lxml")
     html = root.find_all(class_ = "dataBackground")
@@ -72,4 +72,3 @@ def getByName(name):
             return getBySymbol(df.iloc[0]["Symbol"])
         else:
             return df
-print(getByName("schneider"))

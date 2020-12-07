@@ -14,13 +14,14 @@ def home():
         if modal is None:
             formInput = formInput.capitalize()
             nameResults = hg.htmlNameResults(formInput)
-            if "h5" not in str(nameResults):
+            if nameResults is not None:
                 context["nameResults"] = nameResults
             else:
                 errorMsg = f"""
-                    <i>{formInput}</i> doesn't exist as a valid symbol in TD's
-                    Database.  Please enter a valid symbol or search for a
-                    name or name fragment.
+                    \"<i>{formInput.upper()}</i>\" doesn't exist as a valid
+                    symbol, name, or name fragment matching a symbol in TD's
+                    Database.  Please enter a valid symbol, name, or name
+                    fragment.
                 """
                 context["errorMsg"] = flask.Markup(errorMsg)
         else:

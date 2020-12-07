@@ -15,6 +15,23 @@ infoAttrs = ["symbol", "description", "mark", "netChange",
              "netPercentChangeInDouble", "exchangeName", "assetType",
              "totalVolume", "divAmount", "divYield", "divDate"]
 
+# Defines the attributes that need to be rounded in attrFormat()
+roundedAttrs = ["lastPrice", "closePrice", "netChange",
+                "netPercentChangeInDouble", "openPrice", "lowPrice",
+                "highPrice", "mark", "divAmount", "divYield"]
+
+# Defines number attributes that need commas added between thousands
+commaAttrs = ["lastPrice", "closePrice", "netChange",
+              "netPercentChangeInDouble", "openPrice", "lowPrice",
+              "highPrice", "mark", "totalVolume", "divAmount"]
+
+# Defines the attributes that need a % sign after their value
+percentAttrs = ["netPercentChangeInDouble", "divYield"]
+
+# Defines the attributes that MAY need a $ sign before their value (depends
+# on whether it is an index or stock)
+moneyAttrs = ["mark", "netChange", "divAmount"]
+
 # Dictionary that maps the TD API attribute names to readable english form
 engAttrs = {
     "lastPrice": "Last",

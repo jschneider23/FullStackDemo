@@ -1,0 +1,59 @@
+This file is for personal use to keep track of features that I still need to
+implement, bugs/functionality I still need to fix, and other notes during
+development.  Structure of this file may very as it will be deleted upon
+deployment.  Priorities are noted to help me decide what to work on next.
+
+Overall/All Pages:
+    -> MED: Make app mobile-friendly
+    -> MED: Documentation
+-------------------------------------------------------------------------------
+Homepage:
+    Main Page View:
+    -> MED: Index Card Data auto-refresh
+    -> LOW: Move disclaimer to bottom of screen or put it in nav
+    -> LOW: Add a link to the TD Ameritrade Developer API Page
+
+    Quote & Information Modal View:
+    -> HI:  Implement working chart functionality
+            ->  Redevelop and refactor stock_chart.py to work better with
+                frontend
+            ->  Fix script implementation
+            ->  Add functioning chart options such as time period, candlestick
+                and line options, and colors for all aspects
+            ->  Enable the downloading of charts (bootstrap option)
+    -> MED: Add table row for "View Options" that has link to options page
+            and goes directly to modal or display "Non-Optionable Stock"
+-------------------------------------------------------------------------------
+Options:
+    Main Page View:
+    -> HI:  Create the HTML for the page (remove placeholder)
+            ->  Header
+            ->  Search card similar to main page except with extra form fields
+                ->  Extra form fields will be the params in getOptionChain():
+                    ->  Dropdown for conType
+                    ->  Dropdown for numStrikes
+                    ->  ? for hasQuotes
+                    ->  text/float input for strike
+                    ->  ? for rng
+                    ->  Datepickers that allow either expFrom and expTo OR
+                        expMonth
+                    ->  Checkboxes for optType
+            ->  Add loading spinner and toggle function
+    Option Chain & Single Option Modal View:
+    -> HI:  Implement option chain display
+    -> MED: Implement single option display after chosing from option chain
+-------------------------------------------------------------------------------
+Movers:
+    Main Page View:
+    -> HI:  Create the HTML for the page (remove placeholder)
+            ->  Add columns for the three markets that will be supported
+            ->  Add cards
+            ->  Add tables to cards
+            ->  Add links to symbols of each row to load modal
+    Mover Modal View:
+    -> MED: Show the exact same modal you would get from entering the symbol
+            on main page, except load it in movers url
+-------------------------------------------------------------------------------
+README:
+    -> LOW: Figure out layout and sections best for showing to recruiters
+    -> LOW: Write README
