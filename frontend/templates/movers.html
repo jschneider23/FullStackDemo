@@ -5,5 +5,142 @@
 {% endblock %}
 
 {% block body %}
-movers page here
+<h1 class="text-center">Top Movers: Dow Jones</h1>
+<div class="row" style="padding-bottom: 15px">
+    <div class="col-lg-6">
+        <div class="card bg-success text-white shadow-sm h-100">
+            <h5 class="card-header text-center">$DJI Gainers</h5>
+            <div class="card-body">
+                <div id="DJIUpPercent">
+                    {{context.DJIUpPercent}}
+                </div>
+                <div id="DJIUpValue" style="display: none">
+                    {{context.DJIUpValue}}
+                </div>
+            </div>
+            <div class="card-footer text-center">
+                <button type="button" class="btn btn-dark btn-sm" onclick="toggleDJIUp()">Toggle Change By %/$</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card bg-danger text-white shadow-sm h-100">
+            <h5 class="card-header text-center">$DJI Losers</h5>
+            <div class="card-body">
+                <div id="DJIDownPercent">
+                    {{context.DJIDownPercent}}
+                </div>
+                <div id="DJIDownValue" style="display: none">
+                    {{context.DJIDownValue}}
+                </div>
+            </div>
+            <div class="card-footer text-center">
+                <button type="button" class="btn btn-dark btn-sm" onclick="toggleDJIDown()">Toggle Change By %/$</button>
+            </div>
+        </div>
+    </div>
+</div>
+<hr>
+<h1 class="text-center">Top Movers: S&P 500</h1>
+<div class="row" style="padding-bottom: 15px">
+    <div class="col-lg-6">
+        <div class="card bg-success text-white shadow-sm h-100">
+            <h5 class="card-header text-center">$SPX.X Gainers</h5>
+            <div class="card-body">
+                <div id="SPXXUpPercent">
+                    {{context.SPXXUpPercent}}
+                </div>
+                <div id="SPXXUpValue" style="display: none">
+                    {{context.SPXXUpValue}}
+                </div>
+            </div>
+            <div class="card-footer text-center">
+                <button type="button" class="btn btn-dark btn-sm" onclick="toggleSPXXUp()">Toggle Change By %/$</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card bg-danger text-white shadow-sm h-100">
+            <h5 class="card-header text-center">$SPX.X Losers</h5>
+            <div class="card-body">
+                <div id="SPXXDownPercent">
+                    {{context.SPXXDownPercent}}
+                </div>
+                <div id="SPXXDownValue" style="display: none">
+                    {{context.SPXXDownValue}}
+                </div>
+            </div>
+            <div class="card-footer text-center">
+                <button type="button" class="btn btn-dark btn-sm" onclick="toggleSPXXDown()">Toggle Change By %/$</button>
+            </div>
+        </div>
+    </div>
+</div>
+<hr>
+<h1 class="text-center">Top Movers: NASDAQ Composite</h1>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card bg-success text-white shadow-sm h-100">
+            <h5 class="card-header text-center">$COMPX Gainers</h5>
+            <div class="card-body">
+                <div id="COMPXUpPercent">
+                    {{context.COMPXUpPercent}}
+                </div>
+                <div id="COMPXUpValue" style="display: none">
+                    {{context.COMPXUpValue}}
+                </div>
+            </div>
+            <div class="card-footer text-center">
+                <button type="button" class="btn btn-dark btn-sm" onclick="toggleCOMPXUp()">Toggle Change By %/$</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card bg-danger text-white shadow-sm h-100">
+            <h5 class="card-header text-center">$COMPX Losers</h5>
+            <div class="card-body">
+                <div id="COMPXDownPercent">
+                    {{context.COMPXDownPercent}}
+                </div>
+                <div id="COMPXDownValue" style="display: none">
+                    {{context.COMPXDownValue}}
+                </div>
+            </div>
+            <div class="card-footer text-center">
+                <button type="button" class="btn btn-dark btn-sm" onclick="toggleCOMPXDown()">Toggle Change By %/$</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function toggleDJIUp() {
+        $(DJIUpPercent).toggle()
+        $(DJIUpValue).toggle()
+    }
+
+    function toggleDJIDown() {
+        $(DJIDownPercent).toggle()
+        $(DJIDownValue).toggle()
+    }
+
+    function toggleSPXXUp() {
+        $(SPXXUpPercent).toggle()
+        $(SPXXUpValue).toggle()
+    }
+
+    function toggleSPXXDown() {
+        $(SPXXDownPercent).toggle()
+        $(SPXXDownValue).toggle()
+    }
+
+    function toggleCOMPXUp() {
+        $(COMPXUpPercent).toggle()
+        $(COMPXUpValue).toggle()
+    }
+
+    function toggleCOMPXDown() {
+        $(COMPXDownPercent).toggle()
+        $(COMPXDownValue).toggle()
+    }
+</script>
 {% endblock %}

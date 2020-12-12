@@ -44,7 +44,21 @@ def options():
 
 @app.route("/movers")
 def movers():
-    return render_template("movers.html")
+    context = {
+        "DJIUpPercent": hg.htmlMoverCard("$DJI", "up", "percent"),
+        "DJIUpValue": hg.htmlMoverCard("$DJI", "up", "value"),
+        "DJIDownPercent": hg.htmlMoverCard("$DJI", "down", "percent"),
+        "DJIDownValue": hg.htmlMoverCard("$DJI", "down", "value"),
+        "SPXXUpPercent": hg.htmlMoverCard("$SPX.X", "up", "percent"),
+        "SPXXUpValue": hg.htmlMoverCard("$SPX.X", "up", "value"),
+        "SPXXDownPercent": hg.htmlMoverCard("$SPX.X", "down", "percent"),
+        "SPXXDownValue": hg.htmlMoverCard("$SPX.X", "down", "value"),
+        "COMPXUpPercent": hg.htmlMoverCard("$COMPX", "up", "percent"),
+        "COMPXUpValue": hg.htmlMoverCard("$COMPX", "up", "value"),
+        "COMPXDownPercent": hg.htmlMoverCard("$COMPX", "down", "percent"),
+        "COMPXDownValue": hg.htmlMoverCard("$COMPX", "down", "value")
+    }
+    return render_template("movers.html", context = context)
 
 if __name__ == "__main__":
     app.run(debug = True)

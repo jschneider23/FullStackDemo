@@ -4,11 +4,19 @@
 import json
 import flask
 import pandas as pd
-from backend import bd_config as cfg, stock_info as si, stock_chart as sc
+from backend import bd_config as cfg, stock_info as si, stock_chart as sc, stock_movers as sm
 
 def htmlIndexCard(indexSym):
     data = si.getBySymbol(indexSym, "indexCard")
-    cardClr = "bg-danger" if float(data["netChange"]) < 0.0 else "bg-success"
+    if "-" in str(data["netChange"]):
+        cardClr = "bg-danger"
+        arrow = "↓"
+    elif data["netPercentChangeInDouble"] == "0.00%":
+        cardClr = "bg-secondary"
+        arrow = "↔"
+    else:
+        cardClr = "bg-success"
+        arrow = "↑"
     html = f"""
         <div class="row">
         <div class="col"><b><u>Last:</u></b><br>
@@ -16,9 +24,10 @@ def htmlIndexCard(indexSym):
         <div class="col"><b><u>Close:</u></b><br>
         <span id=" + indexSym + cp">{data["closePrice"]}</span></div>
         <div class="col"><b><u>Value Chg:</u></b><br>
-        <span id=" + indexSym + vchg">{data["netChange"]}</span></div>
+        <span id=" + indexSym + vchg">{arrow} {data["netChange"]}</span></div>
         <div class="col"><b><u>% Chg:</u></b><br>
-        <span id=" + indexSym + pchg">{data["netPercentChangeInDouble"]}</div>
+        <span id=" + indexSym + pchg">
+        {arrow} {data["netPercentChangeInDouble"]}</div>
         </div>
     """
     return (cardClr, flask.Markup(html))
@@ -139,4 +148,46 @@ def htmlNameResults(name):
         """
     return flask.Markup(html)
 
-
+def htmlMoverCard(indexSym, direction, change):
+    dfMovers = sm.getMovers(indexSym, direction, change)
+    rows = ""
+    for ind in dfMovers.index:
+        rows += f"""
+            <tr class="text-white">
+                <th>{int(ind)+1}</th>
+                <td>{dfMovers["symbol"][ind]}</td>
+                <td>{dfMovers["name"][ind]}</td>
+                <td>{dfMovers["change"][ind]}</td>
+                <td>{dfMovers["last"][ind]}</td>
+            </tr>
+        """
+    if ind < 9:
+        ind += 1
+        for ind in range(ind, 10):
+            rows += f"""
+                <tr class="text-white">
+                <td>{int(ind)+1}</td>
+                <td colspan="4">
+                    N/A: Less than 10 movers of this type
+                </td>
+                </tr>
+            """
+    html = f"""
+        <div class="table-responsive">
+            <table class="table table-hover table-borderless">
+                <thead>
+                    <tr class="text-white">
+                        <th>Rank</th>
+                        <th>Symbol</th>
+                        <th>Name</th>
+                        <th>Change</th>
+                        <th>Last</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {rows}
+                </tbody>
+            </table>
+        </div>
+    """
+    return flask.Markup(html)

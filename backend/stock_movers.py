@@ -34,7 +34,15 @@ def getMovers(index, direction, change):
     for m in movers:
         chg = m["change"]
         if change == "percent":
-            chg = str(round(chg * 100, 2)) + "%"
+            chg = f"{round(chg * 100, 2)}%"
+        else:
+            chg = f"${round(chg, 2)}"
+        if "-" in str(chg):
+            chg = f"↓&nbsp;{chg}"
+        elif str(chg) == "0.00" or str(chg) == "0.00%":
+            chg = f"↔&nbsp;{chg}"
+        else:
+            chg = f"↑&nbsp;{chg}"
         newRow = [m["symbol"], m["description"], chg, round(m["last"], 2)]
         df.loc[len(df)] = newRow
     return df
