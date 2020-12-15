@@ -38,7 +38,7 @@ def home():
                     "clrCOMPX": tupCOMPX[0], "COMPX": tupCOMPX[1]})
     return render_template("home.html", context = context)
 
-@app.route("/options")
+@app.route("/options", methods = ["POST", "GET"])
 def options():
     return render_template("options.html")
 

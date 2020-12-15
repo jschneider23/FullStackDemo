@@ -19,10 +19,10 @@ def getOptionChain(sym, conType, numStrikes, hasQuotes, strike, rng, expFrom,
               "strikeCount": numStrikes,
               "includeQuotes": hasQuotes,
               "strategy": "SINGLE",
-              #"strike": strike,
+              "strike": strike,
               "range": rng,
-              #"fromDate": expFrom,
-              #"toDate": expTo,
+              "fromDate": expFrom,
+              "toDate": expTo,
               "expMonth": expMonth,
               "optionType": optType
               }

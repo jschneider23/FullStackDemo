@@ -151,6 +151,7 @@ def htmlNameResults(name):
 def htmlMoverCard(indexSym, direction, change):
     dfMovers = sm.getMovers(indexSym, direction, change)
     rows = ""
+    ind = None
     for ind in dfMovers.index:
         rows += f"""
             <tr class="text-white">
@@ -161,20 +162,28 @@ def htmlMoverCard(indexSym, direction, change):
                 <td>{dfMovers["last"][ind]}</td>
             </tr>
         """
-    if ind < 9:
+    if ind is not None and ind < 9:
         ind += 1
         for ind in range(ind, 10):
             rows += f"""
                 <tr class="text-white">
-                <td>{int(ind)+1}</td>
-                <td colspan="4">
-                    N/A: Less than 10 movers of this type
-                </td>
+                    <td>{int(ind)+1}</td>
+                    <td colspan="4">
+                        N/A: Less than 10 movers of this type
+                    </td>
+                </tr>
+            """
+    if ind is None:
+        for rank in range(1, 11):
+            rows += f"""
+                <tr class="text-white">
+                    <td>{rank}</td>
+                    <td colspan="4">MARKETS CLOSED TODAY</td>
                 </tr>
             """
     html = f"""
         <div class="table-responsive">
-            <table class="table table-hover table-borderless">
+            <table class="table table-hover table-borderless table-sm">
                 <thead>
                     <tr class="text-white">
                         <th>Rank</th>

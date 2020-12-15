@@ -5,5 +5,118 @@
 {% endblock %}
 
 {% block body %}
-options page here
+<h1 class="text-center">Options &amp; Option Chain Search</h1>
+<div class="row text-center">
+    <div class="col-md-8 offset-md-2">
+        <div class="card bg-light text-dark shadow">
+            <h5 class="card-header">
+                Directly Lookup and Filter Options and Option Chains for a Symbol
+            </h5>
+            <div class="card-body">
+                <form method="post" onsubmit="{{url_for('options')}}">
+                    <input type="text" class="form-control form-control-lg" placeholder="Enter an Existing/Valid Symbol (Ex: TSLA)"required id="search" name="search"><br>
+                    <button type="submit" class="btn btn-dark w-25" onclick="showLoadingSpinner()">Find</button>
+                    <button type="reset" class="btn btn-dark w-25">Clear</button>
+                    <hr>
+                    <h5><b>Search Filters</b></h5>
+                    <div class="row justify-content-center">
+                        <div class="col-auto">
+                            <div class="form-group">
+                                <label for="conType">Contract Type:</label>
+                                <select class="custom-select" id="conType" name="conType">
+                                    <option value="ALL" selected>Calls &amp; Puts</option>
+                                    <option value="CALL">Calls</option>
+                                    <option value="PUT">Puts</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="form-group">
+                                <label for="numStrikes"># of Strikes:</label>
+                                <input type="number" class="form-control" id="numStrikes" name="numStrikes" value="10" min="1" max="25" step="1"></input>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="form-group">
+                                <label for="strike">Strike Price ($):</label>
+                                <input type="number" class="form-control" id="strike" name="strike" min="0.01" step=".01" placeholder="Any Price"></input>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="form-group">
+                                <label for="range">Range (ITM, OTM, etc.):</label>
+                                <select class="custom-select" id="range" name="range">
+                                    <option value="ALL" selected>All Possible Contracts</option>
+                                    <option value="ITM">ITM: In The Money</option>
+                                    <option value="OTM">OTM: Out of the Money</option>
+                                    <option value="NTM">NTM: Near The Money</option>
+                                    <option value="SAK">SAK: Strikes Above Market</option>
+                                    <option value="SBK">SAK: Strikes Below Market</option>
+                                    <option value="SNK">NTM: Strikes Near Market</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-auto">
+                            <div class="form-group">
+                                <label for="fromDate">Expirations From:</label>
+                                <input type="date" class="form-control" id="fromDate" name="fromDate" placeholder="today's date"></input>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="form-group">
+                                <label for="toDate">Expirations To:</label>
+                                <input type="date" class="form-control" id="toDate" name="toDate" placeholder="tomorrow's date"></input>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="form-group">
+                                <label for="expMonth">Expiration Month:</label>
+                                <select class="custom-select" id="expMonth" name="expMonth">
+                                    <option value="ALL" selected>Any Month</option>
+                                    <option value="JAN">January</option>
+                                    <option value="FEB">February</option>
+                                    <option value="MAR">March</option>
+                                    <option value="APR">April</option>
+                                    <option value="MAY">May</option>
+                                    <option value="JUN">June</option>
+                                    <option value="JUL">July</option>
+                                    <option value="AUG">August</option>
+                                    <option value="SEP">September</option>
+                                    <option value="OCT">October</option>
+                                    <option value="NOV">November</option>
+                                    <option value="DEC">December</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-auto">
+                            <div class="form-group">
+                                <label for="optType">Option Type (Advanced):</label>
+                                <select class="custom-select" id="optType" name="optType">
+                                    <option value="ALL" selected>All Options</option>
+                                    <option value="S">Standard</option>
+                                    <option value="NS">Non-Standard</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-dark w-25" onclick="showLoadingSpinner()">Find</button>
+                    <button type="reset" class="btn btn-dark w-25">Reset Filters</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<div id="loadingSpinner" class="text-center text-dark" style="display: none">
+  <div class="spinner-border" role="status"></div>
+</div>
+<script>
+    function showLoadingSpinner() {
+        $(loadingSpinner).toggle()
+    }
+</script>
 {% endblock %}
