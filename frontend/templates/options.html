@@ -15,8 +15,6 @@
             <div class="card-body">
                 <form method="post" onsubmit="{{url_for('options')}}">
                     <input type="text" class="form-control form-control-lg" placeholder="Enter an Existing/Valid Symbol (Ex: TSLA)"required id="search" name="search"><br>
-                    <button type="submit" class="btn btn-dark w-25" onclick="showLoadingSpinner()">Find</button>
-                    <button type="reset" class="btn btn-dark w-25">Clear</button>
                     <hr>
                     <h5><b>Search Filters</b></h5>
                     <div class="row justify-content-center">
@@ -74,7 +72,7 @@
                             <div class="form-group">
                                 <label for="expMonth">Expiration Month:</label>
                                 <select class="custom-select" id="expMonth" name="expMonth">
-                                    <option value="ALL" selected>Any Month</option>
+                                    <option value="ALL" selected>All Months</option>
                                     <option value="JAN">January</option>
                                     <option value="FEB">February</option>
                                     <option value="MAR">March</option>
@@ -94,9 +92,9 @@
                     <div class="row justify-content-center">
                         <div class="col-auto">
                             <div class="form-group">
-                                <label for="optType">Option Type (Advanced):</label>
-                                <select class="custom-select" id="optType" name="optType">
-                                    <option value="ALL" selected>All Options</option>
+                                <label for="optType">Standard/Non-Standard Contracts (Advanced):</label>
+                                <select class="custom-select" id="standard" name="standard">
+                                    <option value="ALL" selected>All Contracts</option>
                                     <option value="S">Standard</option>
                                     <option value="NS">Non-Standard</option>
                                 </select>
@@ -104,7 +102,7 @@
                         </div>
                     </div>
                     <button type="submit" class="btn btn-dark w-25" onclick="showLoadingSpinner()">Find</button>
-                    <button type="reset" class="btn btn-dark w-25">Reset Filters</button>
+                    <button type="reset" class="btn btn-dark w-25">Reset Fields</button>
                 </form>
             </div>
         </div>
@@ -114,9 +112,63 @@
 <div id="loadingSpinner" class="text-center text-dark" style="display: none">
   <div class="spinner-border" role="status"></div>
 </div>
+<div class="text-center text-danger">
+    <h5>{{context.errorMsg}}</h5>
+</div>
+<div class="modal fade" id="viewOptionChain" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="overflow-y: initial !important">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-center">{{context.modalTitle}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="height: 80vh; overflow-y: auto;">
+        <div>
+            {{context.modalOptionChain}}
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+{{context.modalScript}}
 <script>
+    // Code for handling entry into from and to expiry dates OR expiry month,
+    // but not both
+    var inputFromDate = document.getElementById("fromDate")
+    var inputToDate = document.getElementById("toDate")
+    var inputExpMonth = document.getElementById("expMonth")
+
+    inputFromDate.onchange = function() {
+        inputExpMonth.disabled = (this.value != "" || this.value != null)
+    }
+
+    inputToDate.onchange = function() {
+        inputExpMonth.disabled = (this.value != "" || this.value != null)
+    }
+
+    inputExpMonth.onchange = function() {
+        inputFromDate.disabled = (this.value != "" || this.value != null)
+        inputToDate.disabled = (this.value != "" || this.value != null)
+    }
+
     function showLoadingSpinner() {
-        $(loadingSpinner).toggle()
+        var searchField = document.getElementById("search").value
+        if (searchField != null && searchField != "") {
+            $(loadingSpinner).toggle();
+        }
+    }
+    
+    function toggleArrowDir(groupID) {
+        var arrow = document.getElementById("btnedg" + groupID)
+        if arrow.innerText == "▼" {
+            arrow.innerText = "▲"
+        } else {
+            arrow.innerText = "▼"
+        }
     }
 </script>
 {% endblock %}

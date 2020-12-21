@@ -43,7 +43,7 @@
         <div class="card bg-light text-dark shadow">
             <h5 class="card-header">Direct Lookup by Symbol or Search TD's Database by Name</h5>
             <div class="card-body">
-                <form method="post" onsubmit="{{url_for('home')}}">
+                <form name="form" method="post" onsubmit="{{url_for('home')}}">
                     <input type="text" class="form-control form-control-lg" placeholder="Direct Ex: TSLA | Name Search Ex: Tesla or Tesla, Inc. - Common Stock" id="search" name="search"required><br>
                     <button type="submit" class="btn btn-dark w-25" onclick="showLoadingSpinner()">Find</button>
                     <button type="reset" class="btn btn-dark w-25">Clear</button>
@@ -56,7 +56,6 @@
 <div id="loadingSpinner" class="text-center text-dark" style="display: none">
   <div class="spinner-border" role="status"></div>
 </div>
-
 <div class="text-center text-danger">
     <h5>{{context.errorMsg}}</h5>
 </div>
@@ -64,7 +63,7 @@
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="overflow-y: initial !important">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title text-center" id="exampleModalLongTitle">{{context.modalTitle}}</h5>
+        <h5 class="modal-title text-center">{{context.modalTitle}}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -96,7 +95,10 @@
 {{context.modalScript}}
 <script>
     function showLoadingSpinner() {
-        $(loadingSpinner).toggle()
+        var searchField = document.getElementById("search").value
+        if (searchField != null && searchField != "") {
+            $(loadingSpinner).toggle();
+        }
     }
 </script>
 {% endblock %}

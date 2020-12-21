@@ -1,13 +1,12 @@
 from flask import Flask, render_template, request
-from backend import stock_info, stock_chart, stock_movers, stock_options
-import html_generator as hg
+from frontend import html_generation as hg
 import flask
 
 app = Flask(__name__)
 
 @app.route("/", methods = ["POST", "GET"])
 def home():
-    context = {}
+    context = {"home": "active"}
     if request.method == "POST":
         formInput = request.form["search"].strip().upper()
         modal = hg.htmlModalData(formInput)
@@ -40,11 +39,28 @@ def home():
 
 @app.route("/options", methods = ["POST", "GET"])
 def options():
-    return render_template("options.html")
+    context = {"options": "active"}
+    if request.method == "POST":
+        sym = request.form["search"].strip().upper()
+        conType = request.form["conType"]
+        numStrikes = request.form["numStrikes"]
+        strike = request.form["strike"]
+        rng = request.form["range"]
+        fromDate = request.form["fromDate"]
+        toDate = request.form["toDate"]
+        expMonth = request.form["expMonth"]
+        standard = request.form["standard"]
+        modal = hg.htmlOCModalData(sym, conType, numStrikes, strike, rng, fromDate, toDate, expMonth, standard)
+        context.update({"modalScript": modal["script"],
+                        "modalTitle": modal["title"],
+                        "modalOptionChain": modal["oc"],
+                        "errorMsg": modal["errorMsg"]})
+    return render_template("options.html", context = context)
 
 @app.route("/movers")
 def movers():
     context = {
+        "movers": "active",
         "DJIUpPercent": hg.htmlMoverCard("$DJI", "up", "percent"),
         "DJIUpValue": hg.htmlMoverCard("$DJI", "up", "value"),
         "DJIDownPercent": hg.htmlMoverCard("$DJI", "down", "percent"),

@@ -2,6 +2,7 @@
 # clean up code, increase readability, and improve performance
 
 from backend import bd_config as cfg
+from datetime import datetime as dt
 
 # Formats the value of an attribute to have necessary symbols before or after
 # the value, such as $ <value> for money amounts or <value> % for percentages.
@@ -12,11 +13,9 @@ def attrFormat(sym, attr, value):
     # Format Datetime into format "Jan 1 2020".  Returns early as no other
     # formatting is required if the value is for divDate.
     if attr == "divDate":
-        try:
-            dtObj = dt.datetime.strptime(value, "%Y-%m-%d %H:%M:%S.%f")
-            return dtObj.strftime("%b %d %Y")
-        except:
-            return "N/A (No Dividends)"
+        value = str(value[:value.index(" ")])
+        dtObj = dt.strptime(value, "%Y-%m-%d")
+        return dtObj.strftime("%b %d %Y")
     # Attributes that need rounding (regardless of whether index or stock)
     if attr in cfg.roundedAttrs:
         value = round(value, 2) if str(round(value, 2)) != "0.0" else "0.00"

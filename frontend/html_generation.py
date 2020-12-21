@@ -4,8 +4,10 @@
 import json
 import flask
 import pandas as pd
-from backend import bd_config as cfg, stock_info as si, stock_chart as sc, stock_movers as sm
+from backend import bd_config as cfg, stock_info as si, stock_chart as sc, stock_movers as sm, stock_options as so
+from frontend import fr_objects as frobj
 
+# *** Home Page Generator Functions *** #
 def htmlIndexCard(indexSym):
     data = si.getBySymbol(indexSym, "indexCard")
     if "-" in str(data["netChange"]):
@@ -98,7 +100,6 @@ def htmlModalData(sym):
     script = """
         <script>
             $('#viewStock').modal('show');
-            console.log($('#viewStock'))
         </script>
     """
     return {"script": flask.Markup(script),
@@ -148,6 +149,89 @@ def htmlNameResults(name):
         """
     return flask.Markup(html)
 
+# *** Options Page Functions ***#
+
+def htmlOCModalData(sym, conType, numStrikes, strike, rng, expFrom, expTo,
+                    expMonth, standard):
+    errorMsg = ""
+    try:
+        ocDict = so.getOptionChain(sym, conType, numStrikes, strike, rng, expFrom, expTo, expMonth, standard)
+        underlyingPrice = ocDict.get("underlyingPrice")
+        dfCalls = ocDict.get("dfCalls")
+        dfPuts = ocDict.get("dfPuts")
+    except:
+        errorMsg = f"""
+            There was an error finding an Option Chain for \"<i>{sym}</i>\" 
+            with the given filters.  Either \"<i>{sym}</i>\" is a
+            non-optionable symbol or invalid parameters were provided.
+        """
+        return {"errorMsg": errorMsg}
+
+    if dfCalls is not None and dfPuts is None:
+        longerLen = len(dfCalls)
+    elif dfPuts is not None and dfCalls is None:
+        longerLen = len(dfPuts)
+    else:
+        longerLen = len(dfCalls) if len(dfCalls) > len(dfPuts) else len(dfPuts)
+
+    callList = []
+    putList = []
+    oldExpDate = None
+    newExpDate = None
+    expDateGroups = []
+    for ind in range(longerLen):
+        if dfCalls is not None and dfPuts is None:
+            if ind < len(dfCalls):
+                row = dfCalls.loc[ind]
+                newExpDate = row["Expiration"]
+                if oldExpDate is None or oldExpDate == newExpDate:
+                    call = frobj.Option.fromRow(ind, underlyingPrice, row)
+                    callList.append(call)
+                    oldExpDate = newExpDate
+                else:
+                    edg = frobj.OptionEDG.fromOptionLists(callList = callList)
+                    expDateGroups.append(edg)
+                    callList = []
+                    oldExpDate = None
+        elif dfPuts is not None and dfCalls is None:
+            if ind < len(dfPuts):
+                row = dfPuts.loc[ind]
+                newExpDate = row["Expiration"]
+                if oldExpDate is None or oldExpDate == newExpDate:
+                    put = frobj.Option.fromRow(ind, underlyingPrice, row)
+                    callList.append(put)
+                    oldExpDate = newExpDate
+                else:
+                    edg = frobj.OptionEDG.fromOptionLists(putList = putList)
+                    expDateGroups.append(edg)
+                    putList = []
+                    oldExpDate = None
+        else:
+            if ind < len(dfCalls):
+                callRow = dfCalls.loc[ind]
+            if ind < len(dfPuts):
+                putRow = dfPuts.loc[ind]
+                newExpDate = callRow["Expiration"]
+            if oldExpDate is None or oldExpDate == newExpDate:
+                call = frobj.Option.fromRow(ind, underlyingPrice, callRow)
+                put = frobj.Option.fromRow(ind, underlyingPrice, putRow)
+                callList.append(call)
+                putList.append(put)
+                oldExpDate = newExpDate
+            else:
+                edg = frobj.OptionEDG.fromOptionLists(callList = callList, putList = putList)
+                expDateGroups.append(edg)
+                callList = []
+                putList = []
+                oldExpDate = None
+    oc = frobj.OptionChain(sym, underlyingPrice, expDateGroups)
+    htmlDict = oc.htmlOCAccordian()
+    return {"script": flask.Markup(htmlDict["script"]),
+            "title": flask.Markup(htmlDict["title"]),
+            "oc": flask.Markup(htmlDict["oc"]),
+            "errorMsg": flask.Markup(errorMsg)}
+
+# *** Movers Page Functions *** #
 def htmlMoverCard(indexSym, direction, change):
     dfMovers = sm.getMovers(indexSym, direction, change)
     rows = ""
