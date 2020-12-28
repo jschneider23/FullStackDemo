@@ -56,9 +56,21 @@ class Option:
 
         htmlStr = f"""
             {strikeSingle}
-            <td {bgITM}>${self.bid}</td>
-            <td {bgITM}>${self.ask}</td>
-            <td {bgITM}>${self.market}</td>
+            <td {bgITM}>
+                <a href="#" class="text-decoration-none">
+                    ${self.bid}
+                </a>
+            </td>
+            <td {bgITM}>
+                <a href="#" class="text-decoration-none">
+                    ${self.ask}
+                </a>
+            </td>
+            <td {bgITM}>
+                <a href="#" class="text-decoration-none">
+                    ${self.market}
+                </a>
+            </td>
             <td {bgITM}>{self.volume}</td>
             {strikeBoth}
         """
@@ -191,19 +203,19 @@ class OptionEDG:
         htmlStr = f"""
             <div class="card bg-light text-dark" id="card{gid}">
                 <div class="card-header d-flex align-items-center">
-                    <h6 class="p-2 w-100 align-middle">
+                    <div class="p-1 w-100 align-middle">
                         Exp:&nbsp;{self.expDate}
-                    </h6>
-                    <h6 class="p-2 flex-shrink-1 align-middle">
-                        {self.numContracts}&nbsp;Contracts
-                    </h6>
-                    <h6 class="p-2 flex-shrink-1 align-middle">
-                        <button class="btn btn-dark collapsed" type="button" data-toggle="collapse" data-target="#collapse{gid}" onclick="toggleArrowDir(\'{gid}\')">
+                    </div>
+                    <div class="p-1 flex-shrink-1 align-middle">
+                        {self.numContracts}&nbsp;Contracts&nbsp;
+                    </div>
+                    <div class="p-1 flex-shrink-1 align-middle">
+                        <button class="btn btn-dark collapsed" type="button" data-toggle="collapse" data-target="#collapse{gid}">
                             <span class="text-white" id="btn{gid}">
-                                ▼
+                                ↕
                             </span>
                         </button>
-                    </h6>
+                    </div>
                 </div>
                 <div id="collapse{gid}" class="collapse" data-parent="#ocAccordian">
                     <div class="card-body text-center justify-content-center">

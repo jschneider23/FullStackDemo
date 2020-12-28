@@ -13,9 +13,12 @@ def attrFormat(sym, attr, value):
     # Format Datetime into format "Jan 1 2020".  Returns early as no other
     # formatting is required if the value is for divDate.
     if attr == "divDate":
-        value = str(value[:value.index(" ")])
-        dtObj = dt.strptime(value, "%Y-%m-%d")
-        return dtObj.strftime("%b %d %Y")
+        if value != "":
+            value = str(value[:value.index(" ")])
+            dtObj = dt.strptime(value, "%Y-%m-%d")
+            return dtObj.strftime("%b %d %Y")
+        else:
+            return "No Dividends"
     # Attributes that need rounding (regardless of whether index or stock)
     if attr in cfg.roundedAttrs:
         value = round(value, 2) if str(round(value, 2)) != "0.0" else "0.00"

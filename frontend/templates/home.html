@@ -6,7 +6,7 @@
 
 {% block body %}
 <h1 class="text-center">Markets at a Glance</h1>
-<div class="row text-center" style="padding-bottom: 15px">
+<div id="row" class="row text-center" style="padding-bottom: 15px">
     <div class="col-sm-4">
         <div class="card {{context.clrDJI}} text-white shadow-sm">
             <h5 class="card-header">$DJI</h5>
@@ -44,8 +44,11 @@
             <h5 class="card-header">Direct Lookup by Symbol or Search TD's Database by Name</h5>
             <div class="card-body">
                 <form name="form" method="post" onsubmit="{{url_for('home')}}">
-                    <input type="text" class="form-control form-control-lg" placeholder="Direct Ex: TSLA | Name Search Ex: Tesla or Tesla, Inc. - Common Stock" id="search" name="search"required><br>
-                    <button type="submit" class="btn btn-dark w-25" onclick="showLoadingSpinner()">Find</button>
+                    <div class="form-group">
+                        <label for="search">Enter a Valid, Existing Symbol or Search by Name Fragment or Full Name:</label>
+                        <input type="text" class="form-control form-control-lg" placeholder="Ex: TSLA (Symbol), Tesla (Fragment), or Tesla, Inc. - Common Stock (Full Name)" id="search" name="search" required autocomplete><br>
+                    </div>
+                    <button id="submit" type="submit" class="btn btn-dark w-25">Find</button>
                     <button type="reset" class="btn btn-dark w-25">Clear</button>
                 </form>
             </div>
@@ -73,8 +76,9 @@
             {{context.modalQuote}}
         </div>
         <br>
-        <div class="card bg-light">
-            <canvas id="chart">{{context.modalChart}}</canvas>
+        <div class="card bg-light text-center">
+            <div id="chartCard" class="card-body"></div>
+            <div class="card-footer">{{context.modalGraphOptions}}</div>
         </div>
         <br>
         <div class="card bg-light">
@@ -92,12 +96,13 @@
         {{context.nameResults}}
     </div>
 </div>
-{{context.modalScript}}
 <script>
-    function showLoadingSpinner() {
+    {{context.modalScript}}
+
+    document.getElementById("submit").onclick = function() {
         var searchField = document.getElementById("search").value
         if (searchField != null && searchField != "") {
-            $(loadingSpinner).toggle();
+            $("#loadingSpinner").toggle();
         }
     }
 </script>

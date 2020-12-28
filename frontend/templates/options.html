@@ -14,7 +14,10 @@
             </h5>
             <div class="card-body">
                 <form method="post" onsubmit="{{url_for('options')}}">
-                    <input type="text" class="form-control form-control-lg" placeholder="Enter an Existing/Valid Symbol (Ex: TSLA)"required id="search" name="search"><br>
+                    <div class="form-group">
+                        <label for="search">Enter a Valid, Existing, and Optionable Symbol:</label>
+                        <input type="text" class="form-control form-control-lg" placeholder="Ex: TSLA, AAPL, F, etc." required id="search" name="search" autocomplete=""><br>
+                    </div>
                     <hr>
                     <h5><b>Search Filters</b></h5>
                     <div class="row justify-content-center">
@@ -101,8 +104,8 @@
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-dark w-25" onclick="showLoadingSpinner()">Find</button>
-                    <button type="reset" class="btn btn-dark w-25">Reset Fields</button>
+                    <button id="btnSubmit" type="submit" class="btn btn-dark w-25">Find</button>
+                    <button id="btnReset" type="reset" class="btn btn-dark w-25">Reset Fields</button>
                 </form>
             </div>
         </div>
@@ -128,6 +131,7 @@
         <div>
             {{context.modalOptionChain}}
         </div>
+      </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
       </div>
@@ -142,33 +146,30 @@
     var inputToDate = document.getElementById("toDate")
     var inputExpMonth = document.getElementById("expMonth")
 
-    inputFromDate.onchange = function() {
-        inputExpMonth.disabled = (this.value != "" || this.value != null)
-    }
-
-    inputToDate.onchange = function() {
-        inputExpMonth.disabled = (this.value != "" || this.value != null)
-    }
-
-    inputExpMonth.onchange = function() {
-        inputFromDate.disabled = (this.value != "" || this.value != null)
-        inputToDate.disabled = (this.value != "" || this.value != null)
-    }
-
-    function showLoadingSpinner() {
+    document.getElementById("btnSubmit").onclick = function() {
         var searchField = document.getElementById("search").value
         if (searchField != null && searchField != "") {
-            $(loadingSpinner).toggle();
+            $("#loadingSpinner").toggle();
         }
     }
-    
-    function toggleArrowDir(groupID) {
-        var arrow = document.getElementById("btnedg" + groupID)
-        if arrow.innerText == "▼" {
-            arrow.innerText = "▲"
-        } else {
-            arrow.innerText = "▼"
-        }
+
+    document.getElementById("btnReset").onclick = function() {
+        inputFromDate.disabled = false
+        inputToDate.disabled = false
+        inputExpMonth.disabled = false
+    }
+
+    inputFromDate.oninput = function() {
+        inputExpMonth.disabled = (this.value != "" || this.value != null)
+    }
+
+    inputToDate.oninput = function() {
+        inputExpMonth.disabled = (this.value != "" || this.value != null)
+    }
+
+    inputExpMonth.oninput = function() {
+        inputFromDate.disabled = (this.value != "ALL")
+        inputToDate.disabled = (this.value != "ALL")
     }
 </script>
 {% endblock %}

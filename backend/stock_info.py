@@ -58,7 +58,7 @@ def getBySymbol(sym, symType = ""):
 # ** Returns **:
 # dict of {atrribute: value} or dict of {symbol: stock name}
 def getByName(name):
-    url = f"https://research.tdameritrade.com/grid/public/symbollookup/symbollookup.asp?text={name}"
+    url = f"{cfg.gbnUrl}?text={name}"
     req = rq.get(url)
     root = bs(req.content, "lxml")
     html = root.find_all(class_ = "dataBackground")
@@ -72,3 +72,28 @@ def getByName(name):
             return getBySymbol(df.iloc[0]["Symbol"])
         else:
             return df
+
+# def postgbn(name):
+#     url = "https://research.tdameritrade.com/grid/public/symbollookup/symbollookup.asp"
+#     session = rq.Session()
+#     reqGet = session.get(f"{url}?text={name}")
+#     rootGet = bs(reqGet.content, "lxml")
+#     formInputs = rootGet.select("input[name]")
+#     payload = {item["name"]:item.get("value", "") for item in formInputs}
+#     print(payload)
+#     reqPost = session.get(url, data = payload)
+#     rootPost = bs(reqPost.content, "lxml")
+#     print(rootPost)
+#     html = rootPost.find_all(class_ = "dataBackground")
+
+#     if len(html) == 0:
+#         return None
+#     else:
+#         df = pd.read_html(str(html[0]))[0]
+        
+#         if len(df) == 1:
+#             return getBySymbol(df.iloc[0]["Symbol"])
+#         else:
+#             return df
+
+# print(postgbn("coffee"))

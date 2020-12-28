@@ -24,6 +24,14 @@ def getOptionChain(sym, conType, numStrikes, strike, rng, expFrom, expTo,
               "toDate": expTo,
               "expMonth": expMonth,
               "optionType": standard}
+    if strike == "" or strike == "null":
+        del params["strike"]
+    if expFrom == "" or expFrom == "null":
+        del params["fromDate"]
+    if expTo == "" or expTo == "null":
+        del params["toDate"]
+    print("Params Backend sends to API:")
+    print(js.dumps(params, indent=4))
     content = rq.get(url, params).json()
     info = {"underlyingPrice": content["underlyingPrice"]}
     if conType == "ALL" or conType == "CALL":

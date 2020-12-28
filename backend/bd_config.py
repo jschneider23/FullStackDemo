@@ -1,6 +1,8 @@
 # Defines the apikey used to interact with registered TD Ameritrade App
 apikey = "RMSSTUCHMW9W04BBKRM7EMIP9OGFVYAE"
 
+# Defines the base url from which to do perform symbol lookup web-scraping
+gbnUrl = "https://research.tdameritrade.com/grid/public/symbollookup/symbollookup.asp"
 # Defines the attributes retrieved in getBySymbol() for an index card
 cardAttrs = ["lastPrice", "closePrice", "netChange", 
              "netPercentChangeInDouble"]
@@ -58,16 +60,27 @@ engAttrs = {
 # values for the API call as well as x axis unit format. Tuples are of format:
 # (english meaning for subtitle, periodType, period, frequencyType, frequency, 
 # canvas.js format string)
-chartMap = {
-    "1d": ("1 Day", "day", 1, "minute", 1, "h:mm"),
-    "3d": ("3 Days", "day", 3, "minute", 15, "DDD M/DD"),
-    "5d": ("5 Days", "day", 5, "minute", 30, "DDD M/DD"),
-    "10d": ("10 Days", "day", 10, "minute", 30, "M/DD"),
-    "1m": ("1 Month", "month", 1, "daily", 1, "M/DD"),
-    "3m": ("3 Months", "month", 3, "daily", 1, "M/DD"),
-    "6m": ("6 Months", "month", 6, "daily", 1, "M/DD"),
-    "1y": ("1 Year", "year", 1, "daily", 1, "M/YY"),
-    "3y": ("3 Years", "year", 3, "weekly", 1, "M/YY"),
-    "5y": ("5 Years", "year", 5, "weekly", 1, "M/YY"),
-    "YTD": ("Year to Date", "year", 1, "daily", 1, "M/DD")
+graphMap = {
+    "1d": {"engTime": "Trading Day", "periodType": "day", "period": 1,
+           "freqType": "minute", "freq": 1, "fmt": "%-I:%M"},
+    "3d": {"engTime": "3 Trading Days", "periodType": "day", "period": 3,
+           "freqType": "minute", "freq": 15, "fmt": "%a %b-%-d"},
+    "5d": {"engTime": "5 Trading Days", "periodType": "day", "period": 5,
+           "freqType": "minute", "freq": 30, "fmt": "%a %b-%-d"},
+    "10d": {"engTime": "10 Trading Days", "periodType": "day", "period": 10,
+            "freqType": "minute", "freq": 30, "fmt": "%b-%-d"},
+    "1m": {"engTime": "1 Trading Month", "periodType": "month", "period": 1,
+           "freqType": "daily", "freq": 1, "fmt": "%b-%-d"},
+    "3m": {"engTime": "3 Trading Months", "periodType": "month", "period": 3,
+           "freqType": "daily", "freq": 1, "fmt": "%b-%-d"},
+    "6m": {"engTime": "6 Trading Months", "periodType": "month", "period": 6,
+           "freqType": "daily", "freq": 1, "fmt": "%b-%-d"},
+    "1y": {"engTime": "1 Trading Year", "periodType": "year", "period": 1,
+           "freqType": "daily", "freq": 1, "fmt": "%b-%y"},
+    "3y": {"engTime": "3 Trading Years", "periodType": "year", "period": 3,
+           "freqType": "weekly", "freq": 1, "fmt": "%b-%y"},
+    "5y": {"engTime": "5 Trading Years", "periodType": "year", "period": 5,
+           "freqType": "weekly", "freq": 1, "fmt": "%b-%y"},
+    "YTD": {"engTime": "Trading Year to Date", "periodType": "year",
+            "period": 1, "freqType": "daily", "freq": 1, "fmt": "%b-%-d"}
 }

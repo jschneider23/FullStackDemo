@@ -32,7 +32,7 @@ def htmlIndexCard(indexSym):
         {arrow} {data["netPercentChangeInDouble"]}</div>
         </div>
     """
-    return (cardClr, flask.Markup(html))
+    return {"color": cardClr, "html": flask.Markup(html)}
 
 def htmlModalData(sym):
     if "$" in sym:
@@ -41,6 +41,7 @@ def htmlModalData(sym):
     else:
         symData = si.getBySymbol(sym)
         title = f"{sym} Stock Quote &amp; Information"
+
     if symData is None:
         return None
 
@@ -69,13 +70,78 @@ def htmlModalData(sym):
             </div>
         </div>
     """
-    chart = f"""
-        <script>
-            window.onload = function () {{
-            var chart = new CanvasJS.Chart("chart", {json.dumps(sc.newGraph(sym))});
-            chart.render();
-            }}
-        </script>
+    graphOptions = f"""
+        <b>Graph Options</b>
+        <br>
+        With Extended Hours:
+        <button id="btn1d" type="button" class="btn btn-sm btn-dark">
+            1d
+        </button>
+        <button id="btn3d" type="button" class="btn btn-sm btn-dark">
+            3d
+        </button>
+        <button id="btn5d" type="button" class="btn btn-sm btn-dark">
+            5d
+        </button>
+        <button id="btn10d" type="button" class="btn btn-sm btn-dark">
+            10d
+        </button>
+        <button id="btn1m" type="button" class="btn btn-sm btn-dark">
+            1m
+        </button>
+        <button id="btn3m" type="button" class="btn btn-sm btn-dark">
+            3m
+        </button>
+        <button id="btn6md" type="button" class="btn btn-sm btn-dark">
+            6m
+        </button>
+        <button id="btn1y" type="button" class="btn btn-sm btn-dark">
+            1y
+        </button>
+        <button id="btn3y" type="button" class="btn btn-sm btn-dark">
+            3y
+        </button>
+        <button id="btn5y" type="button" class="btn btn-sm btn-dark">
+            5y
+        </button>
+        <button id="btnYTD" type="button" class="btn btn-sm btn-dark">
+            YTD
+        </button>
+        <hr>
+        Without Extended Hours:
+        <button id="btn1dfalse" type="button" class="btn btn-sm btn-dark">
+            1d
+        </button>
+        <button id="btn3dfalse" type="button" class="btn btn-sm btn-dark">
+            3d
+        </button>
+        <button id="btn5dfalse" type="button" class="btn btn-sm btn-dark">
+            5d
+        </button>
+        <button id="btn10dfalse" type="button" class="btn btn-sm btn-dark">
+            10d
+        </button>
+        <button id="btn1mfalse" type="button" class="btn btn-sm btn-dark">
+            1m
+        </button>
+        <button id="btn3mfalse" type="button" class="btn btn-sm btn-dark">
+            3m
+        </button>
+        <button id="btn6mdfalse" type="button" class="btn btn-sm btn-dark">
+            6m
+        </button>
+        <button id="btn1yfalse" type="button" class="btn btn-sm btn-dark">
+            1y
+        </button>
+        <button id="btn3yfalse" type="button" class="btn btn-sm btn-dark">
+            3y
+        </button>
+        <button id="btn5yfalse" type="button" class="btn btn-sm btn-dark">
+            5y
+        </button>
+        <button id="btnYTDfalse" type="button" class="btn btn-sm btn-dark">
+            YTD
+        </button>
     """
     rows = ""
     for attr in symData:
@@ -86,7 +152,7 @@ def htmlModalData(sym):
             </tr>
         """
     info = f"""
-        <table class="table table-hover">
+        <table id="table" class="table table-hover">
             <thead class="thead-light text-center">
                 <tr>
                     <th colspan="2">{sym} Profile</th>
@@ -97,15 +163,104 @@ def htmlModalData(sym):
             </tbody>
         </table>
     """
-    script = """
-        <script>
-            $('#viewStock').modal('show');
-        </script>
+    script = f"""
+        $('#viewStock').modal('show');
+        $(function() {{
+            $('#chartCard').load('/graph/{sym}/10d/True', function() {{
+            document.getElementById("btn1d").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/1d/True');
+            }}
+
+            document.getElementById("btn3d").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/3d/True')
+            }}
+
+            document.getElementById("btn5d").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/5d/True')
+            }}
+
+            document.getElementById("btn10d").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/10d/True')
+            }}
+
+            document.getElementById("btn1m").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/1m/True')
+            }}
+
+            document.getElementById("btn3m").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/3m/True')
+            }}
+
+            document.getElementById("btn6m").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/6m/True')
+            }}
+
+            document.getElementById("btn1y").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/1y/True')
+            }}
+
+            document.getElementById("btn3y").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/3y/True')
+            }}
+
+            document.getElementById("btn5y").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/5y/True')
+            }}
+
+            document.getElementById("btnYTD").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/YTD/True')
+            }}
+
+
+            document.getElementById("btn1dfalse").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/1d/False');
+            }}
+
+            document.getElementById("btn3dfalse").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/3d/False')
+            }}
+
+            document.getElementById("btn5dfalse").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/5d/False')
+            }}
+
+            document.getElementById("btn10dfalse").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/10d/False')
+            }}
+
+            document.getElementById("btn1mfalse").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/1m/False')
+            }}
+
+            document.getElementById("btn3mfalse").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/3m/False')
+            }}
+
+            document.getElementById("btn6mfalse").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/6m/False')
+            }}
+
+            document.getElementById("btn1yfalse").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/1y/False')
+            }}
+
+            document.getElementById("btn3yfalse").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/3y/False')
+            }}
+
+            document.getElementById("btn5yfalse").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/5y/False')
+            }}
+
+            document.getElementById("btnYTDfalse").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/YTD/False')
+            }}
+        }})}})
     """
     return {"script": flask.Markup(script),
             "title": flask.Markup(title),
             "quote": flask.Markup(quote),
-            "chart": flask.Markup(chart),
+            "graphOptions": flask.Markup(graphOptions),
             "info": flask.Markup(info)}
 
 def htmlNameResults(name):
@@ -153,6 +308,19 @@ def htmlNameResults(name):
 
 def htmlOCModalData(sym, conType, numStrikes, strike, rng, expFrom, expTo,
                     expMonth, standard):
+    debug = f"""
+        Params sending to backend:
+        sym: {sym}
+        conType: {conType}
+        numStrikes: {numStrikes}
+        strike: {strike}
+        rng: {rng}
+        expFrom: {expFrom}
+        expTo: {expTo}
+        expMonth: {expMonth}
+        standard: {standard}
+    """
+    print(debug)
     errorMsg = ""
     try:
         ocDict = so.getOptionChain(sym, conType, numStrikes, strike, rng, expFrom, expTo, expMonth, standard)
