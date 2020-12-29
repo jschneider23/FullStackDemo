@@ -29,7 +29,6 @@ def home():
             context.update({"modalScript": modal["script"], 
                             "modalTitle": modal["title"],
                             "modalQuote": modal["quote"],
-                            "modalGraphOptions": modal["graphOptions"],
                             "modalInfo": modal["info"]})
     tupDJI = hg.htmlIndexCard("$DJI")
     tupSPXX = hg.htmlIndexCard("$SPX.X")

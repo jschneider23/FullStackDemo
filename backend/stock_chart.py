@@ -30,14 +30,14 @@ def createGraph(sym, time = "10d", hasExtHrs = True):
     closes = []
     for candle in candleList:
         dtConvert = dt.fromtimestamp(candle["datetime"] / 1000)
-        dtFormat = dtConvert.strftime(timeCfg["fmt"])
-        dts.append(dtFormat)
+        #dtFormat = dtConvert.strftime(timeCfg["fmt"])
+        dts.append(dtConvert)
         opens.append(candle["open"])
         highs.append(candle["high"])
         lows.append(candle["low"])
         closes.append(candle["close"])
 
-    if "$" in sym:
+    if "$" not in sym:
         title = f"{sym} Stock Price History (Over Last {timeCfg['engTime']})"
         yaxis = "Price (in $)"
     else:

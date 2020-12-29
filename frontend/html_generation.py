@@ -70,79 +70,6 @@ def htmlModalData(sym):
             </div>
         </div>
     """
-    graphOptions = f"""
-        <b>Graph Options</b>
-        <br>
-        With Extended Hours:
-        <button id="btn1d" type="button" class="btn btn-sm btn-dark">
-            1d
-        </button>
-        <button id="btn3d" type="button" class="btn btn-sm btn-dark">
-            3d
-        </button>
-        <button id="btn5d" type="button" class="btn btn-sm btn-dark">
-            5d
-        </button>
-        <button id="btn10d" type="button" class="btn btn-sm btn-dark">
-            10d
-        </button>
-        <button id="btn1m" type="button" class="btn btn-sm btn-dark">
-            1m
-        </button>
-        <button id="btn3m" type="button" class="btn btn-sm btn-dark">
-            3m
-        </button>
-        <button id="btn6md" type="button" class="btn btn-sm btn-dark">
-            6m
-        </button>
-        <button id="btn1y" type="button" class="btn btn-sm btn-dark">
-            1y
-        </button>
-        <button id="btn3y" type="button" class="btn btn-sm btn-dark">
-            3y
-        </button>
-        <button id="btn5y" type="button" class="btn btn-sm btn-dark">
-            5y
-        </button>
-        <button id="btnYTD" type="button" class="btn btn-sm btn-dark">
-            YTD
-        </button>
-        <hr>
-        Without Extended Hours:
-        <button id="btn1dfalse" type="button" class="btn btn-sm btn-dark">
-            1d
-        </button>
-        <button id="btn3dfalse" type="button" class="btn btn-sm btn-dark">
-            3d
-        </button>
-        <button id="btn5dfalse" type="button" class="btn btn-sm btn-dark">
-            5d
-        </button>
-        <button id="btn10dfalse" type="button" class="btn btn-sm btn-dark">
-            10d
-        </button>
-        <button id="btn1mfalse" type="button" class="btn btn-sm btn-dark">
-            1m
-        </button>
-        <button id="btn3mfalse" type="button" class="btn btn-sm btn-dark">
-            3m
-        </button>
-        <button id="btn6mdfalse" type="button" class="btn btn-sm btn-dark">
-            6m
-        </button>
-        <button id="btn1yfalse" type="button" class="btn btn-sm btn-dark">
-            1y
-        </button>
-        <button id="btn3yfalse" type="button" class="btn btn-sm btn-dark">
-            3y
-        </button>
-        <button id="btn5yfalse" type="button" class="btn btn-sm btn-dark">
-            5y
-        </button>
-        <button id="btnYTDfalse" type="button" class="btn btn-sm btn-dark">
-            YTD
-        </button>
-    """
     rows = ""
     for attr in symData:
         rows += f"""
@@ -166,101 +93,100 @@ def htmlModalData(sym):
     script = f"""
         $('#viewStock').modal('show');
         $(function() {{
-            $('#chartCard').load('/graph/{sym}/10d/True', function() {{
-            document.getElementById("btn1d").onclick = function() {{
+            $('#chartCard').load('/graph/{sym}/10d/True');
+        }})
+        window.onload = function() {{
+            document.getElementById("1dtrue").onclick = function() {{
                 $('#chartCard').load('/graph/{sym}/1d/True');
             }}
-
-            document.getElementById("btn3d").onclick = function() {{
+            document.getElementById("3dtrue").onclick = function() {{
                 $('#chartCard').load('/graph/{sym}/3d/True')
             }}
 
-            document.getElementById("btn5d").onclick = function() {{
+            document.getElementById("5dtrue").onclick = function() {{
                 $('#chartCard').load('/graph/{sym}/5d/True')
             }}
 
-            document.getElementById("btn10d").onclick = function() {{
+            document.getElementById("10dtrue").onclick = function() {{
                 $('#chartCard').load('/graph/{sym}/10d/True')
             }}
 
-            document.getElementById("btn1m").onclick = function() {{
+            document.getElementById("1mtrue").onclick = function() {{
                 $('#chartCard').load('/graph/{sym}/1m/True')
             }}
 
-            document.getElementById("btn3m").onclick = function() {{
+            document.getElementById("3mtrue").onclick = function() {{
                 $('#chartCard').load('/graph/{sym}/3m/True')
             }}
 
-            document.getElementById("btn6m").onclick = function() {{
+            document.getElementById("6mtrue").onclick = function() {{
                 $('#chartCard').load('/graph/{sym}/6m/True')
             }}
 
-            document.getElementById("btn1y").onclick = function() {{
+            document.getElementById("1ytrue").onclick = function() {{
                 $('#chartCard').load('/graph/{sym}/1y/True')
             }}
 
-            document.getElementById("btn3y").onclick = function() {{
+            document.getElementById("3ytrue").onclick = function() {{
                 $('#chartCard').load('/graph/{sym}/3y/True')
             }}
 
-            document.getElementById("btn5y").onclick = function() {{
+            document.getElementById("5ytrue").onclick = function() {{
                 $('#chartCard').load('/graph/{sym}/5y/True')
             }}
 
-            document.getElementById("btnYTD").onclick = function() {{
+            document.getElementById("YTDtrue").onclick = function() {{
                 $('#chartCard').load('/graph/{sym}/YTD/True')
             }}
 
-
-            document.getElementById("btn1dfalse").onclick = function() {{
+            document.getElementById("1dfalse").onclick = function() {{
                 $('#chartCard').load('/graph/{sym}/1d/False');
             }}
 
-            document.getElementById("btn3dfalse").onclick = function() {{
+            document.getElementById("3dfalse").onclick = function() {{
                 $('#chartCard').load('/graph/{sym}/3d/False')
             }}
 
-            document.getElementById("btn5dfalse").onclick = function() {{
+            document.getElementById("5dfalse").onclick = function() {{
                 $('#chartCard').load('/graph/{sym}/5d/False')
             }}
 
-            document.getElementById("btn10dfalse").onclick = function() {{
+            document.getElementById("10dfalse").onclick = function() {{
                 $('#chartCard').load('/graph/{sym}/10d/False')
             }}
 
-            document.getElementById("btn1mfalse").onclick = function() {{
+            document.getElementById("1mfalse").onclick = function() {{
                 $('#chartCard').load('/graph/{sym}/1m/False')
             }}
 
-            document.getElementById("btn3mfalse").onclick = function() {{
+            document.getElementById("3mfalse").onclick = function() {{
                 $('#chartCard').load('/graph/{sym}/3m/False')
             }}
 
-            document.getElementById("btn6mfalse").onclick = function() {{
+            document.getElementById("6mfalse").onclick = function() {{
                 $('#chartCard').load('/graph/{sym}/6m/False')
             }}
 
-            document.getElementById("btn1yfalse").onclick = function() {{
+            document.getElementById("1yfalse").onclick = function() {{
                 $('#chartCard').load('/graph/{sym}/1y/False')
             }}
 
-            document.getElementById("btn3yfalse").onclick = function() {{
+            document.getElementById("3yfalse").onclick = function() {{
                 $('#chartCard').load('/graph/{sym}/3y/False')
             }}
 
-            document.getElementById("btn5yfalse").onclick = function() {{
+            document.getElementById("5yfalse").onclick = function() {{
                 $('#chartCard').load('/graph/{sym}/5y/False')
             }}
 
-            document.getElementById("btnYTDfalse").onclick = function() {{
+            document.getElementById("YTDfalse").onclick = function() {{
                 $('#chartCard').load('/graph/{sym}/YTD/False')
             }}
-        }})}})
+        }}
     """
     return {"script": flask.Markup(script),
             "title": flask.Markup(title),
             "quote": flask.Markup(quote),
-            "graphOptions": flask.Markup(graphOptions),
             "info": flask.Markup(info)}
 
 def htmlNameResults(name):
