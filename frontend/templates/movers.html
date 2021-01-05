@@ -8,7 +8,7 @@
 <h1 class="text-center">Top Movers: Dow Jones</h1>
 <div class="row" style="padding-bottom: 15px">
     <div class="col-lg-6">
-        <div class="card bg-success text-white shadow-sm h-100">
+        <div class="card bg-success text-white shadow h-100">
             <h5 class="card-header text-center">$DJI Gainers</h5>
             <div class="card-body">
                 <div id="DJIUpPercent">
@@ -24,7 +24,7 @@
         </div>
     </div>
     <div class="col-lg-6">
-        <div class="card bg-danger text-white shadow-sm h-100">
+        <div class="card bg-danger text-white shadow h-100">
             <h5 class="card-header text-center">$DJI Losers</h5>
             <div class="card-body">
                 <div id="DJIDownPercent">
@@ -44,7 +44,7 @@
 <h1 class="text-center">Top Movers: S&P 500</h1>
 <div class="row" style="padding-bottom: 15px">
     <div class="col-lg-6">
-        <div class="card bg-success text-white shadow-sm h-100">
+        <div class="card bg-success text-white shadow h-100">
             <h5 class="card-header text-center">$SPX.X Gainers</h5>
             <div class="card-body">
                 <div id="SPXXUpPercent">
@@ -60,7 +60,7 @@
         </div>
     </div>
     <div class="col-lg-6">
-        <div class="card bg-danger text-white shadow-sm h-100">
+        <div class="card bg-danger text-white shadow h-100">
             <h5 class="card-header text-center">$SPX.X Losers</h5>
             <div class="card-body">
                 <div id="SPXXDownPercent">
@@ -80,7 +80,7 @@
 <h1 class="text-center">Top Movers: NASDAQ Composite</h1>
 <div class="row">
     <div class="col-lg-6">
-        <div class="card bg-success text-white shadow-sm h-100">
+        <div class="card bg-success text-white shadow h-100">
             <h5 class="card-header text-center">$COMPX Gainers</h5>
             <div class="card-body">
                 <div id="COMPXUpPercent">
@@ -96,7 +96,7 @@
         </div>
     </div>
     <div class="col-lg-6">
-        <div class="card bg-danger text-white shadow-sm h-100">
+        <div class="card bg-danger text-white shadow h-100">
             <h5 class="card-header text-center">$COMPX Losers</h5>
             <div class="card-body">
                 <div id="COMPXDownPercent">
@@ -109,6 +109,13 @@
             <div class="card-footer text-center">
                 <button type="button" class="btn btn-dark btn-sm" onclick="toggleCOMPXDown()">Toggle Change By %/$</button>
             </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="moverModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="overflow-y: initial !important">
+        <div id="modalContent" class="modal-content">
+
         </div>
     </div>
 </div>

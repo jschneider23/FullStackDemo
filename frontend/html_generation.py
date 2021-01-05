@@ -78,6 +78,17 @@ def htmlModalData(sym):
                 <td>{symData[attr]}</td>
             </tr>
         """
+    if "$" not in sym:
+        rows += f"""
+            <tr>
+                <th>Options</th>
+                <td>
+                    <a id="{sym}OptionsLink" href="placeholder_href">
+                        View Options (w/ Default Settings)
+                    </a>
+                </td>
+            </tr>
+        """
     info = f"""
         <table id="table" class="table table-hover">
             <thead class="thead-light text-center">
@@ -200,7 +211,11 @@ def htmlNameResults(name):
         for ind in dfResults.index:
             rows += f"""
                 <tr>
-                    <td>{dfResults["Symbol"][ind]}</td>
+                    <td>
+                        <a id="{dfResults["Symbol"][ind]}ModalLink" href="testfornameresults">
+                            {dfResults["Symbol"][ind]}
+                        </a>
+                    </td>
                     <td>{dfResults["Company Name"][ind]}</td>
                     <td>{dfResults["Type"][ind]}</td>
                     <td>{dfResults["Exchange"][ind]}</td>
@@ -329,16 +344,35 @@ def htmlOCModalData(sym, conType, numStrikes, strike, rng, expFrom, expTo,
 def htmlMoverCard(indexSym, direction, change):
     dfMovers = sm.getMovers(indexSym, direction, change)
     rows = ""
+    onclickScript = ""
     ind = None
+    tag = "percent" if change == "percent" else "value"
     for ind in dfMovers.index:
+        sym = dfMovers["symbol"][ind]
+        name = dfMovers["name"][ind]
         rows += f"""
             <tr class="text-white">
                 <th>{int(ind)+1}</th>
-                <td>{dfMovers["symbol"][ind]}</td>
-                <td>{dfMovers["name"][ind]}</td>
+                <td>
+                <a id="{sym}sym{tag}" class="text-decoration-none text-white" data-toggle="modal" href="#moverModal">
+                    {sym}
+                </a>
+                </td>
+                <td>
+                <a id="{sym}name{tag}" class="text-decoration-none text-white" data-toggle="modal" href="#moverModal">
+                    {name}
+                </a>
+                </td>
                 <td>{dfMovers["change"][ind]}</td>
                 <td>{dfMovers["last"][ind]}</td>
             </tr>
+        """
+        onclickScript += f"""
+            document.getElementById("{sym}sym{tag}").onclick = function() {{
+                $('#modalContent').load('/moverModalContent/{sym}')
+            }}
+
+            document.getElementById("{sym}name{tag}").onclick = document.getElementById("{sym}sym{tag}").onclick
         """
     if ind is not None and ind < 9:
         ind += 1
@@ -375,6 +409,171 @@ def htmlMoverCard(indexSym, direction, change):
                     {rows}
                 </tbody>
             </table>
+        </div>
+        <script>
+            {onclickScript}
+        </script>
+    """
+    return flask.Markup(html)
+
+def htmlMoverModal(sym):
+    symData = si.getBySymbol(sym)
+    if symData is None:
+        return "Debug message delete this later: this is likely an api issue"
+
+    if "-" in str(symData["netChange"]):
+        cardClr = "bg-danger"
+        arrow = "↓" 
+    elif symData["netPercentChangeInDouble"] == "0.00%":
+        cardClr = "bg-secondary"
+        arrow = "↔"
+    else:
+        cardClr = "bg-success"
+        arrow = "↑"
+    if len(symData["description"]) > 57:
+        name = str(symData["description"])
+        nameDisplay = f"{name[:54]}..."
+    else:
+        nameDisplay = symData["description"]
+    quote = f"""
+        <div class="card {cardClr} text-white">
+            <div class="card-body">
+                <h4>{sym}: {nameDisplay}</h4>
+                <h6>
+                    {arrow} {symData["netChange"]}
+                    ({symData["netPercentChangeInDouble"]})
+                </h6>
+            </div>
+        </div>
+    """
+    rows = ""
+    for attr in symData:
+        rows += f"""
+            <tr>
+                <th>{cfg.engAttrs[attr]}</th>
+                <td>{symData[attr]}</td>
+            </tr>
+        """
+    if "$" not in sym:
+        rows += f"""
+            <tr>
+                <th>Options</th>
+                <td>
+                    <a id="{sym}OptionsLink" href="placeholder_href">
+                        View Options (w/ Default Settings)
+                    </a>
+                </td>
+            </tr>
+        """
+    info = f"""
+        <table id="table" class="table table-hover">
+            <thead class="thead-light text-center">
+                <tr>
+                    <th colspan="2">{sym} Profile</th>
+                </tr>
+            </thead>
+            <tbody>
+                {rows}
+            </tbody>
+        </table>
+    """
+    html = f"""
+        <div class="modal-header">
+            <h5 class="modal-title text-center">
+                {sym} Stock Quote &amp; Information
+            </h5>
+            <button type="button" class="close" data-dismiss="modal">
+                &times;
+            </button>
+        </div>
+        <div class="modal-body" style="height: 80vh; overflow-y: auto;">
+            {quote}
+            <br>
+            <div class="card bg-light text-center">
+                <div id="chartCard" class="card-body"></div>
+                <div class="card-footer">
+                    <b>Graph Options</b>
+                    <br>
+                    With Extended Hours:
+                    <button id="1dtrue" type="button" class="btn btn-sm btn-dark">
+                        1d
+                    </button>
+                    <button id="3dtrue" type="button" class="btn btn-sm btn-dark">
+                        3d
+                    </button>
+                    <button id="5dtrue" type="button" class="btn btn-sm btn-dark">
+                        5d
+                    </button>
+                    <button id="10dtrue" type="button" class="btn btn-sm btn-dark">
+                        10d
+                    </button>
+                    <button id="1mtrue" type="button" class="btn btn-sm btn-dark">
+                        1m
+                    </button>
+                    <button id="3mtrue" type="button" class="btn btn-sm btn-dark">
+                        3m
+                    </button>
+                    <button id="6mtrue" type="button" class="btn btn-sm btn-dark">
+                        6m
+                    </button>
+                    <button id="1ytrue" type="button" class="btn btn-sm btn-dark">
+                        1y
+                    </button>
+                    <button id="3ytrue" type="button" class="btn btn-sm btn-dark">
+                        3y
+                    </button>
+                    <button id="5ytrue" type="button" class="btn btn-sm btn-dark">
+                        5y
+                    </button>
+                    <button id="YTDtrue" type="button" class="btn btn-sm btn-dark">
+                        YTD
+                    </button>
+                    <hr>
+                    Without Extended Hours:
+                    <button id="1dfalse" type="button" class="btn btn-sm btn-dark">
+                        1d
+                    </button>
+                    <button id="3dfalse" type="button" class="btn btn-sm btn-dark">
+                        3d
+                    </button>
+                    <button id="5dfalse" type="button" class="btn btn-sm btn-dark">
+                        5d
+                    </button>
+                    <button id="10dfalse" type="button" class="btn btn-sm btn-dark">
+                        10d
+                    </button>
+                    <button id="1mfalse" type="button" class="btn btn-sm btn-dark">
+                        1m
+                    </button>
+                    <button id="3mfalse" type="button" class="btn btn-sm btn-dark">
+                        3m
+                    </button>
+                    <button id="6mfalse" type="button" class="btn btn-sm btn-dark">
+                        6m
+                    </button>
+                    <button id="1yfalse" type="button" class="btn btn-sm btn-dark">
+                        1y
+                    </button>
+                    <button id="3yfalse" type="button" class="btn btn-sm btn-dark">
+                        3y
+                    </button>
+                    <button id="5yfalse" type="button" class="btn btn-sm btn-dark">
+                        5y
+                    </button>
+                    <button id="YTDfalse" type="button" class="btn btn-sm btn-dark">
+                        YTD
+                    </button>
+                </div>
+            </div>
+            <br>
+            <div class="card bg-light">
+                {info}
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-dark" data-dismiss="modal">
+                Close
+            </button>
         </div>
     """
     return flask.Markup(html)

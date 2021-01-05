@@ -98,5 +98,9 @@ def movers():
     }
     return render_template("movers.html", context = context)
 
+@app.route("/moverModalContent/<sym>")
+def loadMoverModalContent(sym):
+    return hg.htmlMoverModal(sym)
+
 if __name__ == "__main__":
     app.run(debug = True)
