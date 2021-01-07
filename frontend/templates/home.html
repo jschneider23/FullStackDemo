@@ -7,35 +7,17 @@
 {% block body %}
 <h1 class="text-center">Markets at a Glance</h1>
 <div id="row" class="row text-center" style="padding-bottom: 15px">
-    <div class="col-sm-4">
-        <div class="card {{context.clrDJI}} text-white shadow-sm">
-            <h5 class="card-header">$DJI</h5>
-            <div class="card-body">
-                <h4 class="card-title">Dow Jones Industrial Average</h4>
-                <p class="card-text" id="DJI">{{context.DJI}}</p>
-            </div>
-        </div>
+    <div id="glanceDJI" class="col-sm-4">
+        {{context.cardDJI}}
     </div>
-    <div class="col-sm-4">
-        <div class="card {{context.clrSPXX}} text-white shadow-sm">
-            <h5 class="card-header">$SPX.X</h5>
-            <div class="card-body">
-                <h4 class="card-title">S&P 500</h4>
-                <p class="card-text" id="SPXX">{{context.SPXX}}</p>
-            </div>
-        </div>
+    <div id="glanceSPXX" class="col-sm-4">
+        {{context.cardSPXX}}
     </div>
-    <div class="col-sm-4">
-        <div class="card {{context.clrCOMPX}} text-white shadow-sm">
-            <h5 class="card-header">$COMPX</h5>
-            <div class="card-body">
-                <h4 class="card-title">NASDAQ Composite</h4>
-                <p class="card-text" id="COMPX">{{context.COMPX}}</p>
-            </div>
-        </div>
+    <div id="glanceCOMPX" class="col-sm-4">
+        {{context.cardCOMPX}}
     </div>
 </div>
-<p class="text-center text-muted"><i>Auto-refreshes every 10 seconds</i></p>
+<p class="text-center text-muted"><i>Auto-refreshes every 5 seconds</i></p>
 <hr>
 <h1 class="text-center">Stock Quote &amp; Information Lookup</h1>
 <div class="row text-center">
@@ -81,75 +63,78 @@
             <div class="card-footer">
                 <b>Graph Options</b>
                 <br>
-                With Extended Hours:
-                <button id="1dtrue" type="button" class="btn btn-sm btn-dark">
-                    1d
-                </button>
-                <button id="3dtrue" type="button" class="btn btn-sm btn-dark">
-                    3d
-                </button>
-                <button id="5dtrue" type="button" class="btn btn-sm btn-dark">
-                    5d
-                </button>
-                <button id="10dtrue" type="button" class="btn btn-sm btn-dark">
-                    10d
-                </button>
-                <button id="1mtrue" type="button" class="btn btn-sm btn-dark">
-                    1m
-                </button>
-                <button id="3mtrue" type="button" class="btn btn-sm btn-dark">
-                    3m
-                </button>
-                <button id="6mtrue" type="button" class="btn btn-sm btn-dark">
-                    6m
-                </button>
-                <button id="1ytrue" type="button" class="btn btn-sm btn-dark">
-                    1y
-                </button>
-                <button id="3ytrue" type="button" class="btn btn-sm btn-dark">
-                    3y
-                </button>
-                <button id="5ytrue" type="button" class="btn btn-sm btn-dark">
-                    5y
-                </button>
-                <button id="YTDtrue" type="button" class="btn btn-sm btn-dark">
-                    YTD
-                </button>
-                <hr>
-                Without Extended Hours:
-                <button id="1dfalse" type="button" class="btn btn-sm btn-dark">
-                    1d
-                </button>
-                <button id="3dfalse" type="button" class="btn btn-sm btn-dark">
-                    3d
-                </button>
-                <button id="5dfalse" type="button" class="btn btn-sm btn-dark">
-                    5d
-                </button>
-                <button id="10dfalse" type="button" class="btn btn-sm btn-dark">
-                    10d
-                </button>
-                <button id="1mfalse" type="button" class="btn btn-sm btn-dark">
-                    1m
-                </button>
-                <button id="3mfalse" type="button" class="btn btn-sm btn-dark">
-                    3m
-                </button>
-                <button id="6mfalse" type="button" class="btn btn-sm btn-dark">
-                    6m
-                </button>
-                <button id="1yfalse" type="button" class="btn btn-sm btn-dark">
-                    1y
-                </button>
-                <button id="3yfalse" type="button" class="btn btn-sm btn-dark">
-                    3y
-                </button>
-                <button id="5yfalse" type="button" class="btn btn-sm btn-dark">
-                    5y
-                </button>
-                <button id="YTDfalse" type="button" class="btn btn-sm btn-dark">
-                    YTD
-                </button>
+                <div class="row justify-content-center" style="padding-bottom: 10px">
+                    <i>With Extended Hours:</i>&nbsp;&nbsp;
+                    <button id="1dtrue" type="button" class="btn btn-sm btn-dark">
+                        1d
+                    </button>&nbsp;
+                    <button id="3dtrue" type="button" class="btn btn-sm btn-dark">
+                        3d
+                    </button>&nbsp;
+                    <button id="5dtrue" type="button" class="btn btn-sm btn-dark">
+                        5d
+                    </button>&nbsp;
+                    <button id="10dtrue" type="button" class="btn btn-sm btn-dark">
+                        10d
+                    </button>&nbsp;
+                    <button id="1mtrue" type="button" class="btn btn-sm btn-dark">
+                        1m
+                    </button>&nbsp;
+                    <button id="3mtrue" type="button" class="btn btn-sm btn-dark">
+                        3m
+                    </button>&nbsp;
+                    <button id="6mtrue" type="button" class="btn btn-sm btn-dark">
+                        6m
+                    </button>&nbsp;
+                    <button id="1ytrue" type="button" class="btn btn-sm btn-dark">
+                        1y
+                    </button>&nbsp;
+                    <button id="3ytrue" type="button" class="btn btn-sm btn-dark">
+                        3y
+                    </button>&nbsp;
+                    <button id="5ytrue" type="button" class="btn btn-sm btn-dark">
+                        5y
+                    </button>&nbsp;
+                    <button id="YTDtrue" type="button" class="btn btn-sm btn-dark">
+                        YTD
+                    </button>
+                </div>
+                <div class="row justify-content-center">
+                    <i>Without Extended Hours:</i>&nbsp;&nbsp;
+                    <button id="1dfalse" type="button" class="btn btn-sm btn-dark">
+                        1d
+                    </button>&nbsp;
+                    <button id="3dfalse" type="button" class="btn btn-sm btn-dark">
+                        3d
+                    </button>&nbsp;
+                    <button id="5dfalse" type="button" class="btn btn-sm btn-dark">
+                        5d
+                    </button>&nbsp;
+                    <button id="10dfalse" type="button" class="btn btn-sm btn-dark">
+                        10d
+                    </button>&nbsp;
+                    <button id="1mfalse" type="button" class="btn btn-sm btn-dark">
+                        1m
+                    </button>&nbsp;
+                    <button id="3mfalse" type="button" class="btn btn-sm btn-dark">
+                        3m
+                    </button>&nbsp;
+                    <button id="6mfalse" type="button" class="btn btn-sm btn-dark">
+                        6m
+                    </button>&nbsp;
+                    <button id="1yfalse" type="button" class="btn btn-sm btn-dark">
+                        1y
+                    </button>&nbsp;
+                    <button id="3yfalse" type="button" class="btn btn-sm btn-dark">
+                        3y
+                    </button>&nbsp;
+                    <button id="5yfalse" type="button" class="btn btn-sm btn-dark">
+                        5y
+                    </button>&nbsp;
+                    <button id="YTDfalse" type="button" class="btn btn-sm btn-dark">
+                        YTD
+                    </button>&nbsp;
+                </div>
             </div>
         </div>
         <br>
@@ -170,6 +155,17 @@
 </div>
 <script>
     {{context.modalScript}}
+
+    setInterval(function() {
+        $("#glanceDJI").load("/refresh/DJI")
+    }, 5000)
+    setInterval(function() {
+        $("#glanceSPXX").load("/refresh/SPXX")
+    }, 5000)
+    setInterval(function() {
+        $("#glanceCOMPX").load("/refresh/COMPX")
+    }, 5000)
+
 
     document.getElementById("submit").onclick = function() {
         var searchField = document.getElementById("search").value

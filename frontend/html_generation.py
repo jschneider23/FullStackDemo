@@ -19,20 +19,32 @@ def htmlIndexCard(indexSym):
     else:
         cardClr = "bg-success"
         arrow = "↑"
-    html = f"""
+    cardText = f"""
         <div class="row">
-        <div class="col"><b><u>Last:</u></b><br>
-        <span id=" + indexSym + lp">{data["lastPrice"]}</span></div>
-        <div class="col"><b><u>Close:</u></b><br>
-        <span id=" + indexSym + cp">{data["closePrice"]}</span></div>
-        <div class="col"><b><u>Value Chg:</u></b><br>
-        <span id=" + indexSym + vchg">{arrow} {data["netChange"]}</span></div>
-        <div class="col"><b><u>% Chg:</u></b><br>
-        <span id=" + indexSym + pchg">
-        {arrow} {data["netPercentChangeInDouble"]}</div>
+            <div class="col"><b><u>Last:</u></b><br>
+                {data["lastPrice"]}
+            </div>
+            <div class="col"><b><u>Close:</u></b><br>
+                {data["closePrice"]}
+            </div>
+            <div class="col"><b><u>Value Chg:</u></b><br>
+                {arrow} {data["netChange"]}
+            </div>
+            <div class="col"><b><u>% Chg:</u></b><br>
+                {arrow} {data["netPercentChangeInDouble"]}
+            </div>
         </div>
     """
-    return {"color": cardClr, "html": flask.Markup(html)}
+    html = f"""
+        <div class="card {cardClr} text-white shadow-sm">
+            <h5 class="card-header">{indexSym}</h5>
+            <div class-"card-body"><br>
+                <h4 class="card-title">{data["cardTitle"]}</h4>
+                <p class="card-text">{cardText}</p>
+            </div>
+        </div>
+    """
+    return flask.Markup(html)
 
 def htmlModalData(sym):
     if "$" in sym:
@@ -494,75 +506,78 @@ def htmlMoverModal(sym):
                 <div class="card-footer">
                     <b>Graph Options</b>
                     <br>
-                    With Extended Hours:
+                    <div class="row justify-content-center" style="padding-bottom: 10px">
+                    <i>With Extended Hours:</i>&nbsp;&nbsp;
                     <button id="1dtrue" type="button" class="btn btn-sm btn-dark">
                         1d
-                    </button>
+                    </button>&nbsp;
                     <button id="3dtrue" type="button" class="btn btn-sm btn-dark">
                         3d
-                    </button>
+                    </button>&nbsp;
                     <button id="5dtrue" type="button" class="btn btn-sm btn-dark">
                         5d
-                    </button>
+                    </button>&nbsp;
                     <button id="10dtrue" type="button" class="btn btn-sm btn-dark">
                         10d
-                    </button>
+                    </button>&nbsp;
                     <button id="1mtrue" type="button" class="btn btn-sm btn-dark">
                         1m
-                    </button>
+                    </button>&nbsp;
                     <button id="3mtrue" type="button" class="btn btn-sm btn-dark">
                         3m
-                    </button>
+                    </button>&nbsp;
                     <button id="6mtrue" type="button" class="btn btn-sm btn-dark">
                         6m
-                    </button>
+                    </button>&nbsp;
                     <button id="1ytrue" type="button" class="btn btn-sm btn-dark">
                         1y
-                    </button>
+                    </button>&nbsp;
                     <button id="3ytrue" type="button" class="btn btn-sm btn-dark">
                         3y
-                    </button>
+                    </button>&nbsp;
                     <button id="5ytrue" type="button" class="btn btn-sm btn-dark">
                         5y
-                    </button>
+                    </button>&nbsp;
                     <button id="YTDtrue" type="button" class="btn btn-sm btn-dark">
                         YTD
                     </button>
-                    <hr>
-                    Without Extended Hours:
+                </div>
+                <div class="row justify-content-center">
+                    <i>Without Extended Hours:</i>&nbsp;&nbsp;
                     <button id="1dfalse" type="button" class="btn btn-sm btn-dark">
                         1d
-                    </button>
+                    </button>&nbsp;
                     <button id="3dfalse" type="button" class="btn btn-sm btn-dark">
                         3d
-                    </button>
+                    </button>&nbsp;
                     <button id="5dfalse" type="button" class="btn btn-sm btn-dark">
                         5d
-                    </button>
+                    </button>&nbsp;
                     <button id="10dfalse" type="button" class="btn btn-sm btn-dark">
                         10d
-                    </button>
+                    </button>&nbsp;
                     <button id="1mfalse" type="button" class="btn btn-sm btn-dark">
                         1m
-                    </button>
+                    </button>&nbsp;
                     <button id="3mfalse" type="button" class="btn btn-sm btn-dark">
                         3m
-                    </button>
+                    </button>&nbsp;
                     <button id="6mfalse" type="button" class="btn btn-sm btn-dark">
                         6m
-                    </button>
+                    </button>&nbsp;
                     <button id="1yfalse" type="button" class="btn btn-sm btn-dark">
                         1y
-                    </button>
+                    </button>&nbsp;
                     <button id="3yfalse" type="button" class="btn btn-sm btn-dark">
                         3y
-                    </button>
+                    </button>&nbsp;
                     <button id="5yfalse" type="button" class="btn btn-sm btn-dark">
                         5y
-                    </button>
+                    </button>&nbsp;
                     <button id="YTDfalse" type="button" class="btn btn-sm btn-dark">
                         YTD
-                    </button>
+                    </button>&nbsp;
+                </div>
                 </div>
             </div>
             <br>
@@ -575,5 +590,96 @@ def htmlMoverModal(sym):
                 Close
             </button>
         </div>
+        <script>
+            $(function() {{
+                $('#chartCard').load('/graph/{sym}/10d/True')
+            }})
+            document.getElementById("1dtrue").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/1d/True');
+            }}
+            document.getElementById("3dtrue").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/3d/True')
+            }}
+
+            document.getElementById("5dtrue").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/5d/True')
+            }}
+
+            document.getElementById("10dtrue").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/10d/True')
+            }}
+
+            document.getElementById("1mtrue").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/1m/True')
+            }}
+
+            document.getElementById("3mtrue").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/3m/True')
+            }}
+
+            document.getElementById("6mtrue").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/6m/True')
+            }}
+
+            document.getElementById("1ytrue").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/1y/True')
+            }}
+
+            document.getElementById("3ytrue").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/3y/True')
+            }}
+
+            document.getElementById("5ytrue").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/5y/True')
+            }}
+
+            document.getElementById("YTDtrue").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/YTD/True')
+            }}
+
+            document.getElementById("1dfalse").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/1d/False');
+            }}
+
+            document.getElementById("3dfalse").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/3d/False')
+            }}
+
+            document.getElementById("5dfalse").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/5d/False')
+            }}
+
+            document.getElementById("10dfalse").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/10d/False')
+            }}
+
+            document.getElementById("1mfalse").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/1m/False')
+            }}
+
+            document.getElementById("3mfalse").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/3m/False')
+            }}
+
+            document.getElementById("6mfalse").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/6m/False')
+            }}
+
+            document.getElementById("1yfalse").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/1y/False')
+            }}
+
+            document.getElementById("3yfalse").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/3y/False')
+            }}
+
+            document.getElementById("5yfalse").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/5y/False')
+            }}
+
+            document.getElementById("YTDfalse").onclick = function() {{
+                $('#chartCard').load('/graph/{sym}/YTD/False')
+            }}
+        </script>
     """
     return flask.Markup(html)

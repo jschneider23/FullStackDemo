@@ -35,6 +35,12 @@ def getBySymbol(sym, symType = ""):
         if symType == "indexCard":
             for attr in cfg.cardAttrs:
                 data[attr] = aux.attrFormat(sym, attr, content[sym][attr])
+            if sym == "$DJI":
+                data["cardTitle"] = "Dow Jones Industrial Average"
+            elif sym == "$SPX.X":
+                data["cardTitle"] = "S&P 500"
+            else:
+                data["cardTitle"] = "NASDAQ Composite"
         elif symType == "indexFull":
             for attr in cfg.indexAttrs:
                 data[attr] = aux.attrFormat(sym, attr, content[sym][attr])

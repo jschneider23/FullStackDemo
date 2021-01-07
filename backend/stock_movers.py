@@ -43,7 +43,8 @@ def getMovers(index, direction, change):
             chg = f"↔&nbsp;{chg}"
         else:
             chg = f"↑&nbsp;{chg}"
-        newRow = [m["symbol"], m["description"], chg, round(m["last"], 2)]
+        last = f"${round(m['last'], 2)}"
+        newRow = [m["symbol"], m["description"], chg, last]
         df.loc[len(df)] = newRow
     return df
 

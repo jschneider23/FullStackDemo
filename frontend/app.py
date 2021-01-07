@@ -30,31 +30,32 @@ def home():
                             "modalTitle": modal["title"],
                             "modalQuote": modal["quote"],
                             "modalInfo": modal["info"]})
-    tupDJI = hg.htmlIndexCard("$DJI")
-    tupSPXX = hg.htmlIndexCard("$SPX.X")
-    tupCOMPX = hg.htmlIndexCard("$COMPX")
-    context.update({"clrDJI": tupDJI["color"], "DJI": tupDJI["html"], 
-                    "clrSPXX": tupSPXX["color"], "SPXX": tupSPXX["html"],
-                    "clrCOMPX": tupCOMPX["color"], "COMPX": tupCOMPX["html"]})
+    cardDJI = hg.htmlIndexCard("$DJI")
+    cardSPXX = hg.htmlIndexCard("$SPX.X")
+    cardCOMPX = hg.htmlIndexCard("$COMPX")
+    context.update({"cardDJI": cardDJI,
+                    "cardSPXX": cardSPXX,
+                    "cardCOMPX": cardCOMPX})
     return render_template("home.html", context = context)
 
 @app.route("/graph/<sym>/<time>/<hasExtHrs>")
 def showGraph(sym, time, hasExtHrs):
+    aux.clearOldGraphs()
     sc.createGraph(sym, time = time, hasExtHrs = hasExtHrs)
     file = open(f"frontend/graphs/graph{sym}{time}{hasExtHrs}.html")
     contents = file.read()
     file.close()
     return flask.Markup(contents)
 
-@app.route("/refresh")
-def refresh():
-    print("refresh ran")
-    tupDJI = hg.htmlIndexCard("$DJI")
-    tupSPXX = hg.htmlIndexCard("$SPX.X")
-    tupCOMPX = hg.htmlIndexCard("$COMPX")
-    return {"clrDJI": tupDJI["color"], "DJI": tupDJI["html"], 
-            "clrSPXX": tupSPXX["color"], "SPXX": tupSPXX["html"],
-            "clrCOMPX": tupCOMPX["color"], "COMPX": tupCOMPX["html"]}
+@app.route("/refresh/<strippedIndexSym>")
+def refreshIndexCard(strippedIndexSym):
+    if strippedIndexSym == "DJI":
+        indexSym = "$DJI"
+    elif strippedIndexSym == "SPXX":
+        indexSym = "$SPX.X"
+    else:
+        indexSym = "$COMPX"
+    return hg.htmlIndexCard(indexSym)
 
 @app.route("/options", methods = ["POST", "GET"])
 def options():
@@ -81,6 +82,7 @@ def options():
 
 @app.route("/movers")
 def movers():
+    aux.clearOldGraphs()
     context = {
         "movers": "active",
         "DJIUpPercent": hg.htmlMoverCard("$DJI", "up", "percent"),
