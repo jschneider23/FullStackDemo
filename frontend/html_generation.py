@@ -320,7 +320,7 @@ def htmlOCModalData(sym, conType, numStrikes, strike, rng, expFrom, expTo,
                 newExpDate = row["Expiration"]
                 if oldExpDate is None or oldExpDate == newExpDate:
                     put = frobj.Option.fromRow(ind, underlyingPrice, row)
-                    callList.append(put)
+                    putList.append(put)
                     oldExpDate = newExpDate
                 else:
                     edg = frobj.OptionEDG.fromOptionLists(putList = putList)

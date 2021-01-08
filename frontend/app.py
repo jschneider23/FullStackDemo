@@ -66,11 +66,13 @@ def options():
         numStrikes = request.form["numStrikes"]
         strike = request.form["strike"]
         rng = request.form["range"]
-        fromDate = request.form["fromDate"]
-        toDate = request.form["toDate"]
         if request.form.get("expMonth") is not None:
             expMonth = request.form["expMonth"]
+            fromDate = ""
+            toDate = ""
         else:
+            fromDate = request.form["fromDate"]
+            toDate = request.form["toDate"]
             expMonth = "ALL"
         standard = request.form["standard"]
         modal = hg.htmlOCModalData(sym, conType, numStrikes, strike, rng, fromDate, toDate, expMonth, standard)

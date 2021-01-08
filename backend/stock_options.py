@@ -33,6 +33,7 @@ def getOptionChain(sym, conType, numStrikes, strike, rng, expFrom, expTo,
     print("Params Backend sends to API:")
     print(js.dumps(params, indent=4))
     content = rq.get(url, params).json()
+    print("Raw API Return: " + js.dumps(content, indent=4))
     info = {"underlyingPrice": content["underlyingPrice"]}
     if conType == "ALL" or conType == "CALL":
         cols = ["Expiration", "Strike", "Bid", "Ask", "Market", "%Chg",
@@ -62,5 +63,7 @@ def getOptionChain(sym, conType, numStrikes, strike, rng, expFrom, expTo,
                           option["description"]]
                 dfPuts.loc[len(dfPuts)] = newRow
         info["dfPuts"] = dfPuts
+    print("*** info:")
+    print(str(info))
     return info
 
