@@ -44,13 +44,20 @@
 <div class="text-center text-danger">
     <h5>{{context.errorMsg}}</h5>
 </div>
+<div class="modal fade" id="homeResultModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="overflow-y: initial !important">
+        <div id="modalContent" class="modal-content">
+
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="viewStock" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="overflow-y: initial !important">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title text-center">{{context.modalTitle}}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+            &times;
         </button>
       </div>
       <div class="modal-body" style="height: 80vh; overflow-y: auto;">

@@ -10,6 +10,16 @@ import pandas as pd
 import json as js 
 from backend import bd_config as cfg
 
+manualApply = {
+    "OTM": True,
+    "ITM": True,
+    "NTM": True,
+    "SAK": False,
+    "SBK": False,
+    "SNK": False,
+    "ALL": True
+}
+
 def getOptionChain(sym, conType, numStrikes, strike, rng, expFrom, expTo,
                    expMonth, standard):
     url = r"https://api.tdameritrade.com/v1/marketdata/chains"
@@ -30,10 +40,9 @@ def getOptionChain(sym, conType, numStrikes, strike, rng, expFrom, expTo,
         del params["fromDate"]
     if expTo == "" or expTo == "null":
         del params["toDate"]
-    print("Params Backend sends to API:")
-    print(js.dumps(params, indent=4))
+    if numStrikes != "" and manualApply.get(rng):
+        del params["strikeCount"]
     content = rq.get(url, params).json()
-    print("Raw API Return: " + js.dumps(content, indent=4))
     info = {"underlyingPrice": content["underlyingPrice"]}
     if conType == "ALL" or conType == "CALL":
         cols = ["Expiration", "Strike", "Bid", "Ask", "Market", "%Chg",
@@ -63,7 +72,77 @@ def getOptionChain(sym, conType, numStrikes, strike, rng, expFrom, expTo,
                           option["description"]]
                 dfPuts.loc[len(dfPuts)] = newRow
         info["dfPuts"] = dfPuts
-    print("*** info:")
-    print(str(info))
+        print("TD Filtered:\n" + str(info))
+    trueInfo = trulyApplyFilters(info, numStrikes, strike, rng)
+    return trueInfo
+
+# Filter interactions that will remain disallowed for good reason:
+# expFrom and expTo OR expMonth BUT NOT BOTH
+# 
+# Ones that need to be handled:
+# Strike Price (cannot have _ selected)
+# Range (cannot have _ selected)
+#
+# Also once filters are applied, need to add dummy rows so the expiration
+# dates line up and one table doesn't end before the other
+def trulyApplyFilters(info, numStrikes, strike, rng):
+    if manualApply.get(rng) and numStrikes != "":
+        dfCalls = info.get("dfCalls")
+        dfPuts = info.get("dfPuts")
+        if dfCalls is not None:
+            newExp = None
+            oldExp = None
+            strikesLeftForExp = numStrikes
+            for ind in dfCalls.index:
+                newExp = dfCalls["Expiration"][ind]
+                if oldExp is None:
+                    strikesLeftForExp = int(numStrikes) - 1
+                    oldExp = newExp
+                elif strikesLeftForExp > 0:
+                    strikesLeftForExp -= 1
+                else:
+                    dfCalls.drop(ind, inplace = True)
+                    oldExp = None
+            info["dfCalls"] = dfCalls.reset_index(drop = True)
+        if dfPuts is not None:
+            newExp = None
+            oldExp = None
+            strikesLeftForExp = numStrikes
+            for ind in dfPuts.index:
+                newExp = dfPuts["Expiration"][ind]
+                if oldExp is None:
+                    strikesLeftForExp = int(numStrikes) - 1
+                    oldExp = newExp
+                elif strikesLeftForExp > 0:
+                    strikesLeftForExp -= 1
+                else:
+                    dfPuts.drop(ind, inplace = True)
+                    oldExp = None
+            info["dfPuts"] = dfPuts.reset_index(drop = True)
+    print("FULLLY FILTERED (gOC ret):\n" + str(info))
     return info
 
+sym = "TSLA"
+conType = "ALL"
+numStrikes = "4"
+strike = ""
+rng = "OTM"
+expFrom = ""
+expTo = ""
+expMonth = ""
+standard = "ALL"
+# Return for just TSLA with all other at default or blank is both calls and
+# puts table 3863 entries long
+# rng: can't have numStrikes if its "_-the-money" based, but needs it if
+# it is strike-based
+# strike: this is the priortized filter over most others, can't have numStrikes
+# strike can be used with money status but will result in an empty df for
+# either calls or puts, nullifies any strike-based range
+# numStrikes will nullify the strike price filter
+# combining all 3 has numStrikes with priority
+# Ensure all possible combinations work as intended:
+# numStrikes and strike-> have 10 strikes default but disable if strike entered
+# numStrikes and rng->apply rng first, then apply numStrikes if rng is $-based
+# strike and rng->account for empty df if is $-based rng, add strike-based func
+# All 3 at the same time->disable numStrikes if strike entered
+#getOptionChain(sym, conType, numStrikes, strike, rng, expFrom, expTo, expMonth, standard)

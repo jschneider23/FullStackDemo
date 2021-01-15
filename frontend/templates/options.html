@@ -33,13 +33,13 @@
                         </div>
                         <div class="col-auto">
                             <div class="form-group">
-                                <label for="numStrikes"># of Strikes:</label>
+                                <label for="numStrikes">Max # of Strikes:</label>
                                 <input type="number" class="form-control" id="numStrikes" name="numStrikes" value="10" min="1" max="25" step="1"></input>
                             </div>
                         </div>
                         <div class="col-auto">
                             <div class="form-group">
-                                <label for="strike">Strike Price ($):</label>
+                                <label for="strike">Exact Strike ($):</label>
                                 <input type="number" class="form-control" id="strike" name="strike" min="0.01" step=".01" placeholder="Any Price"></input>
                             </div>
                         </div>
@@ -154,20 +154,36 @@
     }
 
     document.getElementById("btnReset").onclick = function() {
+        numStrikes.disabled = false
         inputFromDate.disabled = false
         inputToDate.disabled = false
         inputExpMonth.disabled = false
     }
 
+    strike.onkeyup = function() {
+        if (event.keyCode == 8 || event.charCode == 46) {
+            numStrikes.disabled = false
+        }
+        numStrikes.disabled = (this.value != "")
+    }
     inputFromDate.oninput = function() {
+        if (event.keyCode == 8 || event.charCode == 46) {
+            numStrikes.disabled = false
+        }
         inputExpMonth.disabled = (this.value != "" || this.value != null)
     }
 
     inputToDate.oninput = function() {
+        if (event.keyCode == 8 || event.charCode == 46) {
+            numStrikes.disabled = false
+        }
         inputExpMonth.disabled = (this.value != "" || this.value != null)
     }
 
     inputExpMonth.oninput = function() {
+        if (event.keyCode == 8 || event.charCode == 46) {
+            numStrikes.disabled = false
+        }
         inputFromDate.disabled = (this.value != "ALL")
         inputToDate.disabled = (this.value != "ALL")
     }

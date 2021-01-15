@@ -220,12 +220,14 @@ def htmlNameResults(name):
         html = "TODO: Make this simulate a direct symbol lookup"
     else:
         rows = ""
+        onclickScript = ""
         for ind in dfResults.index:
+            sym = dfResults["Symbol"][ind]
             rows += f"""
                 <tr>
                     <td>
-                        <a id="{dfResults["Symbol"][ind]}ModalLink" href="testfornameresults">
-                            {dfResults["Symbol"][ind]}
+                        <a id="{sym}sym" data-toggle="modal" href="#homeResultModal">
+                            {sym}
                         </a>
                     </td>
                     <td>{dfResults["Company Name"][ind]}</td>
@@ -233,7 +235,11 @@ def htmlNameResults(name):
                     <td>{dfResults["Exchange"][ind]}</td>
                 </tr>
             """
-
+            onclickScript += f"""
+                document.getElementById("{sym}sym").onclick = function() {{
+                    $('#modalContent').load('/modalContent/{sym}')
+                }}
+            """
         html = f"""
             <div class="card bg-light">
                 <h3 class="text-center card-header">
@@ -253,6 +259,9 @@ def htmlNameResults(name):
                         {rows}
                     </tbody>
                 </table>
+                <script>
+                    {onclickScript}
+                </script>
             </div>
         """
     return flask.Markup(html)
@@ -381,7 +390,7 @@ def htmlMoverCard(indexSym, direction, change):
         """
         onclickScript += f"""
             document.getElementById("{sym}sym{tag}").onclick = function() {{
-                $('#modalContent').load('/moverModalContent/{sym}')
+                $('#modalContent').load('/modalContent/{sym}')
             }}
 
             document.getElementById("{sym}name{tag}").onclick = document.getElementById("{sym}sym{tag}").onclick
@@ -428,10 +437,20 @@ def htmlMoverCard(indexSym, direction, change):
     """
     return flask.Markup(html)
 
-def htmlMoverModal(sym):
+def htmlModalContent(sym):
     symData = si.getBySymbol(sym)
     if symData is None:
-        return "Debug message delete this later: this is likely an api issue"
+        return flask.Markup("""
+            <div style="padding: 5px">
+                <button type="button" class="close text-right" data-dismiss="modal">
+                    &times;
+                </button>
+                <p>
+                    API ERROR: TD Ameritrade identifies this symbol as real and
+                    existing in their database, but does not maintain data for it.
+                </p>
+            </div>
+        """)
 
     if "-" in str(symData["netChange"]):
         cardClr = "bg-danger"

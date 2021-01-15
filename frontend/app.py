@@ -63,7 +63,10 @@ def options():
     if request.method == "POST":
         sym = request.form["search"].strip().upper()
         conType = request.form["conType"]
-        numStrikes = request.form["numStrikes"]
+        if request.form.get("numStrikes") is not None:
+            numStrikes = request.form["numStrikes"]
+        else:
+            numStrikes = ""
         strike = request.form["strike"]
         rng = request.form["range"]
         if request.form.get("expMonth") is not None:
@@ -102,9 +105,9 @@ def movers():
     }
     return render_template("movers.html", context = context)
 
-@app.route("/moverModalContent/<sym>")
-def loadMoverModalContent(sym):
-    return hg.htmlMoverModal(sym)
+@app.route("/modalContent/<sym>")
+def loadModalContent(sym):
+    return hg.htmlModalContent(sym)
 
 if __name__ == "__main__":
     app.run(debug = True)
