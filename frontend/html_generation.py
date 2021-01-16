@@ -217,7 +217,7 @@ def htmlNameResults(name):
     if dfResults is None:
         return None
     elif not isinstance(dfResults, pd.DataFrame):
-        html = "TODO: Make this simulate a direct symbol lookup"
+        return {"direct": dfResults["symbol"]}
     else:
         rows = ""
         onclickScript = ""

@@ -15,7 +15,13 @@ def home():
         if modal is None:
             formInput = formInput.capitalize()
             nameResults = hg.htmlNameResults(formInput)
-            if nameResults is not None:
+            if isinstance(nameResults, dict):
+                modal = hg.htmlModalData(nameResults["direct"])
+                context.update({"modalScript": modal["script"], 
+                            "modalTitle": modal["title"],
+                            "modalQuote": modal["quote"],
+                            "modalInfo": modal["info"]})
+            elif nameResults is not None:
                 context["nameResults"] = nameResults
             else:
                 errorMsg = f"""
