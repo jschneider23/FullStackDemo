@@ -73,7 +73,7 @@ def options():
             numStrikes = request.form["numStrikes"]
         else:
             numStrikes = ""
-        strike = request.form["strike"]
+        strike = request.form.get("strike", "")
         rng = request.form["range"]
         if request.form.get("expMonth") is not None:
             expMonth = request.form["expMonth"]

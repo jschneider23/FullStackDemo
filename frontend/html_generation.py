@@ -6,7 +6,8 @@ import flask
 import pandas as pd
 from backend import bd_config as cfg, stock_info as si, stock_chart as sc, stock_movers as sm, stock_options as so
 from frontend import fr_objects as frobj
-
+from datetime import datetime as dt, date
+from dateutil.relativedelta import relativedelta as rd
 # *** Home Page Generator Functions *** #
 def htmlIndexCard(indexSym):
     data = si.getBySymbol(indexSym, "indexCard")
@@ -88,17 +89,6 @@ def htmlModalData(sym):
             <tr>
                 <th>{cfg.engAttrs[attr]}</th>
                 <td>{symData[attr]}</td>
-            </tr>
-        """
-    if "$" not in sym:
-        rows += f"""
-            <tr>
-                <th>Options</th>
-                <td>
-                    <a id="{sym}OptionsLink" href="placeholder_href">
-                        View Options (w/ Default Settings)
-                    </a>
-                </td>
             </tr>
         """
     info = f"""
@@ -295,7 +285,7 @@ def htmlOCModalData(sym, conType, numStrikes, strike, rng, expFrom, expTo,
             with the given filters.  Either \"<i>{sym}</i>\" is a
             non-optionable symbol or invalid parameters were provided.
         """
-        return {"errorMsg": errorMsg}
+        return {"errorMsg": flask.Markup(errorMsg)}
 
     if dfCalls is not None and dfPuts is None:
         longerLen = len(dfCalls)
@@ -483,17 +473,6 @@ def htmlModalContent(sym):
             <tr>
                 <th>{cfg.engAttrs[attr]}</th>
                 <td>{symData[attr]}</td>
-            </tr>
-        """
-    if "$" not in sym:
-        rows += f"""
-            <tr>
-                <th>Options</th>
-                <td>
-                    <a id="{sym}OptionsLink" href="placeholder_href">
-                        View Options (w/ Default Settings)
-                    </a>
-                </td>
             </tr>
         """
     info = f"""

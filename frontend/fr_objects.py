@@ -35,15 +35,9 @@ class Option:
                    row["Bid"], row["Ask"], row["Market"], row["%Chg"],
                    row["Volume"], row["Type"], row["ITM"], row["Name"])
 
-    # Returns the html for a single Option Card that is viewed after
-    # clicking on one of the options from the entire option chain or group
-    def htmlOptionCard(self):
-        htmlStr = ""
-        return htmlStr
-
     # Produces all the html possible for an Option displayed in a group card
     # of the chain using just properties of the Option object
-    def htmlInExpDateGroup(self, chopDuplicate = False):
+    def htmlInExpDateGroup(self, chopDuplicate = False, justPuts = False):
         bgITM = ""
         strikeSingle = ""
         strikeBoth = ""
@@ -53,24 +47,14 @@ class Option:
             strikeSingle = f"<td class='table-dark'>${self.strikePrice}</td>"
         if not chopDuplicate:
             strikeBoth = f"<td class='table-dark'>${self.strikePrice}</td>"
+        if justPuts:
+            strikeSingle = ""
 
         htmlStr = f"""
             {strikeSingle}
-            <td {bgITM}>
-                <a href="#" class="text-decoration-none">
-                    ${self.bid}
-                </a>
-            </td>
-            <td {bgITM}>
-                <a href="#" class="text-decoration-none">
-                    ${self.ask}
-                </a>
-            </td>
-            <td {bgITM}>
-                <a href="#" class="text-decoration-none">
-                    ${self.market}
-                </a>
-            </td>
+            <td {bgITM}>${self.bid}</td>
+            <td {bgITM}>${self.ask}</td>
+            <td {bgITM}>${self.market}</td>
             <td {bgITM}>{self.volume}</td>
             {strikeBoth}
         """
@@ -149,7 +133,7 @@ class OptionEDG:
             for option in puts:
                 rows += f"""
                     <tr>
-                        {option.htmlInExpDateGroup()}
+                        {option.htmlInExpDateGroup(justPuts = True)}
                     </tr>
                 """
         else:
@@ -249,8 +233,8 @@ class OptionChain:
             </script>
         """
         title = f"""
-            {self.symbol} Option Chain | {len(self.expDateGroups)} Expiry Dates
-            w/ Filters Used
+            {self.symbol} Option Chain | {len(self.expDateGroups)} Expiry 
+            Dates | ITM = Grey - OTM = White
         """
         cards = ""
         for edg in self.expDateGroups:

@@ -84,3 +84,13 @@ graphMap = {
     "YTD": {"engTime": "Trading Year to Date", "periodType": "year",
             "period": 1, "freqType": "daily", "freq": 1, "fmt": "%b-%-d"}
 }
+
+manualApply = {
+    "OTM": True,
+    "ITM": True,
+    "NTM": True,
+    "SAK": False,
+    "SBK": False,
+    "SNK": False,
+    "ALL": False
+}

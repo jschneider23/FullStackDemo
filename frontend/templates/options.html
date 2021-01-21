@@ -15,10 +15,9 @@
             <div class="card-body">
                 <form method="post" onsubmit="{{url_for('options')}}">
                     <div class="form-group">
-                        <label for="search">Enter a Valid, Existing, and Optionable Symbol:</label>
-                        <input type="text" class="form-control form-control-lg" placeholder="Ex: TSLA, AAPL, F, etc." required id="search" name="search" autocomplete=""><br>
+                        <label for="search">Enter Stock Symbol:</label>
+                        <input type="text" class="form-control form-control-lg" placeholder="Ex: TSLA, AAPL, F, etc." required id="search" name="search" autocomplete="">
                     </div>
-                    <hr>
                     <h5><b>Search Filters</b></h5>
                     <div class="row justify-content-center">
                         <div class="col-auto">
@@ -51,9 +50,9 @@
                                     <option value="ITM">ITM: In The Money</option>
                                     <option value="OTM">OTM: Out of the Money</option>
                                     <option value="NTM">NTM: Near The Money</option>
-                                    <option value="SAK">SAK: Strikes Above Market</option>
-                                    <option value="SBK">SAK: Strikes Below Market</option>
-                                    <option value="SNK">NTM: Strikes Near Market</option>
+                                    <option value="SAK">SAK: Strikes Above Market Price</option>
+                                    <option value="SBK">SAK: Strikes Below Market Price</option>
+                                    <option value="SNK">SNK: Strikes Near Market Price</option>
                                 </select>
                             </div>
                         </div>
@@ -62,13 +61,27 @@
                         <div class="col-auto">
                             <div class="form-group">
                                 <label for="fromDate">Expirations From:</label>
-                                <input type="date" class="form-control" id="fromDate" name="fromDate" placeholder="today's date"></input>
+                                <div class="input-group">
+                                    <input type="date" class="form-control" id="fromDate" name="fromDate" placeholder="today's date"></input>
+                                    <div class="input-group-append">
+                                        <button id="closeFromDate" type="button" class="btn btn-outline-secondary">
+                                            &times;
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="col-auto">
                             <div class="form-group">
                                 <label for="toDate">Expirations To:</label>
-                                <input type="date" class="form-control" id="toDate" name="toDate" placeholder="tomorrow's date"></input>
+                                <div class="input-group">
+                                    <input type="date" class="form-control" id="toDate" name="toDate" placeholder="tomorrow's date"></input>
+                                    <div class="input-group-append">
+                                        <button id="closeToDate" type="button" class="btn btn-outline-secondary">
+                                            &times;
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="col-auto">
@@ -155,9 +168,20 @@
 
     document.getElementById("btnReset").onclick = function() {
         numStrikes.disabled = false
+        strike.disabled = false
         inputFromDate.disabled = false
         inputToDate.disabled = false
         inputExpMonth.disabled = false
+    }
+
+    closeFromDate.onclick = function() {
+        inputFromDate.value = ""
+        inputExpMonth.disabled = (inputToDate.value != "")
+    }
+
+    closeToDate.onclick = function() {
+        inputToDate.value = ""
+        inputExpMonth.disabled = (inputFromDate.value != "")
     }
 
     strike.onkeyup = function() {
@@ -166,18 +190,23 @@
         }
         numStrikes.disabled = (this.value != "")
     }
+
+    range.oninput = function() {
+        strike.disabled = (this.value != "ALL")
+    }
+
     inputFromDate.oninput = function() {
         if (event.keyCode == 8 || event.charCode == 46) {
             numStrikes.disabled = false
         }
-        inputExpMonth.disabled = (this.value != "" || this.value != null)
+        inputExpMonth.disabled = (this.value != "")
     }
 
     inputToDate.oninput = function() {
         if (event.keyCode == 8 || event.charCode == 46) {
             numStrikes.disabled = false
         }
-        inputExpMonth.disabled = (this.value != "" || this.value != null)
+        inputExpMonth.disabled = (this.value != "")
     }
 
     inputExpMonth.oninput = function() {
