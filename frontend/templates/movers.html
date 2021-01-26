@@ -120,34 +120,40 @@
     </div>
 </div>
 <script>
+    /* Each Bootstrap Movers Card preloads both movers ranked by percent and */
+    /* movers ranked by value as table elements from the server when the */
+    /* Movers page is loaded, so these functions define the the toggle */
+    /* functionality of each "Toggle Change By %/$" onclick event defined in */
+    /* each button tag's onclick event (6 buttons in total) */
+    
     function toggleDJIUp() {
-        $(DJIUpPercent).toggle()
-        $(DJIUpValue).toggle()
+        $("#DJIUpPercent").toggle()
+        $("#DJIUpValue").toggle()
     }
 
     function toggleDJIDown() {
-        $(DJIDownPercent).toggle()
-        $(DJIDownValue).toggle()
+        $("#DJIDownPercent").toggle()
+        $("#DJIDownValue").toggle()
     }
 
     function toggleSPXXUp() {
-        $(SPXXUpPercent).toggle()
-        $(SPXXUpValue).toggle()
+        $("#SPXXUpPercent").toggle()
+        $("#SPXXUpValue").toggle()
     }
 
     function toggleSPXXDown() {
-        $(SPXXDownPercent).toggle()
-        $(SPXXDownValue).toggle()
+        $("#SPXXDownPercent").toggle()
+        $("#SPXXDownValue").toggle()
     }
 
     function toggleCOMPXUp() {
-        $(COMPXUpPercent).toggle()
-        $(COMPXUpValue).toggle()
+        $("#COMPXUpPercent").toggle()
+        $("#COMPXUpValue").toggle()
     }
 
     function toggleCOMPXDown() {
-        $(COMPXDownPercent).toggle()
-        $(COMPXDownValue).toggle()
+        $("#COMPXDownPercent").toggle()
+        $("#COMPXDownValue").toggle()
     }
 </script>
 {% endblock %}

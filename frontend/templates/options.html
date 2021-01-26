@@ -62,9 +62,9 @@
                             <div class="form-group">
                                 <label for="fromDate">Expirations From:</label>
                                 <div class="input-group">
-                                    <input type="date" class="form-control" id="fromDate" name="fromDate" placeholder="today's date"></input>
+                                    <input type="date" class="form-control" id="fromDate" name="fromDate"></input>
                                     <div class="input-group-append">
-                                        <button id="closeFromDate" type="button" class="btn btn-outline-secondary">
+                                        <button id="clearFromDate" type="button" class="btn btn-outline-secondary">
                                             &times;
                                         </button>
                                     </div>
@@ -75,9 +75,9 @@
                             <div class="form-group">
                                 <label for="toDate">Expirations To:</label>
                                 <div class="input-group">
-                                    <input type="date" class="form-control" id="toDate" name="toDate" placeholder="tomorrow's date"></input>
+                                    <input type="date" class="form-control" id="toDate" name="toDate"></input>
                                     <div class="input-group-append">
-                                        <button id="closeToDate" type="button" class="btn btn-outline-secondary">
+                                        <button id="clearToDate" type="button" class="btn btn-outline-secondary">
                                             &times;
                                         </button>
                                     </div>
@@ -153,68 +153,86 @@
 </div>
 {{context.modalScript}}
 <script>
-    // Code for handling entry into from and to expiry dates OR expiry month,
-    // but not both
-    var inputFromDate = document.getElementById("fromDate")
-    var inputToDate = document.getElementById("toDate")
-    var inputExpMonth = document.getElementById("expMonth")
+    /* Defines constants for the form field DOM Elements to decrease */
+    /* repetitve getElementById calls and to increase code readability */
+    const submitButton =  document.getElementById("btnSubmit")
+    const resetButton = document.getElementById("btnReset")
+    const numStrikesInput = document.getElementById("numStrikes")
+    const strikeInput = document.getElementById("strike")
+    const rangeInput = document.getElementById("range")
+    const fromDateInput = document.getElementById("fromDate")
+    const fromDateClear = document.getElementById("clearFromDate")
+    const toDateInput = document.getElementById("toDate")
+    const toDateClear = document.getElementById("clearToDate")
+    const expMonthInput = document.getElementById("expMonth")
 
-    document.getElementById("btnSubmit").onclick = function() {
-        var searchField = document.getElementById("search").value
-        if (searchField != null && searchField != "") {
+    /* Displays the loading spinner for the user on valid form submission */
+    submitButton.onclick = function() {
+        const searchValue = document.getElementById("search").value
+        if (searchValue != null && searchValue != "") {
             $("#loadingSpinner").toggle();
         }
     }
 
-    document.getElementById("btnReset").onclick = function() {
-        numStrikes.disabled = false
-        strike.disabled = false
-        inputFromDate.disabled = false
-        inputToDate.disabled = false
-        inputExpMonth.disabled = false
+    /* Enables all possibly disabled form fields upon form value reset */
+    resetButton.onclick = function() {
+        numStrikesInput.disabled = false
+        strikeInput.disabled = false
+        fromDateInput.disabled = false
+        toDateInput.disabled = false
+        expMonthInput.disabled = false
     }
 
-    closeFromDate.onclick = function() {
-        inputFromDate.value = ""
-        inputExpMonth.disabled = (inputToDate.value != "")
-    }
-
-    closeToDate.onclick = function() {
-        inputToDate.value = ""
-        inputExpMonth.disabled = (inputFromDate.value != "")
-    }
-
-    strike.onkeyup = function() {
+    /* Enables numStrikes if strike is empty otherwise make it disabled */
+    strikeInput.onkeyup = function() {
         if (event.keyCode == 8 || event.charCode == 46) {
-            numStrikes.disabled = false
+            numStrikesInput.disabled = false
         }
-        numStrikes.disabled = (this.value != "")
+        numStrikesInput.disabled = (this.value != "")
     }
 
-    range.oninput = function() {
-        strike.disabled = (this.value != "ALL")
+    /* Disables strike field if range is anything but "ALL" */
+    rangeInput.oninput = function() {
+        strikeInput.disabled = (this.value != "ALL")
     }
 
-    inputFromDate.oninput = function() {
+    /* Re-enables numStrikes field if date is deleted and disables expMonth */
+    /* field if a date is enetered */
+    fromDateInput.oninput = function() {
         if (event.keyCode == 8 || event.charCode == 46) {
-            numStrikes.disabled = false
+            numStrikesInput.disabled = false
         }
-        inputExpMonth.disabled = (this.value != "")
+        expMonthInput.disabled = (this.value != "")
     }
 
-    inputToDate.oninput = function() {
-        if (event.keyCode == 8 || event.charCode == 46) {
-            numStrikes.disabled = false
-        }
-        inputExpMonth.disabled = (this.value != "")
+    /* Resets the value of fromDate's input and re-enables expMonth field if */
+    /* both from and to date are empty */
+    fromDateClear.onclick = function() {
+        fromDateInput.value = ""
+        expMonthInput.disabled = (toDateInput.value != "")
     }
 
-    inputExpMonth.oninput = function() {
+    /* Same as fromDateInput's oninput event but for toDateInput */
+    toDateInput.oninput = function() {
         if (event.keyCode == 8 || event.charCode == 46) {
-            numStrikes.disabled = false
+            numStrikesInput.disabled = false
         }
-        inputFromDate.disabled = (this.value != "ALL")
-        inputToDate.disabled = (this.value != "ALL")
+        expMonthInput.disabled = (this.value != "")
+    }
+
+    /* Same as fromDateClear's onclick event but for toDateClear */
+    toDateClear.onclick = function() {
+        toDateInput.value = ""
+        expMonthInput.disabled = (fromDateInput.value != "")
+    }
+
+    /* Re-enables numStrikesInput, fromDateInput, and toDateInput if needed */
+    expMonthInput.oninput = function() {
+        if (event.keyCode == 8 || event.charCode == 46) {
+            numStrikesInput.disabled = false
+        }
+        fromDateInput.disabled = (this.value != "ALL")
+        toDateInput.disabled = (this.value != "ALL")
     }
 </script>
 {% endblock %}
