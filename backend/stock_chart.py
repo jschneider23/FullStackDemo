@@ -30,7 +30,6 @@ def createGraph(sym, time = "10d", hasExtHrs = True):
     closes = []
     for candle in candleList:
         dtConvert = dt.fromtimestamp(candle["datetime"] / 1000)
-        #dtFormat = dtConvert.strftime(timeCfg["fmt"])
         dts.append(dtConvert)
         opens.append(candle["open"])
         highs.append(candle["high"])

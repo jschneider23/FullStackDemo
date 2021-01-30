@@ -62,19 +62,9 @@ def getOptionChain(sym, conType, numStrikes, strike, rng, expFrom, expTo,
                           option["description"]]
                 dfPuts.loc[len(dfPuts)] = newRow
         info["dfPuts"] = dfPuts
-    print("TD Filtered:\n" + str(info))
     trueInfo = trulyApplyFilters(info, numStrikes, strike, rng)
     return trueInfo
 
-# Filter interactions that will remain disallowed for good reason:
-# expFrom and expTo OR expMonth BUT NOT BOTH
-# 
-# Ones that need to be handled:
-# Strike Price (cannot have _ selected)
-# Range (cannot have _ selected)
-#
-# Also once filters are applied, need to add dummy rows so the expiration
-# dates line up and one table doesn't end before the other
 def trulyApplyFilters(info, numStrikes, strike, rng):
     if cfg.manualApply.get(rng) and numStrikes != "":
         dfCalls = info.get("dfCalls")
@@ -86,7 +76,6 @@ def trulyApplyFilters(info, numStrikes, strike, rng):
             for ind in dfCalls.index:
                 if ind >= len(dfCalls.index):
                     break
-                #print(f"Ind: {ind} | Exp: {dfCalls['Expiration'][ind]} | Strike: {dfCalls['Strike'][ind]}")
                 newExp = dfCalls["Expiration"][ind]
                 if oldExp is not None and oldExp != newExp:
                     oldExp = None
@@ -117,16 +106,4 @@ def trulyApplyFilters(info, numStrikes, strike, rng):
                 else:
                     dfPuts.drop(ind, inplace = True)
             info["dfPuts"] = dfPuts.reset_index(drop = True)
-    print("FULLLY FILTERED (gOC ret):\n" + str(info))
     return info
-
-sym = "TSLA"
-conType = "ALL"
-numStrikes = "5"
-strike = ""
-rng = "ITM"
-expFrom = ""
-expTo = ""
-expMonth = "FEB"
-standard = "ALL"
-#getOptionChain(sym, conType, numStrikes, strike, rng, expFrom, expTo, expMonth, standard)

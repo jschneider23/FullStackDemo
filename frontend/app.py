@@ -1,8 +1,13 @@
+# This file contains all functions that have @app.route decorater, which
+# provide the main functionality for the server at various request urls.
+
 from flask import Flask, render_template, request
 from frontend import html_generation as hg, app_aux as aux
 from backend import stock_chart as sc
 import flask
 import os
+
+# Required to initialize Flask App.
 app = Flask(__name__)
 
 # Renders the Home page accordingly, depending on whether a GET request is
@@ -17,6 +22,7 @@ def home():
     aux.clearOldGraphs()
     if request.method == "POST":
         formInput = request.form["search"].strip().upper()
+        #THIS CAN BE OPTIMIZED TODO
         modal = hg.htmlModalData(formInput)
         if modal is None:
             formInput = formInput.capitalize()
@@ -91,26 +97,19 @@ def options():
     if request.method == "POST":
         sym = request.form["search"].strip().upper()
         conType = request.form["conType"]
-        if request.form.get("numStrikes") is not None:
-            numStrikes = request.form["numStrikes"]
-        else:
-            numStrikes = ""
+        numStrikes = request.form.get("numStrikes", "")
         strike = request.form.get("strike", "")
         rng = request.form["range"]
-        if request.form.get("expMonth") is not None:
-            expMonth = request.form["expMonth"]
-            fromDate = ""
-            toDate = ""
-        else:
-            fromDate = request.form["fromDate"]
-            toDate = request.form["toDate"]
-            expMonth = "ALL"
+        fromDate = request.form.get("fromDate", "")
+        toDate = request.form.get("toDate", "")
+        expMonth = request.form.get("expMonth", "ALL")
         standard = request.form["standard"]
-        modal = hg.htmlOCModalData(sym, conType, numStrikes, strike, rng, fromDate, toDate, expMonth, standard)
+        modal = hg.htmlOCModalData(sym, conType, numStrikes, strike, rng,
+                                   fromDate, toDate, expMonth, standard)
         context.update({"modalScript": modal.get("script"),
                         "modalTitle": modal.get("title"),
                         "modalOptionChain": modal.get("oc"),
-                        "errorMsg": modal.get("errorMsg")})
+                        "errorMsg": modal.get("errorMsg", "")})
     return render_template("options.html", context = context)
 
 # Loads gainer and loser movers tables for each of the API supported indicies
@@ -150,6 +149,6 @@ def movers():
 def loadModalContent(sym):
     return hg.htmlModalContent(sym)
 
-# Required for Flask app to run
+# Required for Flask App to run.
 if __name__ == "__main__":
     app.run(debug = True)

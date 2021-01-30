@@ -16,7 +16,12 @@
                 <form method="post" onsubmit="{{url_for('options')}}">
                     <div class="form-group">
                         <label for="search">Enter Stock Symbol:</label>
-                        <input type="text" class="form-control form-control-lg" placeholder="Ex: TSLA, AAPL, F, etc." required id="search" name="search" autocomplete="">
+                        <div class="input-group">
+                            <input type="text" class="form-control form-control-lg" placeholder="Ex: TSLA, AAPL, F, etc." required id="search" name="search" autocomplete>
+                            <div class="input-group-append">
+                                <button id="clearSearch" type="button" class="btn btn-outline-secondary">&times;</button>
+                            </div>
+                        </div>
                     </div>
                     <h5><b>Search Filters</b></h5>
                     <div class="row justify-content-center">
@@ -32,14 +37,28 @@
                         </div>
                         <div class="col-auto">
                             <div class="form-group">
-                                <label for="numStrikes">Max # of Strikes:</label>
-                                <input type="number" class="form-control" id="numStrikes" name="numStrikes" value="10" min="1" max="25" step="1"></input>
+                                <label for="numStrikes">
+                                    Max # of Strikes:
+                                </label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="numStrikes" name="numStrikes" value="10" min="1" max="25" step="1"></input>
+                                    <div class="input-group-append">
+                                        <button id="clearNumStrikes" type="button" class="btn btn-outline-secondary">&times;</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="col-auto">
                             <div class="form-group">
-                                <label for="strike">Exact Strike ($):</label>
-                                <input type="number" class="form-control" id="strike" name="strike" min="0.01" step=".01" placeholder="Any Price"></input>
+                                <label for="strike">Exact Strike:</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            $
+                                        </span>
+                                    </div>
+                                    <input type="number" class="form-control" id="strike" name="strike" min="0.01" step="0.01" placeholder="Any Price"></input>
+                                </div>
                             </div>
                         </div>
                         <div class="col-auto">
@@ -120,44 +139,47 @@
                     <button id="btnSubmit" type="submit" class="btn btn-dark w-25">Find</button>
                     <button id="btnReset" type="reset" class="btn btn-dark w-25">Reset&nbsp;Fields</button>
                 </form>
+                Add popup message if max # of strikes removed and clear it
+                if readded
             </div>
         </div>
     </div>
 </div>
 <br>
 <div id="loadingSpinner" class="text-center text-dark" style="display: none">
-  <div class="spinner-border" role="status"></div>
+    <div class="spinner-border" role="status"></div>
 </div>
 <div class="text-center text-danger">
     <h5>{{context.errorMsg}}</h5>
 </div>
 <div class="modal fade" id="viewOptionChain" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="overflow-y: initial !important">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title text-center">{{context.modalTitle}}</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body" style="height: 80vh; overflow-y: auto;">
-        <div>
-            {{context.modalOptionChain}}
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="overflow-y: initial !important">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center">{{context.modalTitle}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body" style="height: 80vh; overflow-y: auto;">
+                <div>
+                    {{context.modalOptionChain}}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
-      </div>
     </div>
-  </div>
 </div>
 {{context.modalScript}}
 <script>
     /* Defines constants for the form field DOM Elements to decrease */
     /* repetitve getElementById calls and to increase code readability */
+    const searchInput = document.getElementById("search")
+    const searchClear = document.getElementById("clearSearch")
     const submitButton =  document.getElementById("btnSubmit")
     const resetButton = document.getElementById("btnReset")
     const numStrikesInput = document.getElementById("numStrikes")
+    const numStrikesClear = document.getElementById("clearNumStrikes")
     const strikeInput = document.getElementById("strike")
     const rangeInput = document.getElementById("range")
     const fromDateInput = document.getElementById("fromDate")
@@ -168,8 +190,7 @@
 
     /* Displays the loading spinner for the user on valid form submission */
     submitButton.onclick = function() {
-        const searchValue = document.getElementById("search").value
-        if (searchValue != null && searchValue != "") {
+        if (searchInput.value != null && searchInput.value != "") {
             $("#loadingSpinner").toggle();
         }
     }
@@ -181,6 +202,17 @@
         fromDateInput.disabled = false
         toDateInput.disabled = false
         expMonthInput.disabled = false
+    }
+
+    /* Resets the value of the symbol search field to blank */
+    searchClear.onclick = function() {
+        searchInput.value = ""
+    }
+
+    /* Clears the value of numStrikes (only the reset fields button will */
+    /* return this field to the default value of 10) */
+    numStrikesClear.onclick = function() {
+        numStrikesInput.value = ""
     }
 
     /* Enables numStrikes if strike is empty otherwise make it disabled */

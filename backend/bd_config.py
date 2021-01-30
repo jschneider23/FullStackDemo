@@ -54,12 +54,10 @@ engAttrs = {
     "divDate": "Next Dividend Date"
 }
 
-
 # Defines the mapping of all chart time options (ex. "1y", "3m", "5d" meaning
 # "1 year", "3 month", and "5 day" history respectively) to appropriate
-# values for the API call as well as x axis unit format. Tuples are of format:
-# (english meaning for subtitle, periodType, period, frequencyType, frequency, 
-# canvas.js format string)
+# values for the API call, as well as information required for html to render
+# the candlestick charts in modals using Plotly.
 graphMap = {
     "1d": {"engTime": "Trading Day", "periodType": "day", "period": 1,
            "freqType": "minute", "freq": 1, "fmt": "%-I:%M"},
@@ -85,6 +83,12 @@ graphMap = {
             "period": 1, "freqType": "daily", "freq": 1, "fmt": "%b-%-d"}
 }
 
+# Defines the mapping for use in trulyApplyFilters (stock_options.py) to let
+# the function know whether it needs to implement proper filter functionality
+# if a Max # of Strikes is specified along with a contract range that is
+# OTM, ITM, or NTM, as TD Ameritrade's API will completely ignore this filter
+# with the way it has been implemented if combined with a Max # of Strikes
+# specified (see README for more information on this)
 manualApply = {
     "OTM": True,
     "ITM": True,

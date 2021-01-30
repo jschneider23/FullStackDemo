@@ -5,7 +5,7 @@ import json
 import flask
 import pandas as pd
 from backend import bd_config as cfg, stock_info as si, stock_chart as sc, stock_movers as sm, stock_options as so
-from frontend import fr_objects as frobj
+from frontend import fr_objects as fro
 from datetime import datetime as dt, date
 from dateutil.relativedelta import relativedelta as rd
 # *** Home Page Generator Functions *** #
@@ -273,7 +273,6 @@ def htmlOCModalData(sym, conType, numStrikes, strike, rng, expFrom, expTo,
         standard: {standard}
     """
     print(debug)
-    errorMsg = ""
     try:
         ocDict = so.getOptionChain(sym, conType, numStrikes, strike, rng, expFrom, expTo, expMonth, standard)
         underlyingPrice = ocDict.get("underlyingPrice")
@@ -305,11 +304,11 @@ def htmlOCModalData(sym, conType, numStrikes, strike, rng, expFrom, expTo,
                 row = dfCalls.loc[ind]
                 newExpDate = row["Expiration"]
                 if oldExpDate is None or oldExpDate == newExpDate:
-                    call = frobj.Option.fromRow(ind, underlyingPrice, row)
+                    call = fro.Option.fromRow(ind, underlyingPrice, row)
                     callList.append(call)
                     oldExpDate = newExpDate
                 else:
-                    edg = frobj.OptionEDG.fromOptionLists(callList = callList)
+                    edg = fro.OptionEDG.fromOptionLists(callList = callList)
                     expDateGroups.append(edg)
                     callList = []
                     oldExpDate = None
@@ -318,11 +317,11 @@ def htmlOCModalData(sym, conType, numStrikes, strike, rng, expFrom, expTo,
                 row = dfPuts.loc[ind]
                 newExpDate = row["Expiration"]
                 if oldExpDate is None or oldExpDate == newExpDate:
-                    put = frobj.Option.fromRow(ind, underlyingPrice, row)
+                    put = fro.Option.fromRow(ind, underlyingPrice, row)
                     putList.append(put)
                     oldExpDate = newExpDate
                 else:
-                    edg = frobj.OptionEDG.fromOptionLists(putList = putList)
+                    edg = fro.OptionEDG.fromOptionLists(putList = putList)
                     expDateGroups.append(edg)
                     putList = []
                     oldExpDate = None
@@ -333,23 +332,22 @@ def htmlOCModalData(sym, conType, numStrikes, strike, rng, expFrom, expTo,
                 putRow = dfPuts.loc[ind]
                 newExpDate = callRow["Expiration"]
             if oldExpDate is None or oldExpDate == newExpDate:
-                call = frobj.Option.fromRow(ind, underlyingPrice, callRow)
-                put = frobj.Option.fromRow(ind, underlyingPrice, putRow)
+                call = fro.Option.fromRow(ind, underlyingPrice, callRow)
+                put = fro.Option.fromRow(ind, underlyingPrice, putRow)
                 callList.append(call)
                 putList.append(put)
                 oldExpDate = newExpDate
             else:
-                edg = frobj.OptionEDG.fromOptionLists(callList = callList, putList = putList)
+                edg = fro.OptionEDG.fromOptionLists(callList = callList, putList = putList)
                 expDateGroups.append(edg)
                 callList = []
                 putList = []
                 oldExpDate = None
-    oc = frobj.OptionChain(sym, underlyingPrice, expDateGroups)
+    oc = fro.OptionChain(sym, round(float(underlyingPrice), 2), expDateGroups)
     htmlDict = oc.htmlOCAccordian()
     return {"script": flask.Markup(htmlDict["script"]),
             "title": flask.Markup(htmlDict["title"]),
-            "oc": flask.Markup(htmlDict["oc"]),
-            "errorMsg": flask.Markup(errorMsg)}
+            "oc": flask.Markup(htmlDict["oc"])}
 
 # *** Movers Page Functions *** #
 def htmlMoverCard(indexSym, direction, change):

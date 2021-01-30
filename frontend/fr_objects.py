@@ -1,9 +1,12 @@
-# Objects for Option, OptionExpDateGroup, and OptionChain are used for the
-# complex functionality and more features that this page needs to support
-# Also using objects in at least one of the pages to show object-oriented
-# skills.
+# This file contains class and function definitions that are used to implement
+# the Options page on the frontend, both to handle server and backend data as
+# well as format html to be displayed to the user.  Note that any html produced
+# in this file still needs to be wrapped by flask as valid Markup, which is
+# done in app.py (TENTATIVE, MIGHT CHANGE THIS LATER)
+
 import pandas as pd
 from datetime import datetime as dt
+
 # Represents a single Option
 class Option:
     # Standard Constructor for creating an Option object from each individual
@@ -233,10 +236,23 @@ class OptionChain:
             </script>
         """
         title = f"""
-            {self.symbol} Option Chain | {len(self.expDateGroups)} Expiry 
-            Dates | ITM = Grey - OTM = White
+            {self.symbol} Option Chain | 
+            Underlying Price: ${self.underlyingPrice} | 
+            {len(self.expDateGroups)} Expiry Date(s) |
+            ITM = Grey
         """
-        cards = ""
+        cards = """
+            <div class="text-center text-muted">
+                <i>
+                    <u>NOTE:</u>
+                    <br>
+                    Due to variance in TD API data collection timing,
+                    options with strikes very close to the underlying price may
+                    be inaccurately deemed ITM/OTM when requested.
+                </i>
+            </div>
+            <hr>
+        """
         for edg in self.expDateGroups:
             cards += f"{edg.htmlExpDateGroupCard()}"
         oc = f"<div class='accordian' id='ocAccordian'>{cards}</div>"
