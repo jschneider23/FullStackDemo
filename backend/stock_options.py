@@ -10,6 +10,15 @@ import pandas as pd
 import json as js 
 from backend import bd_config as cfg
 
+# For added details on the purpose and functionality of this module, see the
+# README
+
+# Requests the TD Ameritrade Options Chain API with the given request
+# parameters (streamlined to include only required parameters and optional
+# parameters necessary for implementation desired) and returns a dictionary
+# containing the underlying price as well as dataframes for puts and calls,
+# just puts, just calls, or neither (if filters are too restrictive, resulting
+# in 0 options that fit criteria).
 def getOptionChain(sym, conType, numStrikes, strike, rng, expFrom, expTo,
                    expMonth, standard):
     url = r"https://api.tdameritrade.com/v1/marketdata/chains"
@@ -65,6 +74,14 @@ def getOptionChain(sym, conType, numStrikes, strike, rng, expFrom, expTo,
     trueInfo = trulyApplyFilters(info, numStrikes, strike, rng)
     return trueInfo
 
+# This function "extends" the TD Ameritrade Option Chain API's functionality by
+# implenting intended interaction between the Max # of Strikes filter in
+# combination with ITM, OTM, and NTM contract ranges.  By default, TD
+# Ameritrade has implemented their API to completely ignore the numStrikes
+# setting if one of these ranges is selected, which is not the functionality
+# intended.  Preventing the user from combining these options defeats the
+# purpose of this feature, so this function implements this for the users so
+# they can have this feature properly.
 def trulyApplyFilters(info, numStrikes, strike, rng):
     if cfg.manualApply.get(rng) and numStrikes != "":
         dfCalls = info.get("dfCalls")

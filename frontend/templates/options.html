@@ -1,7 +1,19 @@
 {% extends 'base_layout.html' %}
 
 {% block head %}
+<script>
+    /* Enables popovers for this page, which is needed for the hover notice */
+    /* for potentially clearing the Max # of Strikes input field */
+    $(function () {
+        $('[data-toggle="popover"]').popover()
+    })
 
+    /* Handles the popover warning message to a user when hovering over the */
+    /* numStrikesClear anchor element button */
+    $(".popover-dismiss").popover({
+        trigger: "hover"
+    })
+</script>
 {% endblock %}
 
 {% block body %}
@@ -43,7 +55,7 @@
                                 <div class="input-group">
                                     <input type="number" class="form-control" id="numStrikes" name="numStrikes" value="10" min="1" max="25" step="1"></input>
                                     <div class="input-group-append">
-                                        <button id="clearNumStrikes" type="button" class="btn btn-outline-secondary">&times;</button>
+                                        <a tabindex="0" role="button" id="clearNumStrikes" class="btn btn-outline-secondary" data-toggle="popover" data-trigger="hover" title="Important Notice!" data-content="Searching for an Options Chain without a specifed Max # of Strikes will result in potentially long loading times depending on the symbol.">&times;</a>
                                     </div>
                                 </div>
                             </div>
@@ -260,9 +272,6 @@
 
     /* Re-enables numStrikesInput, fromDateInput, and toDateInput if needed */
     expMonthInput.oninput = function() {
-        if (event.keyCode == 8 || event.charCode == 46) {
-            numStrikesInput.disabled = false
-        }
         fromDateInput.disabled = (this.value != "ALL")
         toDateInput.disabled = (this.value != "ALL")
     }

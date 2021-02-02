@@ -7,20 +7,13 @@ import requests as rq
 import pandas as pd
 from backend import bd_config as cfg
 
-# ** Description **:
-# Requests TD Ameritrade's Movers API to retrieve mover information based on
+# For added details on the purpose and functionality of this module, see the
+# README
+
+# Requests the TD Ameritrade Movers API to retrieve mover information based on
 # the given parameters as a dataframe.  Movers can be retrieved for any TD
 # Ameritrade supported index in either "gainer" or "loser" direction and the
 # change can be in units of value or by percentage.  Last price also retrieved.
-#
-# ** Parameters **:
-# index is string containing a valid index, starting with "$"
-# direction is a string of either "up" or "down"
-# change is a string of either "value" or "percent"
-
-# ** Returns **:
-# Pandas dataframe w/ cols: symbol, name, change, last OR None if any of the
-# parameters are not valid
 def getMovers(index, direction, change):
     url = r"https://api.tdameritrade.com/v1/marketdata/{}/movers".format(index)
     params = {"apikey": cfg.apikey,

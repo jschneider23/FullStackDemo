@@ -1,3 +1,4 @@
+# This file contains auxiliary functions for the Flask app
 import os
 
 # Clears chart files still in the graphs directory from previous profile 

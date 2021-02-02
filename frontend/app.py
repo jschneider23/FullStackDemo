@@ -7,6 +7,9 @@ from backend import stock_chart as sc
 import flask
 import os
 
+# For added details on the purpose and functionality of this module, see the
+# README
+
 # Required to initialize Flask App.
 app = Flask(__name__)
 

@@ -1,16 +1,19 @@
 # This file contains class and function definitions that are used to implement
 # the Options page on the frontend, both to handle server and backend data as
-# well as format html to be displayed to the user.  Note that any html produced
-# in this file still needs to be wrapped by flask as valid Markup, which is
-# done in app.py (TENTATIVE, MIGHT CHANGE THIS LATER)
+# well as format html to be displayed to the user.  Html produced here is
+# wrapped as Flask Markup in the html_generation module.
 
 import pandas as pd
 from datetime import datetime as dt
 
+# For added details on the purpose and functionality of this module, see the
+# README
+
 # Represents a single Option
 class Option:
     # Standard Constructor for creating an Option object from each individual
-    # property (not from the returned getOptionChain() dictionary)
+    # property (not from the returned getOptionChain() dictionary).  Formats
+    # expiration dates into a consistent format.
     def __init__(self, dfIndex, underlyingPrice, expiration, strikePrice, bid,
                  ask, market, percentChange, volume, optionType, itm, name):
         self.optionID = f"{optionType}{dfIndex}"
@@ -62,10 +65,14 @@ class Option:
             {strikeBoth}
         """
         return htmlStr
+
 # Represents a group of Options that all Expire on the same day for easier
 # accordian card rendering (cards are by expiration date)
 class OptionEDG:
     _genID = 0
+
+    # Standard Constructor for an Option Expiration Date Group and assigns
+    # a unique id, which starts at 0 (_genID above)
     def __init__(self, expDate, options):
         self.expDate = expDate
         self.options = options
@@ -185,7 +192,6 @@ class OptionEDG:
                         </tr>
                     """
 
-        # Now prepare html with customized table header and rows
         gid = self.groupID
         htmlStr = f"""
             <div class="card bg-light text-dark" id="card{gid}">
@@ -223,12 +229,20 @@ class OptionEDG:
 # Represents an entire Option Chain that is returned by the Options Chain API.
 # Contains a dictionary of all the expriation date groups.
 class OptionChain:
+    # Standard Constructor to facilitate eventual Option Chain display on
+    # frontend
     def __init__(self, symbol, underlyingPrice, expDateGroups):
         self.symbol = symbol
         self.underlyingPrice = underlyingPrice
         self.expDateGroups = expDateGroups
 
     
+    # Generates the script, title, and actual main option chain html for the
+    # modal on the Options Page in Bootstrap Accordian Card Style.  Includes
+    # a notice for the user that due to when TD Ameritrade collects its final
+    # data for Options for a market day as well as which values for a stock's
+    # price that they use, options with strikes very close to the underlying
+    # price may be incorrectly shaded (incorrectly deemed ITM/OTM)
     def htmlOCAccordian(self):
         script = """
             <script>
@@ -244,11 +258,11 @@ class OptionChain:
         cards = """
             <div class="text-center text-muted">
                 <i>
-                    <u>NOTE:</u>
+                    <u>NOTICE FOR USERS:</u>
                     <br>
-                    Due to variance in TD API data collection timing,
-                    options with strikes very close to the underlying price may
-                    be inaccurately deemed ITM/OTM when requested.
+                    Due to variance in TD API data collection values and
+                    timing, options with strikes very close to the underlying
+                    price may be inaccurately deemed ITM/OTM when requested.
                 </i>
             </div>
             <hr>

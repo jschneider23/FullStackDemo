@@ -12,6 +12,15 @@ import chart_studio.tools as cst
 from backend import bd_config as cfg
 from datetime import datetime as dt
 
+# For added details on the purpose and functionality of this module, see the
+# README
+
+# Requests the TD Ameritrade Price History API for a given symbol, with
+# frequency and periods determined by the time option (default "10d"), and
+# whether or not to include extended hours data.  This data is then used to
+# generate an html file written to the /frontend/graphs directory using
+# plotly's io library so that it can be used to easily render a graph in a
+# modal on the frontend based on the file's name.
 def createGraph(sym, time = "10d", hasExtHrs = True):
     timeCfg = cfg.graphMap.get(time)
     url = f"https://api.tdameritrade.com/v1/marketdata/{sym}/pricehistory"
@@ -56,8 +65,3 @@ def createGraph(sym, time = "10d", hasExtHrs = True):
 
     filename = f"graph{sym}{time}{hasExtHrs}.html"
     pio.write_html(fig, file = f"frontend/graphs/{filename}")
-
-def createAllGraphs(sym):
-    for time in cfg.graphMap.keys():
-        createGraph(sym, time, True)
-        createGraph(sym, time, False)

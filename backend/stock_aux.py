@@ -1,5 +1,4 @@
-# This file contains auxiliary and helper functions used in the backend to
-# clean up code, increase readability, and improve performance
+# This file contains auxiliary functions for the backend
 
 from backend import bd_config as cfg
 from datetime import datetime as dt

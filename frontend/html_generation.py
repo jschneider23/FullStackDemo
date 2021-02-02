@@ -1,5 +1,11 @@
-# File will have code that handles nearly all of the html formatting and
-# processing from backend API data to keep app.py as clutter-free as possible
+# This file contains a large majority of the interaction with the backend in
+# order to request API data formatted by the backend and then process this
+# data to create various formatted html for various app functionality elements
+# across all three pages.  In order for Flask to use a string of html as
+# valid html (and not just a raw string), it is returned as wrapped Flask
+# Markup, which lets Flask know that the html is valid and safe.  For the
+# function comments below, any time html is mentioned it is referring to this
+# valid, flask Markup wrapper object.
 
 import json
 import flask
@@ -8,7 +14,18 @@ from backend import bd_config as cfg, stock_info as si, stock_chart as sc, stock
 from frontend import fr_objects as fro
 from datetime import datetime as dt, date
 from dateutil.relativedelta import relativedelta as rd
-# *** Home Page Generator Functions *** #
+
+# For added details on the purpose and functionality of this module, see the
+# README
+
+# *** Home Page *** #
+
+# Given an index symbol (either "$DJI", "$SPX.X", or "$COMPX"), this function
+# will produce and return an "At a Glance..." Bootstrap "Index" Card that
+# is used to render the initial card present when loading the homepage as well
+# as auto-refreshing every five seconds using jQuery load().  This uses the
+# stock_info module's getBySymbol() function, with a special "indexCard"
+# setting to only fetch the necessary attributes for the card.
 def htmlIndexCard(indexSym):
     data = si.getBySymbol(indexSym, "indexCard")
     if "-" in str(data["netChange"]):
@@ -47,6 +64,14 @@ def htmlIndexCard(indexSym):
     """
     return flask.Markup(html)
 
+# Produces and returns the html from the backend call to getBySymbol() rendered
+# in the popup modal rendered after submitting a POST request, which is done
+# through submitting the lookup form.  There will be slight variance in
+# appearance depending on whether the symbol represents a stock or an index,
+# such as in the title and chart axis labels.  If the backend returns None,
+# however, then this function will return None.  This means that either sym
+# is not a symbol and is a name search OR the symbol is not valid (both cases
+# handled by app.py).
 def htmlModalData(sym):
     if "$" in sym:
         symData = si.getBySymbol(sym, "indexFull")
@@ -202,6 +227,15 @@ def htmlModalData(sym):
             "quote": flask.Markup(quote),
             "info": flask.Markup(info)}
 
+# Produces and returns the html that should be displayed after a name or name
+# fragment search.  In most cases, this will be a Bootstrap card with a title
+# showing the name searched for and number of results out 50 Max Accessible
+# Results (TD Ameritrade's website obscures the ability to automate multiple
+# result page navigation with the way the've constructed their pages) and then
+# a table with the results containing a symbol link to open a modal.  If no
+# results are found, then None is returned.  The rarest case is a direct match,
+# which is when TD Ameritrade's website returns a direct match to a symbol, in
+# which case no dataframe is returned and is instead a json object.
 def htmlNameResults(name):
     dfResults = si.getByName(name)
     if dfResults is None:
@@ -230,11 +264,12 @@ def htmlNameResults(name):
                     $('#modalContent').load('/modalContent/{sym}')
                 }}
             """
+
         html = f"""
             <div class="card bg-light">
                 <h3 class="text-center card-header">
                     Name Search For \"<i>{name}</i>\" Returned <i>
-                    {len(dfResults)} Results</i>
+                    {len(dfResults)} Out of 50 Max Accessible Results</i>
                 </h3>
                 <table class="table table-responsive table-hover">
                     <thead class="thead-light">
@@ -256,26 +291,20 @@ def htmlNameResults(name):
         """
     return flask.Markup(html)
 
-# *** Options Page Functions ***#
+# *** Options Page *** #
 
+# Given parameters required for the TD Amertirade Options Chain API, this
+# will produce the html for the contents of the Options Page modal that
+# loads after form submission.  This return is either a dictionary containing
+# the various parts that the template renders or just a dictionary containing
+# an error message, which is sent to the template if a Key Error occurs in
+# the try block.  This means the API could not find an options chain for
+# the given the symbol or had another type of error.
 def htmlOCModalData(sym, conType, numStrikes, strike, rng, expFrom, expTo,
                     expMonth, standard):
-    debug = f"""
-        Params sending to backend:
-        sym: {sym}
-        conType: {conType}
-        numStrikes: {numStrikes}
-        strike: {strike}
-        rng: {rng}
-        expFrom: {expFrom}
-        expTo: {expTo}
-        expMonth: {expMonth}
-        standard: {standard}
-    """
-    print(debug)
     try:
         ocDict = so.getOptionChain(sym, conType, numStrikes, strike, rng, expFrom, expTo, expMonth, standard)
-        underlyingPrice = ocDict.get("underlyingPrice")
+        underlyingPrice = ocDict["underlyingPrice"]
         dfCalls = ocDict.get("dfCalls")
         dfPuts = ocDict.get("dfPuts")
     except:
@@ -349,7 +378,14 @@ def htmlOCModalData(sym, conType, numStrikes, strike, rng, expFrom, expTo,
             "title": flask.Markup(htmlDict["title"]),
             "oc": flask.Markup(htmlDict["oc"])}
 
-# *** Movers Page Functions *** #
+# *** Movers Page *** #
+
+# Generates the html for the contents of one of the six blank Movers cards
+# already present on the Movers' page.  Each of the Dow Jones, S&P 500, and
+# NASDAQ Composite have a Top Ten Gainers and Top Ten Losers Card, and
+# displays one of two tables: top movers by % change or top movers by $ change.
+# If there are less than 10 movers in a direction or the markets were closed
+# during the day, appropriate placeholders are present in the table instead.
 def htmlMoverCard(indexSym, direction, change):
     dfMovers = sm.getMovers(indexSym, direction, change)
     rows = ""
@@ -425,6 +461,12 @@ def htmlMoverCard(indexSym, direction, change):
     """
     return flask.Markup(html)
 
+
+# *** Home and Movers Page *** #
+
+# This function is used to render an entire modal and associated modal script
+# when clicking a symbol link on either the Home Page from Name Search Results
+# or from the Movers Page via a mover from a Mover Card.
 def htmlModalContent(sym):
     symData = si.getBySymbol(sym)
     if symData is None:
