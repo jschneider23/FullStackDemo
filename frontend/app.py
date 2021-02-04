@@ -25,7 +25,6 @@ def home():
     aux.clearOldGraphs()
     if request.method == "POST":
         formInput = request.form["search"].strip().upper()
-        #THIS CAN BE OPTIMIZED TODO
         modal = hg.htmlModalData(formInput)
         if modal is None:
             formInput = formInput.capitalize()
