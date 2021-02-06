@@ -267,7 +267,16 @@ class OptionChain:
             </div>
             <hr>
         """
-        for edg in self.expDateGroups:
-            cards += f"{edg.htmlExpDateGroupCard()}"
+        if len(self.expDateGroups) == 0:
+            cards += f"""
+                <span class="text-muted">
+                    <h5>No Options Chain for <i>{self.symbol}</i> could be
+                    found as there are no expiry date groups that satisfy all
+                    the criteria specified by the filters used.</h5>
+                </span>
+            """
+        else:
+            for edg in self.expDateGroups:
+                cards += f"{edg.htmlExpDateGroupCard()}"
         oc = f"<div class='accordian' id='ocAccordian'>{cards}</div>"
         return {"script": script, "title": title, "oc": oc}
