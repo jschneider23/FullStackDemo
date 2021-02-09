@@ -54,7 +54,6 @@ six==1.12.0
 soupsieve==2.0.1
 sqlparse==0.4.1
 stock-info==1.0.0
-traitlets==5.0.5
 urllib3==1.25.10
 virtualenv==20.1.0
 wcwidth==0.2.5
