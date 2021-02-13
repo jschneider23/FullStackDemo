@@ -82,7 +82,7 @@ def getOptionChain(sym, conType, numStrikes, strike, rng, expFrom, expTo,
 # intended.  Preventing the user from combining these options defeats the
 # purpose of this feature, so this function implements this for the users so
 # they can have this feature properly.
-def trulyApplyFilters(info, numStrikes, strike, rng):
+def trulyApplyFilters(info, numStrikes, rng):
     if cfg.manualApply.get(rng) and numStrikes != "":
         dfCalls = info.get("dfCalls")
         dfPuts = info.get("dfPuts")
@@ -102,7 +102,6 @@ def trulyApplyFilters(info, numStrikes, strike, rng):
                 elif strikesLeftForExp > 0:
                     strikesLeftForExp -= 1
                 else:
-                    #print(f"Dropping Index: {ind}")
                     dfCalls.drop(ind, inplace = True)
             info["dfCalls"] = dfCalls.reset_index(drop = True)
         if dfPuts is not None:

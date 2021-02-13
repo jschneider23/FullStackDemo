@@ -1,4 +1,4 @@
-# Defines the apikey used to interact with registered TD Ameritrade App
+# Defines the api key used to interact with registered TD Ameritrade App
 apikey = "RMSSTUCHMW9W04BBKRM7EMIP9OGFVYAE"
 
 # Defines the base url from which to do perform symbol lookup web-scraping

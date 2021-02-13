@@ -92,6 +92,7 @@ def htmlModalData(sym):
     else:
         cardClr = "bg-success"
         arrow = "↑"
+        # This should adjust the heading size to h5 if over 57
     if len(symData["description"]) > 57:
         name = str(symData["description"])
         nameDisplay = f"{name[:54]}..."
