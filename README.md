@@ -1,7 +1,11 @@
 # TD Ameritrade Full-Stack Web App Demo: <br>*A Flask Web App with a Bootstrap Frontend Built on TD Ameritrade's Stock Market Developer APIs*
-### Developed by Jason Schneider (as a COVID-19 Pandemic side project)<br>Web App Link Here: [App Deployed on Heroku](http://localhost:5000/)<br>
+<center>
+	<h3>Web App Link Here: [Deployed on Heroku](http://localhost:5000/)<br>
+	Developed by Jason Schneider<br>
+	(*Contact Me: jasondukeschneider@gmail.com*)
+</center>
 
-##### IMPORTANT NOTICES:<br>-> Heroku's free tier for web hosting will automatically put to sleep any free site/app after 30 minutes of inactivity, so the app may take around 10 seconds to initially wake and load if you are the first to navigate to the link in a while.<br>-> The API Key visible in the bd_config.py file is intentionally visible for code review purposes (so you can get an idea as to what one may look like) *as it was only active during development and has since been deactivated and replaced by a new API Key on the Heroku repository.*
+##### <u>IMPORTANT NOTICES</u>:<br>-> Heroku's free tier for web hosting will automatically put to sleep any free site/app after 30 minutes of inactivity, so the app may take around 10 seconds to initially wake and load if you are the first to navigate to the link in a while.<br>-> The API Key visible in the bd_config.py file is intentionally visible for code review purposes (so you can get an idea as to what one may look like) *as it was only active during development and has since been deactivated and replaced by a new API Key on the Heroku repository.*
 
 
 ## Quick Links
@@ -13,10 +17,16 @@
 * Bootstrap 4 Documentation: [Link](https://getbootstrap.com/docs/5.0/getting-started/introduction/)
 
 ## Table of Contents
-* FAQs
+* ["FAQs" For Interested Employers, Recruiters, and Organizations](#faqs-for-interested-employers-recruiters-and-organizations)
 * TD Ameritrade APIs
 
 ## "FAQs" For Interested Employers, Recruiters, and Organizations
+
+### What languages and technologies were used?
+**Data API**: TD Ameritrade's Developer APIs *(app licensed under my personal account)*<br>
+**Backend**: *Python 3.7.3* with the main libraries being *Pandas, Requests, Plotly, and Datetime*<br>
+**Framework**: *Flask Web Framework*<br>
+**Frontend/UI**: Plain *JavaScript*, *jQuery*, and *HTML/CSS (using Bootstrap 4)*
 
 ### What was the purpose of this web app project?
 
@@ -26,12 +36,6 @@ This project was also a great opportunity to learn more about a personal interes
 
 ### What are the main features the web app demo?
 List main features here
-
-### What languages, technologies, and skills were used?
-**Data API**: TD Ameritrade's Developer APIs *(app licensed under my personal account)*<br>
-**Backend**: *Python 3.7.3* with the main libraries being *Pandas, Requests, Plotly, and Datetime*<br>
-**Framework**: *Flask Web Framework*<br>
-**Frontend/UI**: Plain *JavaScript*, *jQuery*, and *HTML/CSS (using Bootstrap 4)*
 
 ### What challenges did I face and how did I overcome them or deal with them?
 
@@ -49,7 +53,7 @@ An example of two parameters that **can and should be combined** (aside from sym
 
 An example of some parameters that **can't and should not be combined** are **fromDate and toDate** *(only get options contracts expiring between these dates)* and then a completely different **expMonth**.  Since these **both specify a time period of valid options contracts**, the time periods will almost always **conflict** and therefore **should not be combined**.  While they technically can be combined from the API's perspective, this doesn't make any sense when using the API as a data source, so the **app UI disables the Expiration Month field if a date is entered into the Expriations From/To Date and vice versa**.
 
-The functionality issue arose when combining **numContracts** *(renamed to numStrikes in code and UI as this parameter actually specifies the number of strike prices returned, with each strike price having one or two associated contracts depending on contractType setting)* and **range** *(in/out/near-the-money, strikes-at/below/near-market, or all possible contracts)*.  If a **range value other than ALL, SAK, SBK, or SNK** is sent to the API, the value of **numContracts is completely ignored** and the **response will be the exact same regardless of what numContracts value it is given**.  This is not the functionality that is expected and takes away a control feature I want the user to have.  Since I can't edit the API source code, I came up with a different solution.
+The functionality issue arose when combining **numContracts** *(renamed to <b>numStrikes</b> in code and UI as this parameter actually specifies the number of strike prices returned, with each strike price having one or two associated contracts depending on contractType setting)* and **range** *(in/out/near-the-money, strikes-at/below/near-market, or all possible contracts)*.  If a **range value other than ALL, SAK, SBK, or SNK** is sent to the API, the value of **numContracts is completely ignored** and the **response will be the exact same regardless of what numContracts value it is given**.  This is not the functionality that is expected and takes away a control feature I want the user to have.  Since I can't edit the API source code, I came up with a different solution.
 
 ##### Solution: the trulyApplyFilters function
 
@@ -58,13 +62,37 @@ Aside from disabling incompatible parameter combinations via javaScript, I creat
 ```python
 def trulyApplyFilters(info, numStrikes, rng):
 ```
-The first parameter, **info**, is a dictionary containing the underlying price of a certain symbol, and then either a dataframe for calls or a dataframe for puts, or a dataframe for both.  **numStrikes** and **rng** *(stands for range, since range is a keyword in python already)* are passed from the parent function it is used in, but are the exact same values inputted by the user in the UI.  The code in this function will only run if the range value is **ITM, OTM, or NTM** and **numStrikes is not an empty string**.  If these conditions are met, it will loop through the dataframe(s) in info manually and **drop any rows** representing contracts within the same expiration date group that **exceed the max numStrikes provided**.  It then re-indexes the dataframes to ensure that they will still display properly in the Option Chain Modal.  You can learn more about how this is done specifically by looking at the source code in the repository.
 
-#### Candlestick Chart Rendering and Timeframe Option Button onClick Events
-Displaying **price history candlestick charts** for a symbol to the user as well as allowing them to **select a timeframe option** *(for example, displaying a price history chart for TSLA over the past 3 months)* like they can do on trading websites or other applications was a key feature I wanted to include that definitely included a lot of challenges.
+The first parameter, **info**, is a dictionary containing the underlying price of a certain symbol, and then either a dataframe for calls or a dataframe for puts, or a dataframe for both.  **numStrikes** and **rng** *(stands for range, since range is a keyword in python already)* are passed from the parent function it is used in, but are the exact same values inputted by the user in the UI.  The code in this function will only run if the range value is **ITM, OTM, or NTM** and **numStrikes is not an empty string**.  If these conditions are met, it will loop through the dataframe(s) in info manually and **drop any rows** representing contracts within the same expiration date group that **exceed the max numStrikes provided**.  It then re-indexes the dataframes to ensure that they will still display properly in the Option Chain Modal.  You can learn more about how this is done specifically by looking at the source code in the repository.
 
 #### Webscraping TD Ameritrade's Symbol Look Results for App's "Search By Name" Feature
 
+Stuff here
+
+#### Candlestick Chart Rendering and Timeframe Option Button onClick Events
+
+Displaying **price history candlestick charts** for a symbol to the user as well as allowing them to **select a timeframe option** *(for example, displaying a price history chart for TSLA over the past 3 months)*, something most stock market websites and applications provide, was a key feature that needed to be included and created some troublesome issues.
+
+##### Chart Processing, Creation, and Rendering
+
+**Originally** I planned on sending a dictionary/json to the flask server containing all necessary format settings, information, and price history data, and then using **canvas.js** to create and render this chart on the frontend when necessary.  I had planned on handling this feature in this way throughout a decent portion of development as I thought it would be more efficient size-wise, while still being simple enough, than producing entire charts on the backend and then finding a way to send much larger data to the server to render.
+
+This turned out to be **too complex for the scenario and not worth the runtime saved, if any**.  In addition, it was quite difficult to get anything to render properly as the JavaScript required to render the data sent didn't play well with the Jinja2 templating.  The slight formatting difference between JavaScript json and Python dictionaries as well as the need to **manually format datetime units** generated a lot of messy, unmanageable, and ineffecient code.  Even though it would require me to reconfigure the **stock_chart.py** module, I decided switching my approach entirely would be a lot more scaleable and workable than trying to force my original plan.
+
+##### Solution: Using Plotly to Create Temporary HTML Candlestick Chart Files on the Backend
+
+After some research, I found **Plotly** (which you can read more about [here](https://plotly.com/python/candlestick-charts/)) to be a great solution to all of my issues.  I actually didn't need to change that much of the stock_chart.py module to format the data for the library.  In terms of data-points, I just needed to provide datetimes in epoch format, which only required a dividing TDA's datetimes by 1000 to convert to seconds, and then a list of every open, high, low, and close.  A candlestick chart figure object could then be created from this data, followed by easily updating its layout to add appropriate titles and axis labels, and then using **Plotly's IO library** to write the chart to its own html file using a **special filepath** format to allow for easy creation, identification, and deletion of a chart:
+<center>*frontend/graphs/graph<b>{symbol}{timeframe option (ex: "10d")}{true/false include ext hrs}</b>.html*</center>
+
+##### Timeframe Option Buttons null due to not Loading in DOM Before Setting onClick Events
+
+In order for the user to be able to access different time period charts, the Bootstrap card within the stock/index profile modal requires **buttons with onClick events to send a request to the server for that specific chart's html**.  The charts can be accessed from two different pages, the **Home Page** and the **Movers Page**, via either **a direct symbol lookup POST** or **by clicking a symbol link**.  I originally planned on sending these button elements with their onClick events the same way for both methods: **adding the elements and script at the same time as modal**.
+
+Unfortunately, when accessing the chart feature after submitting a direct lookup, only a few of these buttons would load in the DOM before the events would all try to be set.  The **1d, 3d, 5d, and 10d buttons** would exist in the DOM in time, but not any of the buttons beyond that, so while setting the onClick events would work for those, it would try to assign onClick events to **null elements**, even though the buttons would load right after that.  This frustrated me for a while, as I even made sure to try including **window.onload** to solve the issue, but nothing I tried as a workaround in JavaScript seemed to have any effect.  Eventually, after overthinking the problem for a extensive amount of time, I came up with a much more straightforward and simplistic approach to this feature.
+
+##### Solution: Add the Button Elements into the Hidden Lookup Modal as Part of the Page at Load
+
+Adding the two groups of buttons with unique ids into the **home.html** template directly was a much easier solution.  These buttons exist in the modal that only appears after submitting a direct symbol lookup into the form on the page, so they don't take up any space on the page when navigating to it through a standard GET request.  When the form is submited, the function that adds the script to immediately load the modal **will also have the necessary JavaScript to add the onClick events** to the buttons with corresponding ids.  Since the buttons already exist in the DOM, there are no null buttons, and the events are added successfully.  Each button can now appropriately tell the server to create and load a chart's html to the modal for the user to see.
 
 ### What did I learn and/or gain from this experience?
 Answer placeholder
