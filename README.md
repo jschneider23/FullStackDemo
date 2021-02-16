@@ -1,9 +1,9 @@
-# TD Ameritrade Full-Stack Web App Demo: <br>*A Flask Web App with a Bootstrap Frontend Built on TD Ameritrade's Stock Market Developer APIs*
-<center>
-	<h3>Web App Link Here: [Deployed on Heroku](http://localhost:5000/)<br>
-	Developed by Jason Schneider<br>
-	(*Contact Me: jasondukeschneider@gmail.com*)
-</center>
+# TD Ameritrade Full-Stack Web App Demo: <br>*A Flask Web App with a Bootstrap Frontend Built on TD Ameritrade's (TDA) Stock Market Developer APIs*
+<h3 style="text-align: center">
+Web App Link Here: <a href="linkhere.com">Deployed on Heroku</a><br>
+Developed by Jason Schneider<br>
+<i>Contact Me At: jasondukeschneider@gmail.com</i>
+</h3>
 
 ##### <u>IMPORTANT NOTICES</u>:<br>-> Heroku's free tier for web hosting will automatically put to sleep any free site/app after 30 minutes of inactivity, so the app may take around 10 seconds to initially wake and load if you are the first to navigate to the link in a while.<br>-> The API Key visible in the bd_config.py file is intentionally visible for code review purposes (so you can get an idea as to what one may look like) *as it was only active during development and has since been deactivated and replaced by a new API Key on the Heroku repository.*
 
@@ -11,7 +11,7 @@
 ## Quick Links
 * **App Features, Use, and Demonstration Video:** [Link](https://videolinkplaceholder.com)
 * **My LinkedIn:** [Link](https://www.linkedin.com/in/jason-schneider-772a19173/)
-* TD Ameritrade *(sometimes referenced as TDA in other sections)* Developer APIs and Documentation: [Link](https://developer.tdameritrade.com/apis)
+* TD Ameritrade Developer APIs and Documentation: [Link](https://developer.tdameritrade.com/apis)
 * TD Ameritrade Symbol Lookup (Used in Implementation): [Link](https://research.tdameritrade.com/grid/public/symbollookup/symbollookup.asp)
 * Flask Web Framework: [Link](https://flask.palletsprojects.com/en/1.1.x/)
 * Bootstrap 4 Documentation: [Link](https://getbootstrap.com/docs/5.0/getting-started/introduction/)
@@ -35,7 +35,15 @@ The purpose of this project was to be a **personal side project** that refreshed
 This project was also a great opportunity to learn more about a personal interest of mine: **the stock market.**  I eventually plan to develop a predictive model for personal investments down the line, and this project was able to give me experience with APIs I likely want to use as well as **methods of handling, processing, and understanding raw stock market data**.  My involvement with this project will serve as invaluable resource and reference when I do decide to develop that for myself, after further research and experience of course.
 
 ### What are the main features the web app demo?
-List main features here
+#### Home Page
+<ul>
+<li><b>"Market At A Glance..."</b> cards that shows automatically updating market information for the <b>Dow Jones Industrial Average, S&P 500, and NASDAQ Composite</b></li>
+<li><b>Stock/Index Lookup By Symbol</b></li>
+<li><b>Stock/Index Search By Name</b> with a table of up to 50 results and smart redirection to a direct match</li>
+<li><b>Stock/Index Quote & Profile Bootstrap Modal</b> containing quotes, interactive candlestick charts with the ability to show different time periods, and various information about the symbol</li>
+</ul>
+#### Options Page
+
 
 ### What challenges did I face and how did I overcome them or deal with them?
 
@@ -65,9 +73,19 @@ def trulyApplyFilters(info, numStrikes, rng):
 
 The first parameter, **info**, is a dictionary containing the underlying price of a certain symbol, and then either a dataframe for calls or a dataframe for puts, or a dataframe for both.  **numStrikes** and **rng** *(stands for range, since range is a keyword in python already)* are passed from the parent function it is used in, but are the exact same values inputted by the user in the UI.  The code in this function will only run if the range value is **ITM, OTM, or NTM** and **numStrikes is not an empty string**.  If these conditions are met, it will loop through the dataframe(s) in info manually and **drop any rows** representing contracts within the same expiration date group that **exceed the max numStrikes provided**.  It then re-indexes the dataframes to ensure that they will still display properly in the Option Chain Modal.  You can learn more about how this is done specifically by looking at the source code in the repository.
 
-#### Webscraping TD Ameritrade's Symbol Look Results for App's "Search By Name" Feature
+#### Webscraping TD Ameritrade's Symbol Lookup Results for App's "Search By Name" Feature
 
-Stuff here
+In order to include the **"Search By Name"** feature on the home page that generates a table of matches with a symbol that links straight to their quote & information profile, I needed to find a data source that could support this feature.  Unfortunately, TD Ameritrade **does not offer an API that can fulfill this feature**.  In order to ensure that new stocks and indicies that come into existence during development and after release, I decided to use TD Ameritrade's [**Symbol Lookup Website**](https://research.tdameritrade.com/grid/public/symbollookup/symbollookup.asp).
+
+##### Webscraping the Symbol Lookup Results Table for Web App Use
+
+I used **[Beautiful Soup 4](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)** along with the **[lxml](https://lxml.de/index.html#documentation)** parser, my two favorite webscraping libraries during my time at the University of Maryland and in other side projects, to handle processing the website results.  I was able to do this by sending a GET request to the symbol lookup website with a query parameter of **text=<i>searchValue</i>**, and then searching for the specific table element I wanted.  Getting the results and formatting them into a table with a link on the symbol that was found to link that allows the user **bring up its profile modal from whichever page they're on**.  However, the results generated by the website **only shows a maximum of 50 results per page when sending a request**.
+
+After searching on the symbol lookup website by name, TD Ameritrade will paginate the extra results with links that will load the next page's results.  It also will show options to show more than 50 per page.  **Due to the way that TD Ameritrade has implemented their website <i>(and for understandable reasons, given that this is their data and they want to make sure it is used in ways that is acceptable to them)</i>, it isn't possible to access these extra pages' links nor is it possible to parse the page generated by a POST request that tries to select the maximum number of results per page**.  I tried this with different parses and several different approaches to be able to access these extra results through code, but their website simply prevented this from being possible.
+
+##### Solution: Only Show Limited Results
+
+Since this web app is a demo and not a full-fledged enterprise application, I figured the best solution here would be to simply provide the user with a maximum of the first 50 results for any name search they perform.  **In most cases, 50 results is plenty:** *a large majority of the first 50 results tend to be extremely obscure indicies with very long symbols that don't have any practical use*.  While I had hoped to find a way to access all possible results, the extra data being retrieved and processed would increase load times for very little practicality, since any useful name matches are typically in the top 10 results.  **Despite this, if I had a better data source or higher specification standards from a client/manager, I would absolutely find a way to implement this feature as planned**.
 
 #### Candlestick Chart Rendering and Timeframe Option Button onClick Events
 
