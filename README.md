@@ -5,8 +5,8 @@ Developed by Jason Schneider | <i>Contact Me At: jasondukeschneider@gmail.com</i
 </h3>
 
 <h4><u>IMPORTANT NOTICES:</u></h4>
-* <b>Heroku's free tier for web hosting will automatically put to sleep any free site/app after 30 minutes of inactivity, so the app may take around 10 seconds to initially wake and load if you are the first to navigate to the link in a while.</b>
-* <b>The API Key visible in the bd_config.py file is intentionally visible for code review purposes (so you can get an idea as to what one may look like) *as it was only active during development and has since been deactivated and replaced by a new API Key on the Heroku repository.*</b>
+* **Heroku's free tier for web hosting will automatically put to sleep any free site/app after 30 minutes of inactivity, so the app may take around 10 seconds to initially wake and load if you are the first to navigate to the link in a while.**
+* **The API Key visible in the bd_config.py file is intentionally visible for code review purposes (so you can get an idea as to what one may look like) *as it was only active during development and has since been deactivated and replaced by a new API Key on the Heroku repository*.**
 
 
 ## Quick Links
@@ -19,7 +19,24 @@ Developed by Jason Schneider | <i>Contact Me At: jasondukeschneider@gmail.com</i
 
 ## Table of Contents
 * ["FAQs" For Interested Employers, Recruiters, and Organizations](#faqs-for-interested-employers-recruiters-and-organizations)
-* TD Ameritrade APIs
+	* [What languages and technologies were used?](#what-languages-and-technologies-were-used)
+	* [What was the purpose of this web app project?](#what-was-the-purpose-of-this-web-app-project)
+	* [What are the main features the web app demo?](#what-are-the-main-features-the-web-app-demo)
+		* [All Pages](#all-pages)
+		* [Home Page](#home-page)
+		* [Options Page](#options-page)
+		* [Movers Page](#movers-page)
+	* [What challenges did I face and how did I overcome them or deal with them?](#what-challenges-did-i-face-and-how-did-i-overcome-them-or-deal-with-them)
+		* [COVID-19 Pandemic](#covid19-Pandemic)
+		* [Unexpected TDA Options Chain API Parameter/Filter Interaction](#unexpected-tda-options-chain-api-parameterfilter-interaction)
+		* [Webscraping TD Ameritrade's Symbol Lookup Results for App's "Search By Name" Feature](#webscraping-td-ameritrades-symbol-lookup-results-for-app's-search-by-name-feature)
+		* [Candlestick Chart Rendering and Timeframe Option Button onClick Events](#candlestick-chart-rendering-and-timeframe-option-button-onclick-events)
+	* [What did I learn and/or gain from this experience?
+](#what-did-i-learn-andor-gain-from-this-experience)
+* [TD Ameritrade Developer APIs](#td-ameritrade-developer-apis)
+* [Backend Modules and Functions](#backend-modules-and-functions)
+* [Framework and Hosting](#framework-and-hosting)
+* [Frontend and UI/UX](#frontend-and-uiux)
 
 ## "FAQs" For Interested Employers, Recruiters, and Organizations
 
@@ -31,7 +48,7 @@ Developed by Jason Schneider | <i>Contact Me At: jasondukeschneider@gmail.com</i
 
 ### What was the purpose of this web app project?
 
-The purpose of this project was to be a **personal side project** that refreshed, sharpened, and further developed my skills in **full-stack development** (as well as the languages and tools used in the project individually) during a pandemic that interrupted my original post-graduation plans.  Given that we had, and still have, no idea how much longer this pandemic might last, I wanted to work on a practical side project for an **hour or two every day on average** so that I could use my time during the pandemic productively and **gain more experience, knowledge, and insight** as a full-stack developer.
+The purpose of this project was to be a **personal side project** that refreshed, sharpened, and further developed my skills in **full-stack development** (as well as the languages and tools used in the project individually) during a pandemic that interrupted my original post-graduation plans.  Given that we had, and still have, no idea how much longer this pandemic might last, I wanted to work on a practical side project for an **hour or two every day on average** *(in a corporate or professional development environment, I would obviously have worked on something like this for around eight hours a day or so, and therefore, would've finished it much more quickly)* so that I could use my time during the pandemic productively and **gain more experience, knowledge, and insight** as a full-stack developer.
 
 This project was also a great opportunity to learn more about a personal interest of mine: **the stock market.**  I eventually plan to develop a predictive model for personal investments down the line, and this project was able to give me experience with APIs I likely want to use as well as **methods of handling, processing, and understanding raw stock market data**.  My involvement with this project will serve as invaluable resource and reference when I do decide to develop that for myself, after further research and experience of course.
 
@@ -40,6 +57,7 @@ This project was also a great opportunity to learn more about a personal interes
 #### All Pages
 * **Optimized for desktop and laptop screens** but fully functional and accessible across all devices, screen sizes, and browsers (TODO: make sure to double check older IE)
 * **Bootstrap CSS Styling** across all pages for minimal, modern, and aesthetic feel
+* **Card-Based Sectioning** allows for intuitive background coloring and clean sectioning of information
 * **Responsive Navbar** with hamburger button and dropdown menu for smaller screens
 
 #### Home Page
@@ -47,21 +65,25 @@ This project was also a great opportunity to learn more about a personal interes
 * **"Market At A Glance..."** cards that shows automatically updating market information for the **Dow Jones Industrial Average**, **S&P 500**, and **NASDAQ Composite**
 * **Stock/Index Direct Lookup By Symbol**
 * **Stock/Index Search By Name** with a results table of up to 50 entries and smart redirection to a direct match
+	* **Direct Profile Links** in the results table open a symbol's profile modal with one click
 * **Stock/Index Quote & Profile Bootstrap Modal** containing quotes, interactive candlestick charts with the ability to show different time periods, and various information about the symbol
 
 #### Options Page
-* stuff
-	* sub stuff
-		* sub sub stuff
-			* more sub
+* **Options Chain Lookup for Any Optionable Symbol** that loads in Bootstrap modal
+* **Intuitive Collapsable Card Accordian Option Chain Display** grouped by expiration date with number of contracts per date shown
+* **Support for Several Filters to Specify Desired Option Chains**:
+	* *Contract Type, Max # of Strikes, Exact Strike, Range, Expiration Range, Expiration Month, and Standard/Non-Standard Contracts...*
+	* *OR enter a symbol and search with default settings right away!*
 
 #### Movers Page
-* features here
-	* subfeatures here
+* **Top 10 Movers** for the **Dow Jones Industrial Average**, **S&P 500**, and **NASDAQ Composite**
+* **Movers Tables Quickly Toggalable by Change in % and $** by preloading both types of tables for both directions of each index
+* **Quick Direct Profile Links** on the symbol and name of every movers table entry to **open its profile modal** right from the Movers page
+
 ### What challenges did I face and how did I overcome them or deal with them?
 
 #### COVID-19 Pandemic
-The largest problem I faced wasn't an issue with code, development, or a bug: it was the **COVID-19 Pandemic**.  The pandemic has hit everyone hard and differently, whether we or a loved one has actually contracted it or not.  While I have been fortunate so far as to not contract it myself, the pandemic has certainly **impacted my mental health and capacity noticeably**, and also has had me worried about family members and relatives who are at risk.  While the manner in which it has affected these things is a private matter, it certainly had the largest impact on this project out of any of the challenges I faced.  Despite the difficulty the situation posed for me, I saw this project idea as an **opportunity to not only recover from the impacts of the pandemic, but also to grow as a developer** due to the less-than-desired conditions that can frequently come up during development on a larger scale.  I was able to push through this adveristy with **dedication and persistance** to **achieve the purposes and goals I set** for this project and present it to anyone who may be interested.
+The largest problem I faced wasn't an issue with code, development, or a bug: it was the **COVID-19 Pandemic**.  The pandemic has hit everyone hard and differently, whether we or a loved one has actually contracted it or not.  While I have been fortunate so far as to not contract it myself, the pandemic has certainly **impacted my mental health**, and also has had me quite worried about family members and relatives who are at risk.  While the manner in which it has affected these things is a private matter, it definitely had the largest burden on this project out of any of the challenges I faced.  Despite the difficulty the situation posed for me, I saw this project idea as an **opportunity to not only recover from the impacts of the pandemic, but also to grow as a developer** due to the less-than-desired conditions that can frequently come up during development on a larger scale.  I was able to push through this adveristy with **dedication and persistance** to **achieve the purposes and goals I set** for this project and present it to anyone who may be interested.
 
 #### Unexpected TDA Options Chain API Parameter/Filter Interaction
 The next largest issue I faced was **undocumented and unexpected functionality when requesting TD Ameritrade's Option Chains API** that I needed to handle on my end to **fulfill expected and desired implementation and functionality**.  You can read more about this specific API [here](https://developer.tdameritrade.com/option-chains/apis/get/marketdata/chains).
@@ -114,7 +136,7 @@ This turned out to be **too complex for the scenario and not worth the runtime s
 
 After some research, I found **Plotly** (which you can read more about [here](https://plotly.com/python/candlestick-charts/)) to be a great solution to all of my issues.  I actually didn't need to change that much of the stock_chart.py module to format the data for the library.  In terms of data-points, I just needed to provide datetimes in epoch format, which only required a dividing TDA's datetimes by 1000 to convert to seconds, and then a list of every open, high, low, and close.  A candlestick chart figure object could then be created from this data, followed by easily updating its layout to add appropriate titles and axis labels, and then using **Plotly's IO library** to write the chart to its own html file using a **special filepath** format to allow for easy creation, identification, and deletion of a chart:
 	
-	frontend/graphs/graph<b>{symbol}{timeframe option (ex: "10d")}{true/false include exthrs}.html
+	frontend/graphs/graph{symbol}{timeframe option}{true/false include exthrs}.html
 
 ##### _Timeframe Option Buttons null due to not Loading in DOM Before Setting onClick Events_
 
@@ -127,7 +149,11 @@ Unfortunately, when accessing the chart feature after submitting a direct lookup
 Adding the two groups of buttons with unique ids into the **home.html** template directly was a much easier solution.  These buttons exist in the modal that only appears after submitting a direct symbol lookup into the form on the page, so they don't take up any space on the page when navigating to it through a standard GET request.  When the form is submited, the function that adds the script to immediately load the modal **will also have the necessary JavaScript to add the onClick events** to the buttons with corresponding ids.  Since the buttons already exist in the DOM, there are no null buttons, and the events are added successfully.  Each button can now appropriately tell the server to create and load a chart's html to the modal for the user to see.
 
 ### What did I learn and/or gain from this experience?
-Answer placeholder
+While I have had a decent amount of experience in full-stack development through my time at the University of Maryland, and more recently and importantly, my internship at **Eagle Technologies** where I was the **lead full-stack developer on the then new SAMHSA Play 2 Documentation Site Application**, this project furthered my knowledge about developing full-stack applications.  I gained a much better perspective on how long certain things take as a single developer working with new frameworks and APIs, with one big determination being that things almost always tend to take longer than expected, especially if they are to be done well.  Since this was a personal side project, I didn't exactly have any hard deadlines or specific timeline expectations, so **I was able to experience how long something would take compared to *how long I thought it would*.**  Going forward, certain things that might've taken me much longer than expected will **take far less time the next time I encounter them**, even if the technologies are different, since the concepts behind them are mostly the same.
+
+As stated earlier, this is the first time I've used the **Flask Web Framework** specifically, and also the first time I've deployed an app to a **web host accessible from anywhere**, unlike in-house test deployment environments or using a "localhost server" (such as XAMPP in college).  It was an amazing feeling to see my project come together piece by piece and then eventually become a website I could open on my mom's computer.  Those final couple steps were really only a theoretical process to me before or something handled by other employees.
+
+Working on this project also further advanced skills required of me as a developer regardless of what specific type of development I may be tasked with.  Working more with **Python**, even though it is my most-used and favorite language, still uncovered some tricks and knowledge that I didn't have before.  I was able to further refine my ability to **write documentation** that is easily **readable and accessible** as well as utilize **github** to make sure my git skills were refreshed and used to keep quality versioning and progress documented and backed up.
 
 ## TD Ameritrade Developer APIs
 Explanation Here
