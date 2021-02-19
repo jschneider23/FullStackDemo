@@ -6,6 +6,7 @@ Developed by Jason Schneider | <i>Contact Me At: jasondukeschneider@gmail.com</i
 
 <h4><u>IMPORTANT NOTICES:</u></h4>
 * **Heroku's free tier for web hosting will automatically put to sleep any free site/app after 30 minutes of inactivity, so the app may take around 10 seconds to initially wake and load if you are the first to navigate to the link in a while.**
+
 * **The API Key visible in the bd_config.py file is intentionally visible for code review purposes (so you can get an idea as to what one may look like) *as it was only active during development and has since been deactivated and replaced by a new API Key on the Heroku repository*.**
 
 
@@ -29,7 +30,7 @@ Developed by Jason Schneider | <i>Contact Me At: jasondukeschneider@gmail.com</i
 	* [What challenges did I face and how did I overcome them or deal with them?](#what-challenges-did-i-face-and-how-did-i-overcome-them-or-deal-with-them)
 		* [COVID-19 Pandemic](#covid19-Pandemic)
 		* [Unexpected TDA Options Chain API Parameter/Filter Interaction](#unexpected-tda-options-chain-api-parameterfilter-interaction)
-		* [Webscraping TD Ameritrade's Symbol Lookup Results for App's "Search By Name" Feature](#webscraping-td-ameritrades-symbol-lookup-results-for-app's-search-by-name-feature)
+		* [Webscraping TD Ameritrade's Symbol Lookup Results for App's "Search By Name" Feature](#webscraping-td-ameritrades-symbol-lookup-results-for-apps-search-by-name-feature)
 		* [Candlestick Chart Rendering and Timeframe Option Button onClick Events](#candlestick-chart-rendering-and-timeframe-option-button-onclick-events)
 	* [What did I learn and/or gain from this experience?
 ](#what-did-i-learn-andor-gain-from-this-experience)
