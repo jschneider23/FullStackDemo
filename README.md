@@ -11,7 +11,7 @@ Developed by Jason Schneider | <i>Contact Me: jasondukeschneider@gmail.com</i>
 
 
 ## Quick Links
-* [**App Features, Use, and Demonstration Video**](https://videolinkplaceholder.com)
+* [***App Features, Use, and Demonstration Video***](https://videolinkplaceholder.com)
 * [**My LinkedIn**](https://www.linkedin.com/in/jason-schneider-772a19173/)
 * [TD Ameritrade Developer APIs and Documentation](https://developer.tdameritrade.com/apis)
 * [TD Ameritrade Symbol Lookup](https://research.tdameritrade.com/grid/public/symbollookup/symbollookup.asp)
@@ -41,10 +41,17 @@ Developed by Jason Schneider | <i>Contact Me: jasondukeschneider@gmail.com</i>
 	* [Get Option Chain](#get-option-chain-documentation)
 	* [Get Movers](#get-movers-documentation)
 * [Backend Modules and Functions](#backend-modules-and-functions)
-	* [stock_info.py](#stockinfopy)
-		* [getBySymbol(sym, symType = "")](#getbysymbolsym-symtype)
-* [Framework and Hosting](#framework-and-hosting)
-* [Frontend and UI/UX](#frontend-and-uiux)
+	* [stock_info.py](#stock_infopy)
+		* [getBySymbol(sym, symType = "")](#getbysymbolsym-symtype--)
+		* [getByName(name)](#getbynamename)
+	* [stock_chart.py](#stock_chartpy)
+		* [createGraph(sym, time = "10d", hasExtHrs = True)](#creategraphsym-time--10d-hasexthrs--true)
+	* [stock_options.py](#stock_optionspy)
+		* [getOptionChain(sym, conType, numStrikes, strike, rng, expFrom, expTo, expMonth, standard)](#getoptionchainsym-contype-numstrikes-strike-rng-expfrom-expto-expmonth-standard)
+		* [trulyApplyFilters(info, numStrikes, rng) (Called Within getOptionChain)](#trulyapplyfiltersinfo-numstrikes-rng-called-within-getoptionchain)
+	* [stock_movers.py](#stock_moverspy)
+		* [getMovers(index, direction, change)](#getmoversindex-direction-change)
+* [Framework, Frontend, and UI](#framework-frontend-and-ui)
 
 ## "FAQs" For Interested Employers, Recruiters, and Organizations
 
@@ -294,7 +301,6 @@ Description
 # change can be in units of value or by percentage.  Last price also retrieved.
 def getMovers(index, direction, change):
 ```
-## Framework and Hosting
-More Documentation Here
-## Frontend and UI/UX
+
+## Framework, Frontend, and UI
 More Documentation Here
