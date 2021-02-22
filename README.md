@@ -1,22 +1,22 @@
 # TD Ameritrade Full-Stack Web App Demo: <br>*A Flask Web App with a Bootstrap Frontend Built on TD Ameritrade's (TDA) Stock Market Developer APIs*
 <h3>
 Web App Link Here: <a href="linkhere.com">Deployed on Heroku</a><br>
-Developed by Jason Schneider | <i>Contact Me At: jasondukeschneider@gmail.com</i>
+Developed by Jason Schneider | <i>Contact Me: jasondukeschneider@gmail.com</i>
 </h3>
 
-<h4><u>IMPORTANT NOTICES:</u></h4>
+#### _IMPORTANT NOTICES:_
 * **Heroku's free tier for web hosting will automatically put to sleep any free site/app after 30 minutes of inactivity, so the app may take around 10 seconds to initially wake and load if you are the first to navigate to the link in a while.**
 
-* **The API Key visible in the bd_config.py file is intentionally visible for code review purposes (so you can get an idea as to what one may look like) *as it was only active during development and has since been deactivated and replaced by a new API Key on the Heroku repository*.**
+* **The API Key in the bd_config.py file is intentionally visible for code review purposes (so you can get an idea as to what one may look like) *as it was only active during development and has since been deactivated and replaced by a new API Key on the Heroku repository*.**
 
 
 ## Quick Links
-* **App Features, Use, and Demonstration Video:** [Link](https://videolinkplaceholder.com)
-* **My LinkedIn:** [Link](https://www.linkedin.com/in/jason-schneider-772a19173/)
-* TD Ameritrade Developer APIs and Documentation: [Link](https://developer.tdameritrade.com/apis)
-* TD Ameritrade Symbol Lookup (Used in Implementation): [Link](https://research.tdameritrade.com/grid/public/symbollookup/symbollookup.asp)
-* Flask Web Framework: [Link](https://flask.palletsprojects.com/en/1.1.x/)
-* Bootstrap 4 Documentation: [Link](https://getbootstrap.com/docs/5.0/getting-started/introduction/)
+* [**App Features, Use, and Demonstration Video**](https://videolinkplaceholder.com)
+* [**My LinkedIn**](https://www.linkedin.com/in/jason-schneider-772a19173/)
+* [TD Ameritrade Developer APIs and Documentation](https://developer.tdameritrade.com/apis)
+* [TD Ameritrade Symbol Lookup](https://research.tdameritrade.com/grid/public/symbollookup/symbollookup.asp)
+* [Flask Web Framework](https://flask.palletsprojects.com/en/1.1.x/)
+* [Bootstrap 4 Documentation](https://getbootstrap.com/docs/5.0/getting-started/introduction/)
 
 ## Table of Contents
 * ["FAQs" For Interested Employers, Recruiters, and Organizations](#faqs-for-interested-employers-recruiters-and-organizations)
@@ -35,7 +35,14 @@ Developed by Jason Schneider | <i>Contact Me At: jasondukeschneider@gmail.com</i
 	* [What did I learn and/or gain from this experience?
 ](#what-did-i-learn-andor-gain-from-this-experience)
 * [TD Ameritrade Developer APIs](#td-ameritrade-developer-apis)
+	* [Introduction and Reasons Of Use](#introduction-and-reasons-of-use)
+	* [Get Quote](#get-quote-documentation)
+	* [Get Price History](#get-price-history-documentation)
+	* [Get Option Chain](#get-option-chain-documentation)
+	* [Get Movers](#get-movers-documentation)
 * [Backend Modules and Functions](#backend-modules-and-functions)
+	* [stock_info.py](#stockinfopy)
+		* [getBySymbol(sym, symType = "")](#getbysymbolsym-symtype)
 * [Framework and Hosting](#framework-and-hosting)
 * [Frontend and UI/UX](#frontend-and-uiux)
 
@@ -154,12 +161,139 @@ While I have had a decent amount of experience in full-stack development through
 
 As stated earlier, this is the first time I've used the **Flask Web Framework** specifically, and also the first time I've deployed an app to a **web host accessible from anywhere**, unlike in-house test deployment environments or using a "localhost server" (such as XAMPP in college).  It was an amazing feeling to see my project come together piece by piece and then eventually become a website I could open on my mom's computer.  Those final couple steps were really only a theoretical process to me before or something handled by other employees.
 
-Working on this project also further advanced skills required of me as a developer regardless of what specific type of development I may be tasked with.  Working more with **Python**, even though it is my most-used and favorite language, still uncovered some tricks and knowledge that I didn't have before.  I was able to further refine my ability to **write documentation** that is easily **readable and accessible** as well as utilize **github** to make sure my git skills were refreshed and used to keep quality versioning and progress documented and backed up.
+Working on this project also further advanced skills required of me as a developer regardless of what specific type of development I may be tasked with.  Working more with **Python**, even though it is my most-used and favorite language, still uncovered some tricks and knowledge that I didn't have before.  I was able to further refine my ability to **write documentation** that is easily **readable and accessible** as well as utilize **Github** to make sure my git skills were refreshed and used to keep quality versioning and progress documented and backed up.
 
 ## TD Ameritrade Developer APIs
-Explanation Here
+
+### Introduction and Reasons Of Use
+
+**TD Ameritrade (now operating as a subsidiary of Charles Schwab)** is the online broker and platform provide I use for my personal trades and investments.  After several months of stock market trading, my interest in a potential stock market evaluation project began to grow, so I started to look for potential APIs to use for stock data.  I found that TD Ameritrade provided their own **developer APIs that were free for personal, non-profit use**.  Given that I already had a lot of experience with the data and services offered by their trading platform, I decided it would be a great idea to use their APIs in a project and eventually the idea for a full-stack web app that provided stock market features **using some of their GET APIs** as a data source came to fruition.
+
+**[Their collection of APIs](https://developer.tdameritrade.com/apis)** is quite robust and is separated into many sub-categories using various http request methods.  Some of their APIs **can even automate senstive, advanced operations** with a valid authentication token, such as retrieval and changing of **account information**, **placing and changing orders**, and accessing **transaction history**.  For the purposes of this project, only GET APIs that didn't require any sensitive account credentials or advanced authorization were needed.  To implement the features desired, the APIs selected and used are described below:
+
+### Get Quote ([Documentation](https://developer.tdameritrade.com/quotes/apis/get/marketdata/%7Bsymbol%7D/quotes))
+
+#### Description
+The **Get Quote API** gets a quote for a symbol.  The response is more than just a simple price or point value and actually returns a lot of useful data.  The exact information returned depends on the type of symbol, which can be one of the following: **mutual fund**, **future**, **future option**, **index** *(prefaced with a "$" in TDA's APIs, even though typically it is the other way around in most investing contexts)*, **option**, **forex**, **ETF**, or **equity**.  The web app deems **anything that is not an index is a "stock"**.  The only query parameter required for this API is the api key as the symbol data is requested for is put into the resource url.
+
+#### Use in Project
+This API is used to implement the backend module **stock_info.py**, which contains two frequently used functions: `getBySymbol(sym, symType = "")` and indirectly `getByName(name)`, which calls getBySymbol in a certain case.
+
+### Get Price History ([Documentation](https://developer.tdameritrade.com/price-history/apis/get/marketdata/%7Bsymbol%7D/pricehistory))
+
+#### Description
+The **Get Price History API** gets the price history for a symbol, which is the data needed to **render candlestick charts**.  The response is a candle list, with each candle containing a **close**, **datetime**, **high**, **low**, **open**, and **volume**.  Along with the required api key, this API takes several query parameters, with the following used in the project: **periodType**, **period**, **frequencyType**, **frequency**, and **needExtendedHoursData**.  The values these parameters can be are defined in the documentation linked above.
+
+#### Use in Project
+This API is used to implement the backend module **stock_chart.py**, which contains the chart creation function: `createGraph(sym, time = "10d", hasExtHrs = True)`.
+
+### Get Option Chain ([Documentation](https://developer.tdameritrade.com/option-chains/apis/get/marketdata/chains))
+
+#### Description
+The **Get Option Chain API** gets an option chain for an optionable symbol.  The response contains a lot of data in a complex format, much of which is unneeded for this app's functionality.  The main data that is needed from the response is the **underlying** and then the **callExpDateMap**, the **putExpDateMap**, or **both**.  Each of the maps contain another complex json list format but it will essentially **group individual options contracts by expiration date**.  Along with the api key, this API takes several query parameters, with the following used in the project: **symbol**, **contractType**, **strikeCount**, **strike**, **range**, **fromDate**, **toDate**, **expMonth**, and **optionType**.  To get a better idea of the parameters and response format, please read the documentation above.
+
+#### Use in Project
+This API is used to implement the backend module **stock_options.py**, which contains the option chain processing and formatting function: `getOptionChain(sym, conType, numStrikes, strike, rng, expFrom, expTo, expMonth, standard)`.
+
+### Get Movers ([Documentation](https://developer.tdameritrade.com/movers/apis/get/marketdata/%7Bindex%7D/movers))
+
+#### Description
+The **Get Movers API** gets the top 10 (up or down) movers by value or percent for a particular market, which the hover pop-up on the documentation site states to be either the **NASDAQ Composite**, **Dow Jones Industrial Average**, or **S&P 500**.  The response is a list of movers, with each mover containing the following values: **change**, **description** *(the name of the mover)*, **direction**, **last**, **symbol**, and **totalVolume**.  Along with the api key, this API takes two other query parameters: **direction** *(up or down)* and **change** *(value or percent)*.
+
+#### Use in Project
+This API is used to implement the backend module **stock_movers.py**, which contains the function that retrieves and formats the movers into a dataframe ready for the frontend: `getMovers(index, direction, change)`.
+
 ## Backend Modules and Functions
-Documentation Here
+The backend is driven by six python modules (which can be found in the **backend directory**): **stock_info.py**, **stock_chart.py**, **stock_options.py**, **stock_movers.py**, an auxiliary module named **stock_aux.py**, and the config file named **bd_config.py**.  Below you can find descriptions of each module and the functions it contains with **explanations for each parameter taken**, as well as a description of what each value of the config file does.
+
+### stock_info.py
+
+Description
+
+#### `getBySymbol(sym, symType = "")`
+
+```python
+# Requests the TD Ameritrade Quotes API for the stock's attributes that will
+# eventually be displayed to the user on the frontend and returns a dictionary
+# with each attribute and its corresponding value.  These attributes are
+# defined in the config file and the README, and depend on whether the symbol
+# is for a stock, index, or for the case when this is used for Index Cards for
+# the "At a Glance..." Home Page Section.
+def getBySymbol(sym, symType = ""):
+```
+
+#### `getByName(name)`
+```python
+# Searching by stock name requires a symbol lookup on an exchange's symbol
+# list via a GET Request to TD Ameritrade's symbol lookup page with
+# appropriate url parameters to generate a table of all stock names containing
+# name.  If there is only one table entry then this function returns the
+# result of getBySymbol() with the associated symbol.  Otherwise, it will
+# return a dictionary of all search results with symbol keys and stock name
+# values.
+def getByName(name):
+```
+
+### stock_chart.py
+
+Description
+
+#### `createGraph(sym, time = "10d", hasExtHrs = True)`
+
+```python
+# Requests the TD Ameritrade Price History API for a given symbol, with
+# frequency and periods determined by the time option (default "10d"), and
+# whether or not to include extended hours data.  This data is then used to
+# generate an html file written to the /frontend/graphs directory using
+# plotly's io library so that it can be used to easily render a graph in a
+# modal on the frontend based on the file's name.
+def createGraph(sym, time = "10d", hasExtHrs = True):
+```
+
+### stock_options.py
+
+Description
+
+#### `getOptionChain(sym, conType, numStrikes, strike, rng, expFrom, expTo, expMonth, standard)`
+
+```python
+# Requests the TD Ameritrade Options Chain API with the given request
+# parameters (streamlined to include only required parameters and optional
+# parameters necessary for implementation desired) and returns a dictionary
+# containing the underlying price as well as dataframes for puts and calls,
+# just puts, just calls, or neither (if filters are too restrictive, resulting
+# in 0 options that fit criteria).
+def getOptionChain(sym, conType, numStrikes, strike, rng, expFrom, expTo,
+                   expMonth, standard):
+```
+
+#### `trulyApplyFilters(info, numStrikes, rng)` *(Called Within getOptionChain)*
+
+```python
+# This function "extends" the TD Ameritrade Option Chain API's functionality by
+# implenting intended interaction between the Max # of Strikes filter in
+# combination with ITM, OTM, and NTM contract ranges.  By default, TD
+# Ameritrade has implemented their API to completely ignore the numStrikes
+# setting if one of these ranges is selected, which is not the functionality
+# intended.  Preventing the user from combining these options defeats the
+# purpose of this feature, so this function implements this for the users so
+# they can have this feature properly.
+def trulyApplyFilters(info, numStrikes, rng):
+```
+
+### stock_movers.py
+
+Description
+
+#### `getMovers(index, direction, change)`
+
+```python
+# Requests the TD Ameritrade Movers API to retrieve mover information based on
+# the given parameters as a dataframe.  Movers can be retrieved for any TD
+# Ameritrade supported index in either "gainer" or "loser" direction and the
+# change can be in units of value or by percentage.  Last price also retrieved.
+def getMovers(index, direction, change):
+```
 ## Framework and Hosting
 More Documentation Here
 ## Frontend and UI/UX
