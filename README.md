@@ -181,7 +181,7 @@ Working on this project also further advanced skills required of me as a develop
 ### Get Quote ([Documentation](https://developer.tdameritrade.com/quotes/apis/get/marketdata/%7Bsymbol%7D/quotes))
 
 #### Description
-The **Get Quote API** gets a quote for a symbol.  The response is more than just a simple price or point value and actually returns a lot of useful data.  The exact information returned depends on the type of symbol, which can be one of the following: **mutual fund**, **future**, **future option**, **index** *(prefaced with a "$" in TDA's APIs, even though typically it is the other way around in most investing contexts)*, **option**, **forex**, **ETF**, or **equity**.  The web app deems **anything that is not an index is a "stock"**.  The only query parameter required for this API is the api key as the symbol data is requested for is put into the resource url.
+The **Get Quote API** gets a quote for a symbol.  The response is more than just a simple price or point value and actually returns a lot of useful data.  The exact information returned depends on the type of symbol, which can be one of the following: **mutual fund**, **future**, **future option**, **index** *(prefaced with a "\$" in TDA's APIs, even though typically it is the other way around in most investing contexts)*, **option**, **forex**, **ETF**, or **equity**.  The web app deems **anything that is not an index is a "stock"**.  The only query parameter required for this API is the api key as the symbol data is requested for is put into the resource url.
 
 #### Use in Project
 This API is used to implement the backend module **stock_info.py**, which contains two frequently used functions: `getBySymbol(sym, symType = "")` and indirectly `getByName(name)`, which calls getBySymbol in a certain case.
@@ -215,7 +215,7 @@ The backend is driven by six python modules (which can be found in the **backend
 
 ### stock_info.py
 
-Description
+This module utilizes the **Get Quote API** to implement most of every **Stock and Index Quote & Profile Modal** and the html generation functions to create their html formatting.  It also handles **webscraping TD Ameritrade's Symbol Lookup** website to implement searching by name, as well as directly retrieving information for a symbol that is found for a name search that results in a **direct one to one match** *(for example: searching for "Lemonade" results in a one to one match for LMND on the website, so getBySymbol("LMND") is returned directly)*.
 
 #### `getBySymbol(sym, symType = "")`
 
@@ -228,6 +228,13 @@ Description
 # the "At a Glance..." Home Page Section.
 def getBySymbol(sym, symType = ""):
 ```
+***Parameters:***
+
+* **sym**: A string symbol for an index with preceeding "\$" *(such as \$DJI)* or for a stock with no preceeding "\$" *(such as TSLA)*.  An invalid or nonexisting symbol will result in a return value of `None`.
+* **symType**: A string containing a symbol type code to tell the function what types of attributes to include in its return dictionary.  Can be one of: *indexCard* (for markets at a glance cards), *indexFull* (for a symbol provided with a preceeding "\$"), or an *empty string* (for any other symbol, which are deemed stock symbols).
+
+***Returns:*** A `dict` of attribute names and attribute values or `None`.
+
 
 #### `getByName(name)`
 ```python
