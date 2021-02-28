@@ -71,7 +71,7 @@ def getOptionChain(sym, conType, numStrikes, strike, rng, expFrom, expTo,
                           option["description"]]
                 dfPuts.loc[len(dfPuts)] = newRow
         info["dfPuts"] = dfPuts
-    trueInfo = trulyApplyFilters(info, numStrikes, strike, rng)
+    trueInfo = trulyApplyFilters(info, numStrikes, rng)
     return trueInfo
 
 # This function "extends" the TD Ameritrade Option Chain API's functionality by

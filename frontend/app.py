@@ -108,9 +108,9 @@ def options():
         standard = request.form["standard"]
         modal = hg.htmlOCModalData(sym, conType, numStrikes, strike, rng,
                                    fromDate, toDate, expMonth, standard)
-        context.update({"modalScript": modal.get("script"),
-                        "modalTitle": modal.get("title"),
-                        "modalOptionChain": modal.get("oc"),
+        context.update({"modalScript": modal.get("script", ""),
+                        "modalTitle": modal.get("title", ""),
+                        "modalOptionChain": modal.get("oc", ""),
                         "errorMsg": modal.get("errorMsg", "")})
     return render_template("options.html", context = context)
 

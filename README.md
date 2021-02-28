@@ -27,6 +27,7 @@ Developed by Jason Schneider | <i>Contact Me: jasondukeschneider@gmail.com</i>
 		* [Home Page](#home-page)
 		* [Options Page](#options-page)
 		* [Movers Page](#movers-page)
+		* [Potential for Future Development](#potential-for-future-development)
 	* [What challenges did I face and how did I overcome them or deal with them?](#what-challenges-did-i-face-and-how-did-i-overcome-them-or-deal-with-them)
 		* [COVID-19 Pandemic](#covid19-Pandemic)
 		* [Unexpected TDA Options Chain API Parameter/Filter Interaction](#unexpected-tda-options-chain-api-parameterfilter-interaction)
@@ -94,6 +95,10 @@ This project was also a great opportunity to learn more about a personal interes
 * **Top 10 Movers** for the **Dow Jones Industrial Average**, **S&P 500**, and **NASDAQ Composite**
 * **Movers Tables Quickly Toggalable by Change in % and $** by preloading both types of tables for both directions of each index
 * **Quick Direct Profile Links** on the symbol and name of every movers table entry to **open its profile modal** right from the Movers page
+
+#### Potential for Future Development
+* **Templated UI Design** allows for easy addition, removal, or changing of elements
+* **Demo Includes Extra Backend Data for Possible Future Development** allows for easy addition of feature expansion, feature inclusion, and scalability *(such as inclusion of last price in movers backend, full options name in options backend, etc. for demonstrating potential for additions)*
 
 ### What challenges did I face and how did I overcome them or deal with them?
 
