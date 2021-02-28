@@ -5,7 +5,7 @@ Developed by Jason Schneider | <i>Contact Me: jasondukeschneider@gmail.com</i>
 </h3>
 
 #### _IMPORTANT NOTICES:_
-* **Heroku's free tier for web hosting will automatically put to sleep any free site/app after 30 minutes of inactivity, so the app may take around 10 seconds to initially wake and load if you are the first to navigate to the link in a while.**
+* **Heroku's free tier for web hosting will automatically put to sleep any free site/app after 30 minutes of inactivity, so the app may take around 15-20 seconds to initially wake and load if you are the first to navigate to the link in a while.  This is a result of the hosting service and not the app or its code.**
 
 * **The API Key in the bd_config.py file is intentionally visible for code review purposes (so you can get an idea as to what one may look like) *as it was only active during development and has since been deactivated and replaced by a new API Key on the Heroku repository*.**
 
@@ -174,7 +174,7 @@ Working on this project also further advanced skills required of me as a develop
 
 ### Introduction and Reasons Of Use
 
-**TD Ameritrade (now operating as a subsidiary of Charles Schwab)** is the online broker and platform provide I use for my personal trades and investments.  After several months of stock market trading, my interest in a potential stock market evaluation project began to grow, so I started to look for potential APIs to use for stock data.  I found that TD Ameritrade provided their own **developer APIs that were free for personal, non-profit use**.  Given that I already had a lot of experience with the data and services offered by their trading platform, I decided it would be a great idea to use their APIs in a project and eventually the idea for a full-stack web app that provided stock market features **using some of their GET APIs** as a data source came to fruition.
+**TD Ameritrade (now operating as a subsidiary of Charles Schwab)** is the online broker and platform provide I use for my personal trades and investments.  After several months of stock market trading, my interest in a potential stock market evaluation project began to grow, so I started to look for potential APIs to use for stock data.  I found that TD Ameritrade provided their own **developer APIs that were free for personal, non-profit use as long as you register an application after making a developer account**.  Given that I already had a lot of experience with the data and services offered by their trading platform, I decided it would be a great idea to use their APIs in a project and eventually the idea for a full-stack web app that provided stock market features **using some of their GET APIs** as a data source came to fruition.
 
 **[Their collection of APIs](https://developer.tdameritrade.com/apis)** is quite robust and is separated into many sub-categories using various http request methods.  Some of their APIs **can even automate senstive, advanced operations** with a valid authentication token, such as retrieval and changing of **account information**, **placing and changing orders**, and accessing **transaction history**.  For the purposes of this project, only GET APIs that didn't require any sensitive account credentials or advanced authorization were needed.  To implement the features desired, the APIs selected and used are described below:
 
@@ -211,7 +211,7 @@ The **Get Movers API** gets the top 10 (up or down) movers by value or percent f
 This API is used to implement the backend module **stock_movers.py**, which contains the function that retrieves and formats the movers into a dataframe ready for the frontend: `getMovers(index, direction, change)`.
 
 ## Backend Modules and Functions
-The backend is driven by six python modules (which can be found in the **backend directory**): **stock_info.py**, **stock_chart.py**, **stock_options.py**, **stock_movers.py**, an auxiliary module named **stock_aux.py**, and the config file named **bd_config.py**.  Below you can find descriptions of each module and the functions it contains with **explanations for each parameter taken**, as well as a description of what each value of the config file does.
+The backend is driven by six python modules (which can be found in the **backend directory**): **stock_info.py**, **stock_chart.py**, **stock_options.py**, **stock_movers.py**, an auxiliary module named **stock_aux.py**, and the config file named **bd_config.py**.  Below you can find descriptions of each module and the functions it contains with **explanations for each parameter taken**.  An explanation of each value of the config file is contained in the comments within the file itself.
 
 ### stock_info.py
 
@@ -228,13 +228,16 @@ This module utilizes the **Get Quote API** to implement most of every **Stock an
 # the "At a Glance..." Home Page Section.
 def getBySymbol(sym, symType = ""):
 ```
+
 ***Parameters:***
 
-* **sym**: A string symbol for an index with preceeding "\$" *(such as \$DJI)* or for a stock with no preceeding "\$" *(such as TSLA)*.  An invalid or nonexisting symbol will result in a return value of `None`.
-* **symType**: A string containing a symbol type code to tell the function what types of attributes to include in its return dictionary.  Can be one of: *indexCard* (for markets at a glance cards), *indexFull* (for a symbol provided with a preceeding "\$"), or an *empty string* (for any other symbol, which are deemed stock symbols).
+* **sym**: A symbol string for an index with preceeding "\$" *(such as \$DJI)* or for a stock with no preceeding "\$" *(such as TSLA)*.  An invalid or nonexisting symbol will result in a return value of `None`.
+* **symType**: A string containing a symbol type code to tell the function what types of attributes to include in its return dictionary.  Can be one of the following values **(defaults to *""* if omitted)**:
+	* *indexCard* - for markets at a glance cards
+	* *indexFull* - for a symbol provided with a preceeding "\$"
+	* *""* (empty string) - for any other symbol, which are deemed stock symbols
 
 ***Returns:*** A `dict` of attribute names and attribute values or `None`.
-
 
 #### `getByName(name)`
 ```python
@@ -248,9 +251,19 @@ def getBySymbol(sym, symType = ""):
 def getByName(name):
 ```
 
+***Parameters:***
+
+* **name**: A string representing either a full stock or index name, name fragment, or stock symbol.  Use of a stock symbol will result in the Symbol Lookup website returning a table of one line, which tells the function to return the result of `getBySymbol(name)`, which is a `dict`.
+
+***Returns:*** One of the following:
+
+* `None` - no results are found for `name` on the Symbol Lookup site
+* `DataFrame` - contains rows matching the results table after searching on the Symbol Lookup site
+* Result of `getBySymbol(name)` - in the case of a one-to-one match
+
 ### stock_chart.py
 
-Description
+This module utilizes the **Get Price History API** to implement the stock or index **candlestick chart** *(chart and graph used interchangeably)* of every **Stock and Index Quote & Profile Modal**.  The candlestick chart figure creation and writing to html file is achieved using **Plotly's Graph Objects and IO Libraries**.
 
 #### `createGraph(sym, time = "10d", hasExtHrs = True)`
 
@@ -264,9 +277,28 @@ Description
 def createGraph(sym, time = "10d", hasExtHrs = True):
 ```
 
+***Parameters:***
+
+* **sym:** A symbol string for either a stock or index.
+* **time:** A time option string representing the period of time (in trading days) from which to create a candlestick chart of for the given symbol *(for example: 10d means "over the last 10 trading days)*.  Can be one of the following values **(defaults to *"10d"* if omitted)**:
+	* *1d* - last trading day
+	* *3d* - last 3 trading days
+	* *5d* - last 5 trading days
+	* *10d* - last 10 trading days
+	* *1m* - last trading month
+	* *3m* - last 3 trading months
+	* *6m* - last 6 trading months
+	* *1y* - last trading year
+	* *3y* - last 3 trading years
+	* *5y* - last 5 trading years
+	* *YTD* - last trading year to date
+* **hasExtHrs**: A boolean value that will include extended hours price history data if True, otherwise, only standard market hours price history data will be used (**defaults to *True* if omitted)**
+
+**Returns:** No value returned.
+
 ### stock_options.py
 
-Description
+This module utilizes the **Get Options Chain API** to retireve options chain data and implement the Bootstrap card accordian-style **Options Chain Modal**.  It also is responsible for handling the manual application of combining the **numStrikes** and **range** filters.  You can read more about why manual application is necessary and how it is done [here](#unexpected-tda-options-chain-api-parameterfilter-interaction).
 
 #### `getOptionChain(sym, conType, numStrikes, strike, rng, expFrom, expTo, expMonth, standard)`
 
@@ -281,6 +313,52 @@ def getOptionChain(sym, conType, numStrikes, strike, rng, expFrom, expTo,
                    expMonth, standard):
 ```
 
+***Parameters:***
+
+* **sym**: A symbol string for an underlying stock to retrieve an options chain for.
+* **conType**: A string representing the type of contracts to be included in the options chain (OC).  Can be one of the following values:
+	* *CALL* - OC will include only call contracts
+	* *PUT* - OC will include only put contracts
+	* *ALL* - OC will include both call and put contracts
+* **numStrikes**: A string representing the maximum integer number of strike prices to include per expiration date group.  **For no maximum number of strikes, this parameter's value is *""* or *"null"*.**
+* **strike**: A float string *(no preceeding \$, such as "20.21")* that specifies to only include options contacts with this exact strike price.  **For no exact strike, this parameter's value is *""* or *"null"*.**
+* **rng**: A string representing the range of contracts to include in the chain.  Can be one of the following values:
+	* *ITM* - In the money
+	* *NTM* - Near the money
+	* *OTM* - Out of the money
+	* *SAK* - Strikes Above Market Price
+	* *SNK* - Strikes Near Market Price
+	* *SBK* - Strikes Below Market Price
+* **expFrom**: A date string of format *YYYY-MM-DD* representing the starting/earliest expiry date to be included in the chain.  **For no starting/earliest expiry date, this parameter's value is *""* or *"null"*.**
+* **expTo**: A date string of format *YYYY-MM-DD* representing the ending/latest expiry date to be included in the chain.  **For no ending/latest expiry date, this parameter's value is *""* or *"null"*.**
+* **expMonth**: A string containing a three letter abbreviation representing the month in which only options contracts expiring in that month should be included in the chain.  Can be one of the following values **(for no expiry month, this parameter's value is *""* or *"null"*)**:
+	* *JAN* - January
+	* *FEB* - February
+	* *MAR* - March
+	* *APR* - April
+	* *MAY* - May
+	* *JUN* - June
+	* *JUL* - July
+	* *AUG* - August
+	* *SEP* - September
+	* *OCT* - October
+	* *NOV* - November
+	* *DEC* - December
+* **standard**: A string representing whether to retrieve only standard contracts, only non-standard contracts, or both.  Can be one of the following values:
+	* *S* - only standard contracts (representing 100 shares of the underlying security)
+	* *NS* - only non-standard contracts (representing a number other than 100 shares of the underlying security)
+	* *ALL* - both standard and non-standard contracts
+
+***Returns:*** A `dict` containing the following keys and values:
+
+* *underlyingPrice* - value is a float string with no preceeding \$
+* *dfCalls* ***or this key may not exist*** - 
+	* This key will only exist if the options chain includes call options
+	* If it exists, its value is a `DataFrame` with the following columns: *Expiration, Strike, Bid, Ask, Market, %Chg, Volume, Type, ITM, Name*
+* *dfPuts* ***or this key may not exist*** - 
+	* This key will only exist if the options chain includes put options
+	* If it exists, its value is a `DataFrame` with the following columns: *Expiration, Strike, Bid, Ask, Market, %Chg, Volume, Type, ITM, Name*
+
 #### `trulyApplyFilters(info, numStrikes, rng)` *(Called Within getOptionChain)*
 
 ```python
@@ -294,10 +372,23 @@ def getOptionChain(sym, conType, numStrikes, strike, rng, expFrom, expTo,
 # they can have this feature properly.
 def trulyApplyFilters(info, numStrikes, rng):
 ```
+***Parameters:***
+
+* **info:** A `dict` of the same exact format as the return value of `getOptionChain` (as this function makes changes to its eventual return `dict`)
+* **numStrikes:** A string representing the maximum integer number of strike prices to include per expiration date group.  **For no maximum number of strikes, this parameter's value is *""* or *"null"*.**
+* **rng**: A string representing the range of contracts to include in the chain.  Can be one of the following values:
+	* *ITM* - In the money
+	* *NTM* - Near the money
+	* *OTM* - Out of the money
+	* *SAK* - Strikes Above Market Price
+	* *SNK* - Strikes Near Market Price
+	* *SBK* - Strikes Below Market Price
+
+***Returns:*** A `dict` of the same format as the info parameter with proper filtering applied if required.
 
 ### stock_movers.py
 
-Description
+This module utilizes the **Get Movers API** to retrieve market movers and implement the **top ten up and down market movers tables** within the green and red Bootstrap cards on the Movers page.
 
 #### `getMovers(index, direction, change)`
 
@@ -308,6 +399,17 @@ Description
 # change can be in units of value or by percentage.  Last price also retrieved.
 def getMovers(index, direction, change):
 ```
+
+***Parameters:***
+
+* **index**: A string containing the index symbol of one the three API supported markets:
+	* *\$DJI* - Dow Jones Industrial Average
+	* *\$SPX.X* - S&P 500
+	* *\$COMPX* - NASDAQ Composite
+* **direction**: A string with a value of either *up* (for top gainers) or *down* (for top losers).
+* **change**: A string with the unit of change to retrieve top movers by, either by *percent* or by *value*.
+
+***Returns:*** A `DataFrame` with the columns: *symbol, change, name, last*
 
 ## Framework, Frontend, and UI
 More Documentation Here
