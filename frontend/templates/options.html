@@ -41,9 +41,9 @@
                             <div class="form-group">
                                 <label for="conType">Contract Type:</label>
                                 <select class="custom-select" id="conType" name="conType">
-                                    <option value="ALL" selected>Calls &amp; Puts</option>
-                                    <option value="CALL">Calls</option>
+                                    <option value="CALL" selected>Calls</option>
                                     <option value="PUT">Puts</option>
+                                    <option value="ALL" id="conTypeAll">Calls &amp; Puts</option>
                                 </select>
                             </div>
                         </div>
@@ -75,15 +75,12 @@
                         </div>
                         <div class="col-auto">
                             <div class="form-group">
-                                <label for="range">Range (ITM, OTM, etc.):</label>
+                                <label for="range">Range (ex. ITM):</label>
                                 <select class="custom-select" id="range" name="range">
                                     <option value="ALL" selected>All Possible Contracts</option>
                                     <option value="ITM">ITM: In The Money</option>
                                     <option value="OTM">OTM: Out of the Money</option>
                                     <option value="NTM">NTM: Near The Money</option>
-                                    <option value="SAK">SAK: Strikes Above Market Price</option>
-                                    <option value="SNK">SNK: Strikes Near Market Price</option>
-                                    <option value="SBK">SBK: Strikes Below Market Price</option>
                                 </select>
                             </div>
                         </div>
@@ -192,6 +189,7 @@
     const numStrikesClear = document.getElementById("clearNumStrikes")
     const strikeInput = document.getElementById("strike")
     const rangeInput = document.getElementById("range")
+    const conTypeAll = document.getElementById("conTypeAll")
     const fromDateInput = document.getElementById("fromDate")
     const fromDateClear = document.getElementById("clearFromDate")
     const toDateInput = document.getElementById("toDate")
@@ -209,6 +207,7 @@
     resetButton.onclick = function() {
         numStrikesInput.disabled = false
         strikeInput.disabled = false
+        conTypeAll.disabled = false
         fromDateInput.disabled = false
         toDateInput.disabled = false
         expMonthInput.disabled = false
@@ -233,9 +232,11 @@
         numStrikesInput.disabled = (this.value != "")
     }
 
-    /* Disables strike field if range is anything but "ALL" */
+    /* Disables strike field and calls & puts select option */
+    /* if range is anything but "ALL" */
     rangeInput.oninput = function() {
         strikeInput.disabled = (this.value != "ALL")
+        conTypeAll.disabled = (this.value == "ITM" || this.value == "OTM")
     }
 
     /* Re-enables numStrikes field if date is deleted and disables expMonth */

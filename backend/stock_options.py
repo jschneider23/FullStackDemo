@@ -39,7 +39,7 @@ def getOptionChain(sym, conType, numStrikes, strike, rng, expFrom, expTo,
         del params["fromDate"]
     if expTo == "" or expTo == "null":
         del params["toDate"]
-    if numStrikes != "" and cfg.manualApply.get(rng):
+    if rng != "ALL" and numStrikes != "":
         del params["strikeCount"]
     content = rq.get(url, params).json()
     info = {"underlyingPrice": content["underlyingPrice"]}
@@ -83,7 +83,7 @@ def getOptionChain(sym, conType, numStrikes, strike, rng, expFrom, expTo,
 # purpose of this feature, so this function implements this for the users so
 # they can have this feature properly.
 def trulyApplyFilters(info, numStrikes, rng):
-    if cfg.manualApply.get(rng) and numStrikes != "":
+    if rng != "ALL" and numStrikes != "":
         dfCalls = info.get("dfCalls")
         dfPuts = info.get("dfPuts")
         if dfCalls is not None:

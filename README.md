@@ -64,7 +64,7 @@ Developed by Jason Schneider | <i>Contact Me: jasondukeschneider@gmail.com</i>
 
 ### What was the purpose of this web app project?
 
-The purpose of this project was to be a **personal side project** that refreshed, sharpened, and further developed my skills in **full-stack development** (as well as the languages and tools used in the project individually) during a pandemic that interrupted my original post-graduation plans.  Given that we had, and still have, no idea how much longer this pandemic might last, I wanted to work on a practical side project for an **hour or two every day on average** *(in a corporate or professional development environment, I would obviously have worked on something like this for around eight hours a day or so, and therefore, would've finished it much more quickly)* so that I could use my time during the pandemic productively and **gain more experience, knowledge, and insight** as a full-stack developer.
+The purpose of this project was to be a **personal side project** that refreshed, sharpened, and further developed my skills in **full-stack development** (as well as the languages and tools used in the project individually) during a pandemic that interrupted my original post-graduation plans.  Given that we had, and still have, no idea how much longer this pandemic might last, I wanted to work on a practical side project for about an **hour per day on average** *(in a corporate or professional development environment, I would have worked on something like this for around eight hours a day or so, and therefore, would've undoubtedly finished it much less time)* so that I could use my time during the pandemic productively and **gain more experience, knowledge, and insight** as a full-stack developer.
 
 This project was also a great opportunity to learn more about a personal interest of mine: **the stock market.**  I eventually plan to develop a predictive model for personal investments down the line, and this project was able to give me experience with APIs I likely want to use as well as **methods of handling, processing, and understanding raw stock market data**.  My involvement with this project will serve as invaluable resource and reference when I do decide to develop that for myself, after further research and experience of course.
 
@@ -116,7 +116,7 @@ An example of two parameters that **can and should be combined** (aside from sym
 
 An example of some parameters that **can't and should not be combined** are **fromDate and toDate** *(only get options contracts expiring between these dates)* and then a completely different **expMonth**.  Since these **both specify a time period of valid options contracts**, the time periods will almost always **conflict** and therefore **should not be combined**.  While they technically can be combined from the API's perspective, this doesn't make any sense when using the API as a data source, so the **app UI disables the Expiration Month field if a date is entered into the Expriations From/To Date and vice versa**.
 
-The functionality issue arose when combining **numContracts** *(renamed to <b>numStrikes</b> in code and UI as this parameter actually specifies the number of strike prices returned, with each strike price having one or two associated contracts depending on contractType setting)* and **range** *(in/out/near-the-money, strikes-at/below/near-market, or all possible contracts)*.  If a **range value other than ALL, SAK, SBK, or SNK** is sent to the API, the value of **numContracts is completely ignored** and the **response will be the exact same regardless of what numContracts value it is given**.  This is not the functionality that is expected and takes away a control feature I want the user to have.  Since I can't edit the API source code, I came up with a different solution.
+The functionality issue arose when combining **numContracts** *(renamed to <b>numStrikes</b> in code and UI as this parameter actually specifies the number of strike prices returned, with each strike price having one or two associated contracts depending on contractType setting)* and **range** *(in/out/near-the-money or all possible contracts)*.  If a **range value other than ALL, SAK, SNK, or SBK** *(SAK, SNK, and SBK are unsupported by the app as I noticed late in development that they apparently did nothing regardless of what other values were and were not set, even changing between them with the exact same settings did nothing)* is sent to the API, the value of **numContracts is completely ignored** and the **response will be the exact same regardless of what numContracts value it is given**.  This is not the functionality that is expected and takes away a control feature I want the user to have.  Since I can't edit the API source code, I came up with a different solution.
 
 ##### _Solution: the trulyApplyFilters function_
 
@@ -331,9 +331,9 @@ def getOptionChain(sym, conType, numStrikes, strike, rng, expFrom, expTo,
 	* *ITM* - In the money
 	* *NTM* - Near the money
 	* *OTM* - Out of the money
-	* *SAK* - Strikes Above Market Price
-	* *SNK* - Strikes Near Market Price
-	* *SBK* - Strikes Below Market Price
+	* ~*SAK* - Strikes Above Market Price~ ([unsupported by app frontend](#unexpected-tda-options-chain-api-parameterfilter-interaction))
+	* ~*SNK* - Strikes Near Market Price~ ([unsupported by app frontend](#unexpected-tda-options-chain-api-parameterfilter-interaction))
+	* ~*SBK* - Strikes Below Market Price~ ([unsupported by app frontend](#unexpected-tda-options-chain-api-parameterfilter-interaction))
 * **expFrom**: A date string of format *YYYY-MM-DD* representing the starting/earliest expiry date to be included in the chain.  **For no starting/earliest expiry date, this parameter's value is *""* or *"null"*.**
 * **expTo**: A date string of format *YYYY-MM-DD* representing the ending/latest expiry date to be included in the chain.  **For no ending/latest expiry date, this parameter's value is *""* or *"null"*.**
 * **expMonth**: A string containing a three letter abbreviation representing the month in which only options contracts expiring in that month should be included in the chain.  Can be one of the following values **(for no expiry month, this parameter's value is *""* or *"null"*)**:
@@ -385,9 +385,9 @@ def trulyApplyFilters(info, numStrikes, rng):
 	* *ITM* - In the money
 	* *NTM* - Near the money
 	* *OTM* - Out of the money
-	* *SAK* - Strikes Above Market Price
-	* *SNK* - Strikes Near Market Price
-	* *SBK* - Strikes Below Market Price
+	* ~*SAK* - Strikes Above Market Price~ ([unsupported by app frontend](#unexpected-tda-options-chain-api-parameterfilter-interaction))
+	* ~*SNK* - Strikes Near Market Price~ ([unsupported by app frontend](#unexpected-tda-options-chain-api-parameterfilter-interaction))
+	* ~*SBK* - Strikes Below Market Price~ ([unsupported by app frontend](#unexpected-tda-options-chain-api-parameterfilter-interaction))
 
 ***Returns:*** A `dict` of the same format as the info parameter with proper filtering applied if required.
 
