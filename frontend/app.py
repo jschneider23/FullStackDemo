@@ -22,7 +22,7 @@ app = Flask(__name__)
 @app.route("/", methods = ["POST", "GET"])
 def home():
     context = {"home": "active"}
-    aux.clearOldGraphs()
+    aux.clearOldCharts()
     if request.method == "POST":
         formInput = request.form["search"].strip().upper()
         modal = hg.htmlModalData(formInput)
@@ -64,11 +64,11 @@ def home():
 # value as a string for whether or not to include extended hours data.  This
 # html is copied and returned as wrapped, valid html, and displayed in a modal
 # using a jQuery load function.
-@app.route("/graph/<sym>/<time>/<hasExtHrs>")
-def showGraph(sym, time, hasExtHrs):
-    aux.clearOldGraphs()
-    sc.createGraph(sym, time = time, hasExtHrs = hasExtHrs)
-    file = open(f"frontend/graphs/graph{sym}{time}{hasExtHrs}.html")
+@app.route("/chart/<sym>/<time>/<hasExtHrs>")
+def showChart(sym, time, hasExtHrs):
+    aux.clearOldCharts()
+    sc.createChart(sym, time = time, hasExtHrs = hasExtHrs)
+    file = open(f"frontend/charts/chart{sym}{time}{hasExtHrs}.html")
     contents = file.read()
     file.close()
     return flask.Markup(contents)
@@ -123,7 +123,7 @@ def options():
 # calls.
 @app.route("/movers")
 def movers():
-    aux.clearOldGraphs()
+    aux.clearOldCharts()
     context = {
         "movers": "active",
         "DJIUpPercent": hg.htmlMoverCard("$DJI", "up", "percent"),

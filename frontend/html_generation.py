@@ -132,94 +132,94 @@ def htmlModalData(sym):
     script = f"""
         $('#viewStock').modal('show');
         $(function() {{
-            $('#chartCard').load('/graph/{sym}/10d/True');
+            $('#chartCard').load('/chart/{sym}/10d/True');
         }})
         window.onload = function() {{
             document.getElementById("1dtrue").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/1d/True');
+                $('#chartCard').load('/chart/{sym}/1d/True');
             }}
             document.getElementById("3dtrue").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/3d/True')
+                $('#chartCard').load('/chart/{sym}/3d/True')
             }}
 
             document.getElementById("5dtrue").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/5d/True')
+                $('#chartCard').load('/chart/{sym}/5d/True')
             }}
 
             document.getElementById("10dtrue").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/10d/True')
+                $('#chartCard').load('/chart/{sym}/10d/True')
             }}
 
             document.getElementById("1mtrue").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/1m/True')
+                $('#chartCard').load('/chart/{sym}/1m/True')
             }}
 
             document.getElementById("3mtrue").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/3m/True')
+                $('#chartCard').load('/chart/{sym}/3m/True')
             }}
 
             document.getElementById("6mtrue").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/6m/True')
+                $('#chartCard').load('/chart/{sym}/6m/True')
             }}
 
             document.getElementById("1ytrue").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/1y/True')
+                $('#chartCard').load('/chart/{sym}/1y/True')
             }}
 
             document.getElementById("3ytrue").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/3y/True')
+                $('#chartCard').load('/chart/{sym}/3y/True')
             }}
 
             document.getElementById("5ytrue").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/5y/True')
+                $('#chartCard').load('/chart/{sym}/5y/True')
             }}
 
             document.getElementById("YTDtrue").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/YTD/True')
+                $('#chartCard').load('/chart/{sym}/YTD/True')
             }}
 
             document.getElementById("1dfalse").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/1d/False');
+                $('#chartCard').load('/chart/{sym}/1d/False');
             }}
 
             document.getElementById("3dfalse").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/3d/False')
+                $('#chartCard').load('/chart/{sym}/3d/False')
             }}
 
             document.getElementById("5dfalse").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/5d/False')
+                $('#chartCard').load('/chart/{sym}/5d/False')
             }}
 
             document.getElementById("10dfalse").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/10d/False')
+                $('#chartCard').load('/chart/{sym}/10d/False')
             }}
 
             document.getElementById("1mfalse").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/1m/False')
+                $('#chartCard').load('/chart/{sym}/1m/False')
             }}
 
             document.getElementById("3mfalse").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/3m/False')
+                $('#chartCard').load('/chart/{sym}/3m/False')
             }}
 
             document.getElementById("6mfalse").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/6m/False')
+                $('#chartCard').load('/chart/{sym}/6m/False')
             }}
 
             document.getElementById("1yfalse").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/1y/False')
+                $('#chartCard').load('/chart/{sym}/1y/False')
             }}
 
             document.getElementById("3yfalse").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/3y/False')
+                $('#chartCard').load('/chart/{sym}/3y/False')
             }}
 
             document.getElementById("5yfalse").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/5y/False')
+                $('#chartCard').load('/chart/{sym}/5y/False')
             }}
 
             document.getElementById("YTDfalse").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/YTD/False')
+                $('#chartCard').load('/chart/{sym}/YTD/False')
             }}
         }}
     """
@@ -543,7 +543,7 @@ def htmlModalContent(sym):
             <div class="card bg-light text-center">
                 <div id="chartCard" class="card-body"></div>
                 <div class="card-footer">
-                    <b>Graph Options</b>
+                    <b>chart Options</b>
                     <br>
                     <div class="row justify-content-center" style="padding-bottom: 10px">
                     <i>With Extended Hours:</i>&nbsp;&nbsp;
@@ -631,93 +631,93 @@ def htmlModalContent(sym):
         </div>
         <script>
             $(function() {{
-                $('#chartCard').load('/graph/{sym}/10d/True')
+                $('#chartCard').load('/chart/{sym}/10d/True')
             }})
             document.getElementById("1dtrue").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/1d/True');
+                $('#chartCard').load('/chart/{sym}/1d/True');
             }}
             document.getElementById("3dtrue").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/3d/True')
+                $('#chartCard').load('/chart/{sym}/3d/True')
             }}
 
             document.getElementById("5dtrue").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/5d/True')
+                $('#chartCard').load('/chart/{sym}/5d/True')
             }}
 
             document.getElementById("10dtrue").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/10d/True')
+                $('#chartCard').load('/chart/{sym}/10d/True')
             }}
 
             document.getElementById("1mtrue").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/1m/True')
+                $('#chartCard').load('/chart/{sym}/1m/True')
             }}
 
             document.getElementById("3mtrue").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/3m/True')
+                $('#chartCard').load('/chart/{sym}/3m/True')
             }}
 
             document.getElementById("6mtrue").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/6m/True')
+                $('#chartCard').load('/chart/{sym}/6m/True')
             }}
 
             document.getElementById("1ytrue").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/1y/True')
+                $('#chartCard').load('/chart/{sym}/1y/True')
             }}
 
             document.getElementById("3ytrue").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/3y/True')
+                $('#chartCard').load('/chart/{sym}/3y/True')
             }}
 
             document.getElementById("5ytrue").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/5y/True')
+                $('#chartCard').load('/chart/{sym}/5y/True')
             }}
 
             document.getElementById("YTDtrue").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/YTD/True')
+                $('#chartCard').load('/chart/{sym}/YTD/True')
             }}
 
             document.getElementById("1dfalse").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/1d/False');
+                $('#chartCard').load('/chart/{sym}/1d/False');
             }}
 
             document.getElementById("3dfalse").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/3d/False')
+                $('#chartCard').load('/chart/{sym}/3d/False')
             }}
 
             document.getElementById("5dfalse").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/5d/False')
+                $('#chartCard').load('/chart/{sym}/5d/False')
             }}
 
             document.getElementById("10dfalse").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/10d/False')
+                $('#chartCard').load('/chart/{sym}/10d/False')
             }}
 
             document.getElementById("1mfalse").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/1m/False')
+                $('#chartCard').load('/chart/{sym}/1m/False')
             }}
 
             document.getElementById("3mfalse").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/3m/False')
+                $('#chartCard').load('/chart/{sym}/3m/False')
             }}
 
             document.getElementById("6mfalse").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/6m/False')
+                $('#chartCard').load('/chart/{sym}/6m/False')
             }}
 
             document.getElementById("1yfalse").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/1y/False')
+                $('#chartCard').load('/chart/{sym}/1y/False')
             }}
 
             document.getElementById("3yfalse").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/3y/False')
+                $('#chartCard').load('/chart/{sym}/3y/False')
             }}
 
             document.getElementById("5yfalse").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/5y/False')
+                $('#chartCard').load('/chart/{sym}/5y/False')
             }}
 
             document.getElementById("YTDfalse").onclick = function() {{
-                $('#chartCard').load('/graph/{sym}/YTD/False')
+                $('#chartCard').load('/chart/{sym}/YTD/False')
             }}
         </script>
     """

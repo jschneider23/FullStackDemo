@@ -1,7 +1,9 @@
 # TD Ameritrade Full-Stack Web App Demo: <br>*A Flask Web App with a Bootstrap Frontend Built on TD Ameritrade's (TDA) Stock Market Developer APIs*
 <h3>
-Web App Link Here: <a href="linkhere.com">Deployed on Heroku</a><br>
-Developed by Jason Schneider | <i>Contact Me: jasondukeschneider@gmail.com</i>
+Web App Deployed on Heroku: <a href="linkhere.com">v1.0-Production</a><br>
+(Initial Deployment v1.0-Production on Date Here)<br>
+Developed by Jason Schneider <br>
+<i>Contact Me (for bug reports, professional opportunities, etc.): jasondukeschneider@gmail.com</i>
 </h3>
 
 #### _IMPORTANT NOTICES:_
@@ -46,12 +48,14 @@ Developed by Jason Schneider | <i>Contact Me: jasondukeschneider@gmail.com</i>
 		* [getBySymbol(sym, symType = "")](#getbysymbolsym-symtype--)
 		* [getByName(name)](#getbynamename)
 	* [stock_chart.py](#stock_chartpy)
-		* [createGraph(sym, time = "10d", hasExtHrs = True)](#creategraphsym-time--10d-hasexthrs--true)
+		* [createChart(sym, time = "10d", hasExtHrs = True)](#createchartsym-time--10d-hasexthrs--true)
 	* [stock_options.py](#stock_optionspy)
 		* [getOptionChain(sym, conType, numStrikes, strike, rng, expFrom, expTo, expMonth, standard)](#getoptionchainsym-contype-numstrikes-strike-rng-expfrom-expto-expmonth-standard)
 		* [trulyApplyFilters(info, numStrikes, rng) (Called Within getOptionChain)](#trulyapplyfiltersinfo-numstrikes-rng-called-within-getoptionchain)
 	* [stock_movers.py](#stock_moverspy)
 		* [getMovers(index, direction, change)](#getmoversindex-direction-change)
+	* [stock_aux.py](#stock_auxpy)
+		* [attrFormat(sym, attr, value)](#attrformatsym-attr-value)
 * [Framework, Frontend, and UI](#framework-frontend-and-ui)
 
 ## "FAQs" For Interested Employers, Recruiters, and Organizations
@@ -71,7 +75,7 @@ This project was also a great opportunity to learn more about a personal interes
 ### What are the main features the web app demo?
 
 #### All Pages
-* **Optimized for desktop and laptop screens** but fully functional and accessible across all devices, screen sizes, and browsers (TODO: make sure to double check older IE)
+* **Optimized for desktop and laptop screens** but fully functional and accessible across all devices, screen sizes, and browsers
 * **Bootstrap CSS Styling** across all pages for minimal, modern, and aesthetic feel
 * **Card-Based Sectioning** allows for intuitive background coloring and clean sectioning of information
 * **Responsive Navbar** with hamburger button and dropdown menu for smaller screens
@@ -116,7 +120,7 @@ An example of two parameters that **can and should be combined** (aside from sym
 
 An example of some parameters that **can't and should not be combined** are **fromDate and toDate** *(only get options contracts expiring between these dates)* and then a completely different **expMonth**.  Since these **both specify a time period of valid options contracts**, the time periods will almost always **conflict** and therefore **should not be combined**.  While they technically can be combined from the API's perspective, this doesn't make any sense when using the API as a data source, so the **app UI disables the Expiration Month field if a date is entered into the Expriations From/To Date and vice versa**.
 
-The functionality issue arose when combining **numContracts** *(renamed to <b>numStrikes</b> in code and UI as this parameter actually specifies the number of strike prices returned, with each strike price having one or two associated contracts depending on contractType setting)* and **range** *(in/out/near-the-money or all possible contracts)*.  If a **range value other than ALL, SAK, SNK, or SBK** *(SAK, SNK, and SBK are unsupported by the app as I noticed late in development that they apparently did nothing regardless of what other values were and were not set, even changing between them with the exact same settings did nothing)* is sent to the API, the value of **numContracts is completely ignored** and the **response will be the exact same regardless of what numContracts value it is given**.  This is not the functionality that is expected and takes away a control feature I want the user to have.  Since I can't edit the API source code, I came up with a different solution.
+The functionality issue arose when combining **numContracts** *(renamed to <b>numStrikes</b> in code and UI as this parameter actually specifies the number of strike prices returned, with each strike price having one or two associated contracts depending on contractType setting)* and **range** *(in/out/near-the-money or all possible contracts)*.  If a **range value other than ALL, SAK, SNK, or SBK** *(SAK, SNK, and SBK are unsupported by the app as I noticed late in development that they apparently did nothing regardless of what other values were and were not set despite earlier preliminary testing, even changing between them with the exact same settings did nothing to alter any results whatsoever)* is sent to the API, the value of **numContracts is completely ignored** and the **response will be the exact same regardless of what numContracts value it is given**.  This is not the functionality that is expected and takes away a control feature I want the user to have.  Since I can't edit the API source code, I came up with a different solution.
 
 ##### _Solution: the trulyApplyFilters function_
 
@@ -156,7 +160,7 @@ This turned out to be **too complex for the scenario and not worth the runtime s
 
 After some research, I found **Plotly** (which you can read more about [here](https://plotly.com/python/candlestick-charts/)) to be a great solution to all of my issues.  I actually didn't need to change that much of the stock_chart.py module to format the data for the library.  In terms of data-points, I just needed to provide datetimes in epoch format, which only required a dividing TDA's datetimes by 1000 to convert to seconds, and then a list of every open, high, low, and close.  A candlestick chart figure object could then be created from this data, followed by easily updating its layout to add appropriate titles and axis labels, and then using **Plotly's IO library** to write the chart to its own html file using a **special filepath** format to allow for easy creation, identification, and deletion of a chart:
 	
-	frontend/graphs/graph{symbol}{timeframe option}{true/false include exthrs}.html
+	frontend/charts/chart{symbol}{timeframe option}{true/false include exthrs}.html
 
 ##### _Timeframe Option Buttons null due to not Loading in DOM Before Setting onClick Events_
 
@@ -169,7 +173,9 @@ Unfortunately, when accessing the chart feature after submitting a direct lookup
 Adding the two groups of buttons with unique ids into the **home.html** template directly was a much easier solution.  These buttons exist in the modal that only appears after submitting a direct symbol lookup into the form on the page, so they don't take up any space on the page when navigating to it through a standard GET request.  When the form is submited, the function that adds the script to immediately load the modal **will also have the necessary JavaScript to add the onClick events** to the buttons with corresponding ids.  Since the buttons already exist in the DOM, there are no null buttons, and the events are added successfully.  Each button can now appropriately tell the server to create and load a chart's html to the modal for the user to see.
 
 ### What did I learn and/or gain from this experience?
-While I have had a decent amount of experience in full-stack development through my time at the University of Maryland, and more recently and importantly, my internship at **Eagle Technologies** where I was the **lead full-stack developer on the then new SAMHSA Play 2 Documentation Site Application**, this project furthered my knowledge about developing full-stack applications.  I gained a much better perspective on how long certain things take as a single developer working with new frameworks and APIs, with one big determination being that things almost always tend to take longer than expected, especially if they are to be done well.  Since this was a personal side project, I didn't exactly have any hard deadlines or specific timeline expectations, so **I was able to experience how long something would take compared to *how long I thought it would*.**  Going forward, certain things that might've taken me much longer than expected will **take far less time the next time I encounter them**, even if the technologies are different, since the concepts behind them are mostly the same.
+While I have had a decent amount of experience in full-stack development through my time at the University of Maryland, and more recently and importantly, my internship at **Eagle Technologies** where I was the **lead full-stack developer on the then new SAMHSA Play 2 Documentation Site Application**, this project furthered my knowledge about developing full-stack applications.  I gained a much better perspective on how long certain things take as a single developer working with new frameworks and APIs, with one big determination being that things almost always tend to take longer than expected, especially if they are to be done well.  Since this was a personal side project, I didn't exactly have any hard deadlines or specific timeline expectations, so **I was able to experience how long something would take compared to *how long I thought it would*.**  Going forward, certain things that might've taken me much longer than expected will **take far less time the next time I encounter them**, even if the technologies are different, since the concepts behind them are mostly the same.  
+
+In addition, many times throughout development **I would deem something as complete and move on** to the next step, stage, function, module, etc. only to **later discover an issue, flaw, or bug and have to backtrack and fix not only the issue itself but several other files and features that were operating off a faulty feature.**  While I try to make sure I only move on when I've implemented something completely correctly, there will always be issues that pop up when you least expect them, and it is important not to let these things you from your goals.  When these issues did pop up, I was able to practice **productively channeling my frustration into fixing the issues** and **learning from the mistakes I made for the sake of future projects**.
 
 As stated earlier, this is the first time I've used the **Flask Web Framework** specifically, and also the first time I've deployed an app to a **web host accessible from anywhere**, unlike in-house test deployment environments or using a "localhost server" (such as XAMPP in college).  It was an amazing feeling to see my project come together piece by piece and then eventually become a website I could open on my mom's computer.  Those final couple steps were really only a theoretical process to me before or something handled by other employees.
 
@@ -197,7 +203,7 @@ This API is used to implement the backend module **stock_info.py**, which contai
 The **Get Price History API** gets the price history for a symbol, which is the data needed to **render candlestick charts**.  The response is a candle list, with each candle containing a **close**, **datetime**, **high**, **low**, **open**, and **volume**.  Along with the required api key, this API takes several query parameters, with the following used in the project: **periodType**, **period**, **frequencyType**, **frequency**, and **needExtendedHoursData**.  The values these parameters can be are defined in the documentation linked above.
 
 #### Use in Project
-This API is used to implement the backend module **stock_chart.py**, which contains the chart creation function: `createGraph(sym, time = "10d", hasExtHrs = True)`.
+This API is used to implement the backend module **stock_chart.py**, which contains the chart creation function: `createChart(sym, time = "10d", hasExtHrs = True)`.
 
 ### Get Option Chain ([Documentation](https://developer.tdameritrade.com/option-chains/apis/get/marketdata/chains))
 
@@ -268,18 +274,18 @@ def getByName(name):
 
 ### stock_chart.py
 
-This module utilizes the **Get Price History API** to implement the stock or index **candlestick chart** *(chart and graph used interchangeably)* of every **Stock and Index Quote & Profile Modal**.  The candlestick chart figure creation and writing to html file is achieved using **Plotly's Graph Objects and IO Libraries**.
+This module utilizes the **Get Price History API** to implement the stock or index **candlestick chart** of every **Stock and Index Quote & Profile Modal**.  The candlestick chart figure creation and writing to html file is achieved using **Plotly's Graph Objects and IO Libraries**.
 
-#### `createGraph(sym, time = "10d", hasExtHrs = True)`
+#### `createChart(sym, time = "10d", hasExtHrs = True)`
 
 ```python
 # Requests the TD Ameritrade Price History API for a given symbol, with
 # frequency and periods determined by the time option (default "10d"), and
 # whether or not to include extended hours data.  This data is then used to
-# generate an html file written to the /frontend/graphs directory using
-# plotly's io library so that it can be used to easily render a graph in a
+# generate an html file written to the /frontend/charts directory using
+# plotly's io library so that it can be used to easily render a chart in a
 # modal on the frontend based on the file's name.
-def createGraph(sym, time = "10d", hasExtHrs = True):
+def createChart(sym, time = "10d", hasExtHrs = True):
 ```
 
 ***Parameters:***
@@ -349,6 +355,7 @@ def getOptionChain(sym, conType, numStrikes, strike, rng, expFrom, expTo,
 	* *OCT* - October
 	* *NOV* - November
 	* *DEC* - December
+	* *ALL* - All Months
 * **standard**: A string representing whether to retrieve only standard contracts, only non-standard contracts, or both.  Can be one of the following values:
 	* *S* - only standard contracts (representing 100 shares of the underlying security)
 	* *NS* - only non-standard contracts (representing a number other than 100 shares of the underlying security)
@@ -414,7 +421,121 @@ def getMovers(index, direction, change):
 * **direction**: A string with a value of either *up* (for top gainers) or *down* (for top losers).
 * **change**: A string with the unit of change to retrieve top movers by, either by *percent* or by *value*.
 
-***Returns:*** A `DataFrame` with the columns: *symbol, change, name, last*
+***Returns:*** A `DataFrame` with the columns: *symbol, change, name, last*.
+
+### stock_aux.py
+
+This is an **auxiliary/helper module** for any functions that serve a utility purpose and/or aren't specific enough to belong in one of the other backend modules.  It currently contains only one function but exists for easy addition of more functions in the case of future development.
+
+#### `attrFormat(sym, attr, value)`
+
+```python
+# Formats the value of an attribute to have necessary symbols before or after
+# the value, such as $ <value> for money amounts or <value> % for percentages.
+# Also handles rounding and date formatting.
+# This applies to any data on frontend that will use data from one of the two
+# functions above.  Does not apply to movers as this requires extra formatting.
+def attrFormat(sym, attr, value):
+```
+
+***Parameters***:
+
+* **sym:** A string symbol for either a stock or index.
+* **attr**: A string API attribute name from one of the attribute lists in bd_config.py
+* **value**: The value of the associated attribute (various types).
+
+***Returns***: A formatted value.
 
 ## Framework, Frontend, and UI
-More Documentation Here
+
+### Framework
+This web app utilizes the [**Flask Web Framework**](https://flask.palletsprojects.com/en/1.1.x/) to handle all frontend routing, requests, and functionality.  Flask is a **micro-framework** for **Python 3.5 and above** that uses **Jinja2 Templating** and the **Werkzeug WSGI Library** to achieve its purpose while being extremely lightweight.  The framework operates all of its functionality through the **app.py** module.  To start the application, it executes the following lines of code:
+
+```python
+app = Flask(__name__)
+
+if __name__ == "__main__":
+    app.run(debug = True)
+```
+
+### app.py
+
+The **app.py** module contains several functions which contain `@app.route()` decorators to bind each function to a URL.  Each function is documented below similarly to the backend functions:
+
+#### `home()`
+
+```python
+# Renders the Home page accordingly, depending on whether a GET request is
+# sent (when opening the app for the first time or navigating to the root url)
+# or a POST request is sent (submitting the Stock Quote & Information Lookup
+# Form).  Handles all of the various form cases and renders this information
+# to the user with the modal loading functionality using the same html
+# generation function as the modal loading on the Movers page.
+@app.route("/", methods = ["POST", "GET"])
+def home():
+```
+
+#### `showChart(sym, time, hasExtHrs)`
+
+
+```python
+# Creates a stock or index chart on the backend and writes the html to the file
+# at the destination shown below with the given parameters: a stock or index
+# symbol, a time setting string (ex. 5d, 3m, 1y, etc.), and a true or false
+# value as a string for whether or not to include extended hours data.  This
+# html is copied and returned as wrapped, valid html, and displayed in a modal
+# using a jQuery load function.
+@app.route("/chart/<sym>/<time>/<hasExtHrs>")
+def showChart(sym, time, hasExtHrs):
+```
+
+#### `refreshIndexCard(strippedIndexSym)`
+
+```python
+# Provides a url destination for the server to return new Index Card html.
+# Since the color of each card needs to be defined in the class of the card
+# element, a new card is returned by each call to this function, which then
+# replaces the old card.
+@app.route("/refresh/<strippedIndexSym>")
+def refreshIndexCard(strippedIndexSym):
+```
+
+#### `options()`
+
+```python
+# Renders the Options page accordingly, depending on whether a GET request is
+# sent (when navigating to the Options page url directly or clicking the nav
+# link) or a POST request is sent (after submitting the Options Chain form).
+# Handles all of the various form cases and displays the appropriate response
+# to the user, as well as handling empty and disabled fields on the server
+# before sending parameters to the backend for processing and API retrieval.
+@app.route("/options", methods = ["POST", "GET"])
+def options():
+```
+
+#### `movers()`
+
+```python
+# Loads gainer and loser movers tables for each of the API supported indicies
+# ranked by both percentage and value, displaying the ranked by percentage
+# tables by default and having the ranked by value tables preloaded so a simple
+# toggle button can be used to nearly instantly show the other tables for each
+# card.  While this does result in slower initial page load times, it allows
+# for a more seamless experience after loading instead of using jQuery load
+# calls.
+@app.route("/movers")
+def movers():
+```
+
+#### `loadModalContent(sym)`
+
+```python
+# This function loads a Stock/Index Quote & Information Profile from a link
+# on either the Home Page Search by Name Results Table or a Movers Card.  It
+# also hypothetically would allow for easy implementation on other additional
+# pages if they were added and required this functionality.  This allows
+# profiles to be viewed within the same page they were loaded from so an
+# entire new page doesn't need to be loaded.
+@app.route("/modalContent/<sym>")
+def loadModalContent(sym):
+```
