@@ -45,26 +45,34 @@ Developed by Jason Schneider <br>
 	* [Get Movers](#get-movers-documentation)
 * [Backend Modules and Functions](#backend-modules-and-functions)
 	* [stock_info.py](#stock_infopy)
-		* [getBySymbol(sym, symType = "")](#getbysymbolsym-symtype--)
-		* [getByName(name)](#getbynamename)
+		* [`getBySymbol(sym, symType = "")`](#getbysymbolsym-symtype--)
+		* [`getByName(name)`](#getbynamename)
 	* [stock_chart.py](#stock_chartpy)
-		* [createChart(sym, time = "10d", hasExtHrs = True)](#createchartsym-time--10d-hasexthrs--true)
+		* [`createChart(sym, time = "10d", hasExtHrs = True)`](#createchartsym-time--10d-hasexthrs--true)
 	* [stock_options.py](#stock_optionspy)
-		* [getOptionChain(sym, conType, numStrikes, strike, rng, expFrom, expTo, expMonth, standard)](#getoptionchainsym-contype-numstrikes-strike-rng-expfrom-expto-expmonth-standard)
-		* [trulyApplyFilters(info, numStrikes, rng) (Called Within getOptionChain)](#trulyapplyfiltersinfo-numstrikes-rng-called-within-getoptionchain)
+		* [`getOptionChain(sym, conType, numStrikes, strike, rng, expFrom, expTo, expMonth, standard)`](#getoptionchainsym-contype-numstrikes-strike-rng-expfrom-expto-expmonth-standard)
+		* [`trulyApplyFilters(info, numStrikes, rng)`](#trulyapplyfiltersinfo-numstrikes-rng-called-within-getoptionchain)
 	* [stock_movers.py](#stock_moverspy)
-		* [getMovers(index, direction, change)](#getmoversindex-direction-change)
+		* [`getMovers(index, direction, change)`](#getmoversindex-direction-change)
 	* [stock_aux.py](#stock_auxpy)
-		* [attrFormat(sym, attr, value)](#attrformatsym-attr-value)
+		* [`attrFormat(sym, attr, value)`](#attrformatsym-attr-value)
 * [Framework, Frontend, and UI](#framework-frontend-and-ui)
+	* [Framework](#framework)
+	* [app.py](#apppy)
+		* [`home()`](#home)
+		* [`showChart(sym, time, hasExtHrs)`](#showchartsym-time-hasexthrs)
+		* [`refreshIndexCard(strippedIndexSym)`](#refreshindexcardstrippedindexsym)
+		* [`options()`](#options)
+		* [`movers()`](#movers)
+		* [`loadModalContent(sym)`](#loadmodalcontentsym)
 
 ## "FAQs" For Interested Employers, Recruiters, and Organizations
 
 ### What languages and technologies were used?
-**Data API**: TD Ameritrade's Developer APIs *(app licensed under my personal account)*<br>
-**Backend**: *Python 3.7.3* with the main libraries being *Pandas, Requests, Plotly, and Datetime*<br>
-**Framework**: *Flask Web Framework*<br>
-**Frontend/UI**: Plain *JavaScript*, *jQuery*, and *HTML/CSS (using Bootstrap 4)*
+**Data API:** TD Ameritrade's Developer APIs *(app licensed under my personal account)*<br>
+**Backend:** *Python 3.7.3* with the main libraries being *Pandas, Requests, Plotly, and Datetime*<br>
+**Framework:** *Flask Web Framework*<br>
+**Frontend/UI:** Plain *JavaScript*, *jQuery*, and *HTML/CSS (using Bootstrap 4)*
 
 ### What was the purpose of this web app project?
 
@@ -91,7 +99,7 @@ This project was also a great opportunity to learn more about a personal interes
 #### Options Page
 * **Options Chain Lookup for Any Optionable Symbol** that loads in Bootstrap modal
 * **Intuitive Collapsable Card Accordian Option Chain Display** grouped by expiration date with number of contracts per date shown
-* **Support for Several Filters to Specify Desired Option Chains**:
+* **Support for Several Filters to Specify Desired Option Chains:**
 	* *Contract Type, Max # of Strikes, Exact Strike, Range, Expiration Range, Expiration Month, and Standard/Non-Standard Contracts...*
 	* *OR enter a symbol and search with default settings right away!*
 
@@ -242,8 +250,8 @@ def getBySymbol(sym, symType = ""):
 
 ***Parameters:***
 
-* **sym**: A symbol string for an index with preceeding "\$" *(such as \$DJI)* or for a stock with no preceeding "\$" *(such as TSLA)*.  An invalid or nonexisting symbol will result in a return value of `None`.
-* **symType**: A string containing a symbol type code to tell the function what types of attributes to include in its return dictionary.  Can be one of the following values **(defaults to *""* if omitted)**:
+* **sym:** A symbol string for an index with preceeding "\$" *(such as \$DJI)* or for a stock with no preceeding "\$" *(such as TSLA)*.  An invalid or nonexisting symbol will result in a return value of `None`.
+* **symType:** A string containing a symbol type code to tell the function what types of attributes to include in its return dictionary.  Can be one of the following values **(defaults to *""* if omitted)**:
 	* *indexCard* - for markets at a glance cards
 	* *indexFull* - for a symbol provided with a preceeding "\$"
 	* *""* (empty string) - for any other symbol, which are deemed stock symbols
@@ -264,7 +272,7 @@ def getByName(name):
 
 ***Parameters:***
 
-* **name**: A string representing either a full stock or index name, name fragment, or stock symbol.  Use of a stock symbol will result in the Symbol Lookup website returning a table of one line, which tells the function to return the result of `getBySymbol(name)`, which is a `dict`.
+* **name:** A string representing either a full stock or index name, name fragment, or stock symbol.  Use of a stock symbol will result in the Symbol Lookup website returning a table of one line, which tells the function to return the result of `getBySymbol(name)`, which is a `dict`.
 
 ***Returns:*** One of the following:
 
@@ -303,7 +311,7 @@ def createChart(sym, time = "10d", hasExtHrs = True):
 	* *3y* - last 3 trading years
 	* *5y* - last 5 trading years
 	* *YTD* - last trading year to date
-* **hasExtHrs**: A boolean value that will include extended hours price history data if True, otherwise, only standard market hours price history data will be used (**defaults to *True* if omitted)**
+* **hasExtHrs:** A boolean value that will include extended hours price history data if True, otherwise, only standard market hours price history data will be used **(defaults to *True* if omitted)**
 
 **Returns:** No value returned.
 
@@ -326,23 +334,23 @@ def getOptionChain(sym, conType, numStrikes, strike, rng, expFrom, expTo,
 
 ***Parameters:***
 
-* **sym**: A symbol string for an underlying stock to retrieve an options chain for.
-* **conType**: A string representing the type of contracts to be included in the options chain (OC).  Can be one of the following values:
+* **sym:** A symbol string for an underlying stock to retrieve an options chain for.
+* **conType:** A string representing the type of contracts to be included in the options chain (OC).  Can be one of the following values:
 	* *CALL* - OC will include only call contracts
 	* *PUT* - OC will include only put contracts
 	* *ALL* - OC will include both call and put contracts
-* **numStrikes**: A string representing the maximum integer number of strike prices to include per expiration date group.  **For no maximum number of strikes, this parameter's value is *""* or *"null"*.**
-* **strike**: A float string *(no preceeding \$, such as "20.21")* that specifies to only include options contacts with this exact strike price.  **For no exact strike, this parameter's value is *""* or *"null"*.**
-* **rng**: A string representing the range of contracts to include in the chain.  Can be one of the following values:
+* **numStrikes:** A string representing the maximum integer number of strike prices to include per expiration date group.  **For no maximum number of strikes, this parameter's value is *""* or *"null"*.**
+* **strike:** A float string *(no preceeding \$, such as "20.21")* that specifies to only include options contacts with this exact strike price.  **For no exact strike, this parameter's value is *""* or *"null"*.**
+* **rng:** A string representing the range of contracts to include in the chain.  Can be one of the following values:
 	* *ITM* - In the money
 	* *NTM* - Near the money
 	* *OTM* - Out of the money
 	* ~*SAK* - Strikes Above Market Price~ ([unsupported by app frontend](#unexpected-tda-options-chain-api-parameterfilter-interaction))
 	* ~*SNK* - Strikes Near Market Price~ ([unsupported by app frontend](#unexpected-tda-options-chain-api-parameterfilter-interaction))
 	* ~*SBK* - Strikes Below Market Price~ ([unsupported by app frontend](#unexpected-tda-options-chain-api-parameterfilter-interaction))
-* **expFrom**: A date string of format *YYYY-MM-DD* representing the starting/earliest expiry date to be included in the chain.  **For no starting/earliest expiry date, this parameter's value is *""* or *"null"*.**
-* **expTo**: A date string of format *YYYY-MM-DD* representing the ending/latest expiry date to be included in the chain.  **For no ending/latest expiry date, this parameter's value is *""* or *"null"*.**
-* **expMonth**: A string containing a three letter abbreviation representing the month in which only options contracts expiring in that month should be included in the chain.  Can be one of the following values **(for no expiry month, this parameter's value is *""* or *"null"*)**:
+* **expFrom:** A date string of format *YYYY-MM-DD* representing the starting/earliest expiry date to be included in the chain.  **For no starting/earliest expiry date, this parameter's value is *""* or *"null"*.**
+* **expTo:** A date string of format *YYYY-MM-DD* representing the ending/latest expiry date to be included in the chain.  **For no ending/latest expiry date, this parameter's value is *""* or *"null"*.**
+* **expMonth:** A string containing a three letter abbreviation representing the month in which only options contracts expiring in that month should be included in the chain.  Can be one of the following values **(for no expiry month, this parameter's value is *""* or *"null"*)**:
 	* *JAN* - January
 	* *FEB* - February
 	* *MAR* - March
@@ -356,7 +364,7 @@ def getOptionChain(sym, conType, numStrikes, strike, rng, expFrom, expTo,
 	* *NOV* - November
 	* *DEC* - December
 	* *ALL* - All Months
-* **standard**: A string representing whether to retrieve only standard contracts, only non-standard contracts, or both.  Can be one of the following values:
+* **standard:** A string representing whether to retrieve only standard contracts, only non-standard contracts, or both.  Can be one of the following values:
 	* *S* - only standard contracts (representing 100 shares of the underlying security)
 	* *NS* - only non-standard contracts (representing a number other than 100 shares of the underlying security)
 	* *ALL* - both standard and non-standard contracts
@@ -388,7 +396,7 @@ def trulyApplyFilters(info, numStrikes, rng):
 
 * **info:** A `dict` of the same exact format as the return value of `getOptionChain` (as this function makes changes to its eventual return `dict`)
 * **numStrikes:** A string representing the maximum integer number of strike prices to include per expiration date group.  **For no maximum number of strikes, this parameter's value is *""* or *"null"*.**
-* **rng**: A string representing the range of contracts to include in the chain.  Can be one of the following values:
+* **rng:** A string representing the range of contracts to include in the chain.  Can be one of the following values:
 	* *ITM* - In the money
 	* *NTM* - Near the money
 	* *OTM* - Out of the money
@@ -414,12 +422,12 @@ def getMovers(index, direction, change):
 
 ***Parameters:***
 
-* **index**: A string containing the index symbol of one the three API supported markets:
+* **index:** A string containing the index symbol of one the three API supported markets:
 	* *\$DJI* - Dow Jones Industrial Average
 	* *\$SPX.X* - S&P 500
 	* *\$COMPX* - NASDAQ Composite
-* **direction**: A string with a value of either *up* (for top gainers) or *down* (for top losers).
-* **change**: A string with the unit of change to retrieve top movers by, either by *percent* or by *value*.
+* **direction:** A string with a value of either *up* (for top gainers) or *down* (for top losers).
+* **change:** A string with the unit of change to retrieve top movers by, either by *percent* or by *value*.
 
 ***Returns:*** A `DataFrame` with the columns: *symbol, change, name, last*.
 
@@ -438,13 +446,13 @@ This is an **auxiliary/helper module** for any functions that serve a utility pu
 def attrFormat(sym, attr, value):
 ```
 
-***Parameters***:
+***Parameters:***
 
 * **sym:** A string symbol for either a stock or index.
-* **attr**: A string API attribute name from one of the attribute lists in bd_config.py
-* **value**: The value of the associated attribute (various types).
+* **attr:** A string API attribute name from one of the attribute lists in bd_config.py
+* **value:** The value of the associated attribute (various types).
 
-***Returns***: A formatted value.
+***Returns:*** A formatted value.
 
 ## Framework, Frontend, and UI
 
@@ -460,7 +468,7 @@ if __name__ == "__main__":
 
 ### app.py
 
-The **app.py** module contains several functions which contain `@app.route()` decorators to bind each function to a URL.  Each function is documented below similarly to the backend functions:
+The **app.py** module contains several functions which contain `@app.route()` decorators to bind each function to a URL.  The function return value `render_template("page_template_name.html", context = context)` is a Flask function where `page_template_name.html` is Jinja2 templating-formatted html file in the frontend/templates directory, which is a special directory Flask will look for when calling this function.  `context` is `dict` which contains various keys (used for template variables) and values (used to render in place of the template variables) depending on what is necessary from the server to fulfill the purpose of a page.  `context` is the name of the parameter of the Flask function and, for readability purposes, is also the name of the `dict`.
 
 #### `home()`
 
@@ -475,8 +483,11 @@ The **app.py** module contains several functions which contain `@app.route()` de
 def home():
 ```
 
-#### `showChart(sym, time, hasExtHrs)`
+***Parameters:*** None
 
+***Returns:*** `render_template("home.html", context = context)` (renders the Home Page)
+
+#### `showChart(sym, time, hasExtHrs)`
 
 ```python
 # Creates a stock or index chart on the backend and writes the html to the file
@@ -489,6 +500,25 @@ def home():
 def showChart(sym, time, hasExtHrs):
 ```
 
+***Parameters:***
+
+* **sym:** A symbol string for either a stock or index.
+* **time:** A time option string representing the period of time (in trading days) from which to create a candlestick chart of for the given symbol *(for example: 10d means "over the last 10 trading days)*.  Can be one of the following values:
+	* *1d* - last trading day
+	* *3d* - last 3 trading days
+	* *5d* - last 5 trading days
+	* *10d* - last 10 trading days
+	* *1m* - last trading month
+	* *3m* - last 3 trading months
+	* *6m* - last 6 trading months
+	* *1y* - last trading year
+	* *3y* - last 3 trading years
+	* *5y* - last 5 trading years
+	* *YTD* - last trading year to date
+* **hasExtHrs:** A boolean string value that will include extended hours price history data if *"true"*, otherwise *("false")*, only standard market hours price history data will be used.
+
+***Returns:*** Flask `Markup` which has the html contained in the chart file at `frontend/charts/chart{sym}{time}{hasExtHrs}.html`.
+
 #### `refreshIndexCard(strippedIndexSym)`
 
 ```python
@@ -499,6 +529,15 @@ def showChart(sym, time, hasExtHrs):
 @app.route("/refresh/<strippedIndexSym>")
 def refreshIndexCard(strippedIndexSym):
 ```
+
+***Parameters:***
+
+* **strippedIndexSym:** One of three supported index symbols that are stripped of their preceeding "\$" and any other punctuation:
+	* *DJI* - Dow Jones Inudstrial Average (normally $DJI)
+	* *SPXX* - S&P 500 (normally $SPX.X)
+	* *COMPX* - NASDAQ Composite (normally $COMPX)
+
+***Returns:*** Flask `Markup` for an Index Card (At a Glance Card)
 
 #### `options()`
 
@@ -512,6 +551,12 @@ def refreshIndexCard(strippedIndexSym):
 @app.route("/options", methods = ["POST", "GET"])
 def options():
 ```
+
+***Parameters:*** None
+
+***Returns:*** `render_template("options.html", context = context)` (renders the Options Page)
+
+
 
 #### `movers()`
 
@@ -527,6 +572,10 @@ def options():
 def movers():
 ```
 
+***Parameters:*** None
+
+***Returns:*** `render_template("movers.html", context = context)` (renders the Movers Page)
+
 #### `loadModalContent(sym)`
 
 ```python
@@ -539,3 +588,9 @@ def movers():
 @app.route("/modalContent/<sym>")
 def loadModalContent(sym):
 ```
+
+***Parameters:***
+
+* **sym:** A symbol string for either a stock or index.
+
+***Returns:*** Flask `Markup` for the content of a Stock or Index Quote & Profile Modal
