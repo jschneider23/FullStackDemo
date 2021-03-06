@@ -594,3 +594,83 @@ def loadModalContent(sym):
 * **sym:** A symbol string for either a stock or index.
 
 ***Returns:*** Flask `Markup` for the content of a Stock or Index Quote & Profile Modal
+
+### html_generation.py
+
+#### `htmlIndexCard(indexSym)`
+
+```python
+# Given an index symbol (either "$DJI", "$SPX.X", or "$COMPX"), this function
+# will produce and return an "At a Glance..." Bootstrap "Index" Card that
+# is used to render the initial card present when loading the homepage as well
+# as auto-refreshing every five seconds using jQuery load().  This uses the
+# stock_info module's getBySymbol() function, with a special "indexCard"
+# setting to only fetch the necessary attributes for the card.
+def htmlIndexCard(indexSym):
+```
+
+#### `htmlModalData(sym)`
+
+```python
+# Produces and returns the html from the backend call to getBySymbol() rendered
+# in the popup modal rendered after submitting a POST request, which is done
+# through submitting the lookup form.  There will be slight variance in
+# appearance depending on whether the symbol represents a stock or an index,
+# such as in the title and chart axis labels.  If the backend returns None,
+# however, then this function will return None.  This means that either sym
+# is not a symbol and is a name search OR the symbol is not valid (both cases
+# handled by app.py).
+def htmlModalData(sym):
+```
+
+#### `htmlNameResults(name)`
+
+```python
+# Produces and returns the html that should be displayed after a name or name
+# fragment search.  In most cases, this will be a Bootstrap card with a title
+# showing the name searched for and number of results out 50 Max Accessible
+# Results (TD Ameritrade's website obscures the ability to automate multiple
+# result page navigation with the way the've constructed their pages) and then
+# a table with the results containing a symbol link to open a modal.  If no
+# results are found, then None is returned.  The rarest case is a direct match,
+# which is when TD Ameritrade's website returns a direct match to a symbol, in
+# which case no dataframe is returned and is instead a json object.
+def htmlNameResults(name):
+```
+
+#### `htmlOCModalData(sym, conType, numStrikes, strike, rng, expFrom, expTo, expMonth, standard)`
+
+```python
+# Given parameters required for the TD Amertirade Options Chain API, this
+# will produce the html for the contents of the Options Page modal that
+# loads after form submission.  This return is either a dictionary containing
+# the various parts that the template renders or just a dictionary containing
+# an error message, which is sent to the template if a Key Error occurs in
+# the try block.  This means the API could not find an options chain for
+# the given the symbol or had another type of error.
+def htmlOCModalData(sym, conType, numStrikes, strike, rng, expFrom, expTo,
+                    expMonth, standard):
+```
+
+#### `htmlMoverCard(indexSym, direction, change)`
+
+```python
+# Generates the html for the contents of one of the six blank Movers cards
+# already present on the Movers' page.  Each of the Dow Jones, S&P 500, and
+# NASDAQ Composite have a Top Ten Gainers and Top Ten Losers Card, and
+# displays one of two tables: top movers by % change or top movers by $ change.
+# If there are less than 10 movers in a direction or the markets were closed
+# during the day, appropriate placeholders are present in the table instead.
+def htmlMoverCard(indexSym, direction, change):
+```
+
+#### `htmlModalContent(sym)`
+
+```python
+# This function is used to render an entire modal and associated modal script
+# when clicking a symbol link on either the Home Page from Name Search Results
+# or from the Movers Page via a mover from a Mover Card.
+def htmlModalContent(sym):
+```
+
+### fr_objects.py
