@@ -1,7 +1,7 @@
 # TD Ameritrade Full-Stack Web App Demo: <br>*A Flask Web App with a Bootstrap Frontend Built on TD Ameritrade's (TDA) Stock Market Developer APIs*
 <h3>
 Web App Deployed on Heroku: <a href="linkhere.com">v1.0-Production</a><br>
-(Initial Deployment v1.0-Production on Date Here)<br>
+(Initial Deployment v1.0-Production on Date Here)<br><br>
 Developed by Jason Schneider <br>
 <i>Contact Me (for bug reports, professional opportunities, etc.): jasondukeschneider@gmail.com</i>
 </h3>
@@ -23,6 +23,7 @@ Developed by Jason Schneider <br>
 * [TD Ameritrade Symbol Lookup](https://research.tdameritrade.com/grid/public/symbollookup/symbollookup.asp)
 * [Flask Web Framework](https://flask.palletsprojects.com/en/1.1.x/)
 * [Bootstrap 4 Documentation](https://getbootstrap.com/docs/5.0/getting-started/introduction/)
+* [Glossary of Stock Market Terms](https://www.firstrade.com/content/en-us/education/glossary)
 
 ## Table of Contents
 * ["FAQs" For Interested Employers, Recruiters, and Organizations](#faqs-for-interested-employers-recruiters-and-organizations)
@@ -275,7 +276,7 @@ def getBySymbol(sym, symType = ""):
 
 ***Parameters:***
 
-* **sym:** A symbol string for an index with preceeding "\$" *(such as \$DJI)* or for a stock with no preceeding "\$" *(such as TSLA)*.  An invalid or nonexisting symbol will result in a return value of `None`.
+* **sym:** A symbol string for an index with preceeding "\$" *(such as \$DJI)* or for a stock with no preceeding "\$" *(such as TSLA)*.  An invalid or non-existing symbol will result in a return value of `None`.
 * **symType:** A string containing a symbol type code to tell the function what types of attributes to include in its return dictionary.  Can be one of the following values **(defaults to *""* if omitted)**:
 	* *indexCard* - for markets at a glance cards
 	* *indexFull* - for a symbol provided with a preceeding "\$"
@@ -338,7 +339,7 @@ def createChart(sym, time = "10d", hasExtHrs = True):
 	* *YTD* - last trading year to date
 * **hasExtHrs:** A boolean value that will include extended hours price history data if True, otherwise, only standard market hours price history data will be used **(defaults to *True* if omitted)**
 
-**Returns:** No value returned.
+**Returns:** *No value returned.*
 
 ### stock_options.py
 
@@ -508,7 +509,7 @@ The **app.py** module contains several functions which contain `@app.route()` de
 def home():
 ```
 
-***Parameters:*** None
+***Parameters:*** *None*
 
 ***Returns:*** `render_template("home.html", context = context)` *(renders the Home Page)*
 
@@ -577,7 +578,7 @@ def refreshIndexCard(strippedIndexSym):
 def options():
 ```
 
-***Parameters:*** None
+***Parameters:*** *None*
 
 ***Returns:*** `render_template("options.html", context = context)` *(renders the Options Page)
 *
@@ -595,7 +596,7 @@ def options():
 def movers():
 ```
 
-***Parameters:*** None
+***Parameters:*** *None*
 
 ***Returns:*** `render_template("movers.html", context = context)` *(renders the Movers Page)*
 
@@ -620,6 +621,8 @@ def loadModalContent(sym):
 
 ### app_aux.py
 
+This is an **auxiliary/helper module** for any functions that serve a utility purpose in **app.py**.  It currently contains only one function but exists for easy addition of more functions in the case of future development.
+
 #### `clearOldCharts()`
 
 ```python
@@ -628,7 +631,14 @@ def loadModalContent(sym):
 def clearOldCharts():
 ```
 
+***Parameters:*** *None*
+
+***Returns:*** *No value returned.*
+
+
 ### html_generation.py
+
+The **html_generation.py** module is responsible for almost all of the interaction with the backend to create the html elements that the user interacts with.  While Jinja2 templating allows for accessing the context dictionary and using if and for loops via templating to create html, it made more sense to create html strings in html generation functions and return Flask `Markup` objects to render these html elements.  Some elements require more robust logic that Jinja2 wouldn't be able to achieve, plus, this keeps all html creation in one place.  The module's functions are documented below:
 
 #### `htmlIndexCard(indexSym)`
 
@@ -641,6 +651,15 @@ def clearOldCharts():
 # setting to only fetch the necessary attributes for the card.
 def htmlIndexCard(indexSym):
 ```
+
+***Parameters:***
+
+* **indexSym:** An index symbol string that can one of the following values:
+	* *$DJI* - Dow Jones Industrial Average
+	* *$SPX.X* - S&P 500
+	* *$COMPX* - NASDAQ Composite
+
+***Returns:*** Flask `Markup` for an Index Card ("Market At a Glance..." Card).
 
 #### `htmlModalData(sym)`
 
@@ -655,6 +674,19 @@ def htmlIndexCard(indexSym):
 # handled by app.py).
 def htmlModalData(sym):
 ```
+
+***Parameters:***
+
+* **sym:** A stock or index symbol string.
+
+***Returns:*** One of the following:
+
+* `None` - backend returned `None`, which means the symbol is invalid or does not exist
+* A `dict` containing `Markup` values for the following keys:
+	* *"script"* - javascript that tells modal to appear and assigns chart button onClick events
+	* *"title"* - modal title
+	* *"quote"* - card containing stock/index name and price/value quote
+	* *"info"* - profile information table for stock/index
 
 #### `htmlNameResults(name)`
 
@@ -671,6 +703,16 @@ def htmlModalData(sym):
 def htmlNameResults(name):
 ```
 
+***Parameters:***
+
+* **name:** The string to which to conduct a search by name on.
+
+***Returns:*** One of the following values:
+
+* `None` - the backend returned `None`, which means the name search produced no results
+* The following `dict`: `{"direct": dfResults["symbol"]}` - the search found a direct match and returns a dictionary containing a special flag key with the symbol for the searched name.
+* Flask `Markup` card with the number of results and results table - the normal/general case
+
 #### `htmlOCModalData(sym, conType, numStrikes, strike, rng, expFrom, expTo, expMonth, standard)`
 
 ```python
@@ -685,6 +727,45 @@ def htmlOCModalData(sym, conType, numStrikes, strike, rng, expFrom, expTo,
                     expMonth, standard):
 ```
 
+***Parameters:***
+
+* **sym:** An upper case optionable stock symbol string.
+* **conType:** A string representing the type of contracts to be included in the options chain (OC).  Can be one of the following values:
+	* *CALL* - OC will include only call contracts
+	* *PUT* - OC will include only put contracts
+	* *ALL* - OC will include both call and put contracts
+* **numStrikes:** A string representing the maximum integer number of strike prices to include per expiration date group.  **For no maximum number of strikes, this parameter's value is *""* or *"null"*.**
+* **strike:** A float string *(no preceeding \$, such as "20.21")* that specifies to only include options contacts with this exact strike price.  **For no exact strike, this parameter's value is *""* or *"null"*.**
+* **rng:** A string representing the range of contracts to include in the chain.  Can be one of the following values:
+	* *ITM* - In the money
+	* *NTM* - Near the money
+	* *OTM* - Out of the money
+* **expFrom:** A date string of format *YYYY-MM-DD* representing the starting/earliest expiry date to be included in the chain.  **For no starting/earliest expiry date, this parameter's value is *""* or *"null"*.**
+* **expTo:** A date string of format *YYYY-MM-DD* representing the ending/latest expiry date to be included in the chain.  **For no ending/latest expiry date, this parameter's value is *""* or *"null"*.**
+* **expMonth:** A string containing a three letter abbreviation representing the month in which only options contracts expiring in that month should be included in the chain.  Can be one of the following values **(for no expiry month, this parameter's value is *""* or *"null"*)**:
+	* *JAN* - January
+	* *FEB* - February
+	* *MAR* - March
+	* *APR* - April
+	* *MAY* - May
+	* *JUN* - June
+	* *JUL* - July
+	* *AUG* - August
+	* *SEP* - September
+	* *OCT* - October
+	* *NOV* - November
+	* *DEC* - December
+	* *ALL* - All Months
+* **standard:** A string representing whether to retrieve only standard contracts, only non-standard contracts, or both.  Can be one of the following values:
+	* *S* - only standard contracts (representing 100 shares of the underlying security)
+	* *NS* - only non-standard contracts (representing a number other than 100 shares of the underlying security)
+	* *ALL* - both standard and non-standard contracts
+
+***Returns:*** One the following values:
+
+* The following `dict`: `{"errorMsg": flask.Markup(errorMsg)}` - an error occured getting the option chain from the backend and provides an error message to display to the user
+* A `dict` of the same keys as [htmlOCAccordian](#htmlocaccordianself) with its values as `Markup` objects.
+
 #### `htmlMoverCard(indexSym, direction, change)`
 
 ```python
@@ -697,6 +778,18 @@ def htmlOCModalData(sym, conType, numStrikes, strike, rng, expFrom, expTo,
 def htmlMoverCard(indexSym, direction, change):
 ```
 
+***Parameters:***
+
+* **indexSym:** An index symbol string that can one of the following values:
+	* *$DJI* - Dow Jones Industrial Average
+	* *$SPX.X* - S&P 500
+	* *$COMPX* - NASDAQ Composite
+* **direction:** A string with a value of either *up* (for top gainers) or *down* (for top losers).
+* **change:** A string with the unit of change to retrieve top movers by, either by *percent* or by *value*.
+
+***Returns:*** Flask `Markup` for a Mover Card containing a table of movers.
+
+
 #### `htmlModalContent(sym)`
 
 ```python
@@ -706,9 +799,33 @@ def htmlMoverCard(indexSym, direction, change):
 def htmlModalContent(sym):
 ```
 
+***Parameters:***
+
+* **sym:** A stock or index symbol string.
+
+***Returns:*** Flask `Markup` for the content of the non-POST modal on the home and movers page.
+
+
 ### fr_objects.py
 
+The **fr_objects.py** contains class definitions for any objects that are used to implement the frontend.  While the project could have been implemented without the use of objects, this would have resulted in rather messy and overly convoluted code for the Options Page and limited potential for future features and development.  In addition, **class composition** made intuitive sense for the Options Chain feature: an **Option Chain** is made up of **groups of options by expiry date** which are made up of individual **options**.  This file currently only contains objects pertaining to Options functionality, however, any other objects used for future frontend development will have their classes defined here.  The use of `self` and `cls` are features of Python and are included but not explained as a paremeter in the documentation of methods below.
+
 #### `Option` Class and `__init__`
+
+The `Option` Class represents a **single option contract** and contains relevant information about it.  Its class definition and initializer are shown below and it has the following properties (any "price" has no preceeding "\$" symbol):
+
+* **optionID:** A string that uniquely identifies this `Option`.
+* **underlyingPrice:** A `float` representing the price of the underyling stock/security.
+* **expiration:** A string representing the option's expriation date in the format *"DEC 01 2021"*.
+* **strikePrice:** A `float` representing this option's strike price.
+* **bid:** A `float` representing this option's current bid price.
+* **ask:** A `float` representing this option's current ask price.
+* **market:** A `float` representing this option's current market price.
+* **percentChange:** A `float` representing this option's current percent change on the day.
+* **volume:** An `int` representing this option's current volume on the day.
+* **optionType:** A string containing the option's type (either *"call"* or *"put"*)
+* **itm:** A boolean string that is *"true"* if this option is in-the-money, otherwise it's *"false"*.
+* **name:** A string representing the full name of this option.
 
 ```python
 # Represents a single Option
@@ -720,6 +837,22 @@ class Option:
                  ask, market, percentChange, volume, optionType, itm, name):
 ```
 
+***Initializer Parameters:***
+
+* ***self***
+* **dfIndex:** The `int` index of the row within a `DataFrame` returned by the backend for an Option Chain.
+* **underlyingPrice:** A string representing the price of the underyling stock/security.
+* **expiration:** A string representing the option's expriation date in the format *"2021 12 01"*.
+* **strikePrice:** A string representing this option's strike price.
+* **bid:** A string representing this option's current bid price.
+* **ask:** A string representing this option's current ask price.
+* **market:** A string representing this option's current market price.
+* **percentChange:** A string representing this option's current percent change on the day.
+* **volume:** An string representing this option's current volume on the day.
+* **optionType:** A string containing the option's type (either *"call"* or *"put"*)
+* **itm:** A boolean string that is *"true"* if this option is in-the-money, otherwise it's *"false"*.
+* **name:** A string representing the full name of this option.
+
 ##### `fromRow(cls, dfIndex, underlyingPrice, row)`
 
 ```python
@@ -729,6 +862,15 @@ class Option:
 def fromRow(cls, dfIndex, underlyingPrice, row):
 ```
 
+***Parameters:***
+
+* ***cls***
+* **dfIndex:** The `int` index of the row within a `DataFrame` returned by the backend for an Option Chain.
+* **underlyingPrice:** A string representing the price of the underyling stock/security.
+* **row**: A row of a `DataFrame` returned by the backend for an Option Chain as a `Series` object as returned by the `DataFrame.loc` property.
+
+***Returns:*** An `Option` instance initialized from the dfIndex and underlyingPrice provided as well as the information from the `DataFrame` row.
+
 ##### `htmlInExpDateGroup(self, chopDuplicate = False, justPuts = False)`
 
 ```python
@@ -737,7 +879,22 @@ def fromRow(cls, dfIndex, underlyingPrice, row):
 def htmlInExpDateGroup(self, chopDuplicate = False, justPuts = False):
 ```
 
+***Parameters:***
+
+* ***self***
+* **chopDuplicate:** A boolean value that tells the function whether to remove the duplicate strike price cell from the html produced **(defaults to False if omitted)**.
+* **justPuts:** A boolean value that tells the function whether user has selected to only view puts or not **(defaults to False if omitted)**.
+
+***Returns:*** A string (not `Markup`) containing the html of the table cells for this option (a cell for its bid price, ask price, market price, volume, and possibly a strike price cell).
+
 #### `OptionEDG` Class and `__init__`
+
+The `OptionEDG` Class represents an **Expiration Date Group** (EDG) of option contracts, which, as the name suggests, is a group of options with the same expiration date.  It contains the expiration date for the group of options it represents and a dictionary that contains either a list of calls, a list of puts, or both.  Its class definition and initializer are shown below and it has the following properties:
+
+* **expDate:** A string representing this `OptionEDG`'s expiration date witht the format *"DEC 01 2021*.
+* **options:** A `dict` containing one of a list of call `Option`s or a list of put `Option`s, or both.
+* **numContracts:** An `int` representing the total number of options contracts in this EDG.
+* **groupID:** A string that uniquely identifies this EDG.
 
 ```python
 # Represents a group of Options that all Expire on the same day for easier
@@ -750,6 +907,12 @@ class OptionEDG:
   	def __init__(self, expDate, options):
 ```
 
+***Initializer Parameters:***
+
+* ***self***
+* **expDate:** A string representing this `OptionEDG`'s expiration date witht the format *"DEC 01 2021*.
+* **options:** A `dict` containing one of a list of calls or a list of puts, or both.
+
 ##### `fromOptionLists(cls, callList = None, putList = None)`
 
 ```python
@@ -759,6 +922,14 @@ class OptionEDG:
 def fromOptionLists(cls, callList = None, putList = None):
 ```
 
+***Parameters:***
+
+* ***cls***
+* **callList:** A list of call `Option`s or `None` if the Option Chain does not include calls **(defaults to `None` if omitted)**.
+* **putList:** A list of put `Option`s or `None` if the Option Chain does not include puts **(defaults to `None` if omitted)**.
+
+***Returns:*** An `OptionEDG` instance initialized from just a list or lists of `Option`s.
+
 ##### `htmlExpDateGroupCard(self)`
 
 ```python
@@ -766,7 +937,20 @@ def fromOptionLists(cls, callList = None, putList = None):
 def htmlExpDateGroupCard(self):
 ```
 
+***Parameters:***
+
+* ***self***
+
+***Returns:*** A string (not `Markup`) containing the html for an entire EDG card with a table of options.
+
+
 #### `OptionChain` Class and `__init__`
+
+The `OptionChain` Class represents an entire **Option Chain** composed of multiple expiration date groups.  It contains the symbol for the underlying stock/security it represents, the underlying price for that stock/security, and a list of `OptionEDG`s.  Its class definition and initializer are shown below and it has the following properties:
+
+* **symbol:** The string symbol for the underlying stock/security of the option chain.
+* **underlyingPrice:** A `float` representing the price of the underyling stock/security.
+* **expDateGroups:** A list of `OptionEDG`s in the option chain.
 
 ```python
 # Represents an entire Option Chain that is returned by the Options Chain API.
@@ -776,6 +960,13 @@ class OptionChain:
   	# frontend
   	def __init__(self, symbol, underlyingPrice, expDateGroups):
 ```
+
+***Initializer Parameters:***
+
+* ***self***
+* **symbol:** The string symbol for the underlying stock/security of the option chain.
+* **underlyingPrice:** A `float` representing the price of the underyling stock/security.
+* **expDateGroups:** A list of `OptionEDG`s in the option chain.
 
 ##### `htmlOCAccordian(self)`
 
@@ -789,4 +980,18 @@ class OptionChain:
 def htmlOCAccordian(self):
 ```
 
+***Parameters:***
+
+* ***self***
+
+***Returns:*** A `dict` containing the following keys and values:
+
+* *"script"* - javascript that tells the modal on the Options page to load
+* *"title"* - a string title of the options chain modal
+* *"oc"* - a string with the html for the entire options chain to display in the modal
+
 ### UI and Demonstration Video
+
+In addition to navigating through the app yourself, you can view all aspects of the UI and a demonstration of app features in **[this video](https://videolinkplaceholder.com)**.
+
+The UI of this web app demo is powered by **[Bootstrap 4](https://getbootstrap.com/docs/5.0/getting-started/introduction/)** and makes heavy use of their card elements.  This provides an intuitive flow to the UI and helps divide content effectively.  In addition, coloring the cards helps provide context and also conveys quick information to the user.  It also uses modals, which allows for information to "pop up" and blurs the background to direct the user's focus right to where they should be looking.  Overall, the app boasts a minimal, clean design with straightforward navigation and supports screens of different sizes.  There is also room to add more UI features and elements in the case of future development.
