@@ -6,10 +6,14 @@ Developed by Jason Schneider <br>
 <i>Contact Me (for bug reports, professional opportunities, etc.): jasondukeschneider@gmail.com</i>
 </h3>
 
-#### _IMPORTANT NOTICES:_
+#### **IMPORTANT NOTICES:**
+
 * **Heroku's free tier for web hosting will automatically put to sleep any free site/app after 30 minutes of inactivity, so the app may take around 15-20 seconds to initially wake and load if you are the first to navigate to the link in a while.  This is a result of the hosting service and not the app or its code.**
 
 * **The API Key in the bd_config.py file is intentionally visible for code review purposes (so you can get an idea as to what one may look like) *as it was only active during development and has since been deactivated and replaced by a new API Key on the Heroku repository*.**
+
+* **Please read the "FAQs" if you are a potential employer, recruiter, or organization representative!  Thank you!**
+
 
 
 ## Quick Links
@@ -65,6 +69,16 @@ Developed by Jason Schneider <br>
 		* [`options()`](#options)
 		* [`movers()`](#movers)
 		* [`loadModalContent(sym)`](#loadmodalcontentsym)
+	* [html_generation.py](#html_generationpy)
+		* [`htmlIndexCard(indexSym)`](#htmlindexcardindexsym)
+		* [`htmlModalData(sym)`](#htmlmodaldatasym)
+		* [`htmlNameResults(name)`](#htmlnameresultsname)
+		* [`htmlOCModalData(sym, conType, numStrikes, strike, rng, expFrom, expTo, expMonth, standard)
+`](#htmlocmodaldatasym-contype-numstrikes-strike-rng-expfrom-expto-expmonth-standard)
+		* [`htmlMoverCard(indexSym, direction, change)`](#htmlmovercardindexsym-direction-change)
+		* [`htmlModalContent(sym)`](#htmlmodalcontentsym)
+	* [fr_objects.py](#fr_objectspy)
+
 
 ## "FAQs" For Interested Employers, Recruiters, and Organizations
 
@@ -485,7 +499,7 @@ def home():
 
 ***Parameters:*** None
 
-***Returns:*** `render_template("home.html", context = context)` (renders the Home Page)
+***Returns:*** `render_template("home.html", context = context)` *(renders the Home Page)*
 
 #### `showChart(sym, time, hasExtHrs)`
 
@@ -554,10 +568,8 @@ def options():
 
 ***Parameters:*** None
 
-***Returns:*** `render_template("options.html", context = context)` (renders the Options Page)
-
-
-
+***Returns:*** `render_template("options.html", context = context)` *(renders the Options Page)
+*
 #### `movers()`
 
 ```python
@@ -574,7 +586,7 @@ def movers():
 
 ***Parameters:*** None
 
-***Returns:*** `render_template("movers.html", context = context)` (renders the Movers Page)
+***Returns:*** `render_template("movers.html", context = context)` *(renders the Movers Page)*
 
 #### `loadModalContent(sym)`
 
@@ -594,6 +606,16 @@ def loadModalContent(sym):
 * **sym:** A symbol string for either a stock or index.
 
 ***Returns:*** Flask `Markup` for the content of a Stock or Index Quote & Profile Modal
+
+### app_aux.py
+
+#### `clearOldCharts()`
+
+```python
+# Clears chart files still in the charts directory from previous profile 
+# modal loads
+def clearOldCharts():
+```
 
 ### html_generation.py
 
@@ -674,3 +696,84 @@ def htmlModalContent(sym):
 ```
 
 ### fr_objects.py
+
+#### `Option` Class and `__init__`
+
+```python
+# Represents a single Option
+class Option:
+	# Standard Constructor for creating an Option object from each individual
+	# property (not from the returned getOptionChain() dictionary).  Formats
+	# expiration dates into a consistent format.
+	def __init__(self, dfIndex, underlyingPrice, expiration, strikePrice, bid,
+                 ask, market, percentChange, volume, optionType, itm, name):
+```
+
+##### `fromRow(cls, dfIndex, underlyingPrice, row)`
+
+```python
+# Creates an Option object directly from a provided index, underlyingPrice,
+# and getOptionChain() dataframe retrieved by using iloc
+@classmethod
+def fromRow(cls, dfIndex, underlyingPrice, row):
+```
+
+##### `htmlInExpDateGroup(self, chopDuplicate = False, justPuts = False)`
+
+```python
+# Produces all the html possible for an Option displayed in a group card
+# of the chain using just properties of the Option object
+def htmlInExpDateGroup(self, chopDuplicate = False, justPuts = False):
+```
+
+#### `OptionEDG` Class and `__init__`
+
+```python
+# Represents a group of Options that all Expire on the same day for easier
+# accordian card rendering (cards are by expiration date)
+class OptionEDG:
+	_genID = 0
+
+	# Standard Constructor for an Option Expiration Date Group and assigns
+	# a unique id, which starts at 0 (_genID above)
+  	def __init__(self, expDate, options):
+```
+
+##### `fromOptionLists(cls, callList = None, putList = None)`
+
+```python
+# Creates an OptionExpDateGroup from a list of call Option objects, put
+# Option objects, or both lists.
+@classmethod
+def fromOptionLists(cls, callList = None, putList = None):
+```
+
+##### `htmlExpDateGroupCard(self)`
+
+```python
+# Produces the entire html for a expiration date group of contracts
+def htmlExpDateGroupCard(self):
+```
+
+#### `OptionChain` Class and `__init__`
+
+```python
+# Represents an entire Option Chain that is returned by the Options Chain API.
+# Contains a dictionary of all the expriation date groups.
+class OptionChain:
+	# Standard Constructor to facilitate eventual Option Chain display on
+  	# frontend
+  	def __init__(self, symbol, underlyingPrice, expDateGroups):
+```
+
+##### stuff
+
+```python
+# Generates the script, title, and actual main option chain html for the
+# modal on the Options Page in Bootstrap Accordian Card Style.  Includes
+# a notice for the user that due to when TD Ameritrade collects its final
+# data for Options for a market day as well as which values for a stock's
+# price that they use, options with strikes very close to the underlying
+# price may be incorrectly shaded (incorrectly deemed ITM/OTM)
+def htmlOCAccordian(self):
+```
