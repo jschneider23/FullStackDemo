@@ -69,6 +69,8 @@ Developed by Jason Schneider <br>
 		* [`options()`](#options)
 		* [`movers()`](#movers)
 		* [`loadModalContent(sym)`](#loadmodalcontentsym)
+	* [app_aux.py](#app_auxpy)
+		* []()
 	* [html_generation.py](#html_generationpy)
 		* [`htmlIndexCard(indexSym)`](#htmlindexcardindexsym)
 		* [`htmlModalData(sym)`](#htmlmodaldatasym)
@@ -78,6 +80,15 @@ Developed by Jason Schneider <br>
 		* [`htmlMoverCard(indexSym, direction, change)`](#htmlmovercardindexsym-direction-change)
 		* [`htmlModalContent(sym)`](#htmlmodalcontentsym)
 	* [fr_objects.py](#fr_objectspy)
+		* [`Option` Class and `__init__`](#option-class-and-__init__)
+			* [`fromRow(cls, dfIndex, underlyingPrice, row)`](#fromrowcls-dfindex-underlyingprice-row)
+			* [`htmlInExpDateGroup(self, chopDuplicate = False, justPuts = False)`](#htmlinexpdategroupself-chopduplicate--false-justputs--false)
+		* [`OptionEDG` Class and `__init__`]()
+			* [`fromOptionLists(cls, callList = None, putList = None)`](#fromoptionlistscls-calllist--none-putlist--none)
+			* [`htmlExpDateGroupCard(self)`](#htmlexpdategroupcardself)
+		* [`OptionChain` Class and `__init__`](#optionchain-class-and-__init__)
+			* [`htmlOCAccordian(self)`](#htmlocaccordianself)
+	* [UI and Demonstration Video](#ui-and-demonstration-video)
 
 
 ## "FAQs" For Interested Employers, Recruiters, and Organizations
@@ -766,7 +777,7 @@ class OptionChain:
   	def __init__(self, symbol, underlyingPrice, expDateGroups):
 ```
 
-##### stuff
+##### `htmlOCAccordian(self)`
 
 ```python
 # Generates the script, title, and actual main option chain html for the
@@ -777,3 +788,5 @@ class OptionChain:
 # price may be incorrectly shaded (incorrectly deemed ITM/OTM)
 def htmlOCAccordian(self):
 ```
+
+### UI and Demonstration Video
