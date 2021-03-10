@@ -815,13 +815,13 @@ The **fr_objects.py** contains class definitions for any objects that are used t
 The `Option` Class represents a **single option contract** and contains relevant information about it.  Its class definition and initializer are shown below and it has the following properties (any "price" has no preceeding "\$" symbol):
 
 * **optionID:** A string that uniquely identifies this `Option`.
-* **underlyingPrice:** A `float` representing the price of the underyling stock/security.
+* **underlyingPrice:** A string representing the price of the underyling stock/security.
 * **expiration:** A string representing the option's expriation date in the format *"DEC 01 2021"*.
-* **strikePrice:** A `float` representing this option's strike price.
-* **bid:** A `float` representing this option's current bid price.
-* **ask:** A `float` representing this option's current ask price.
-* **market:** A `float` representing this option's current market price.
-* **percentChange:** A `float` representing this option's current percent change on the day.
+* **strikePrice:** A string representing this option's strike price.
+* **bid:** A string representing this option's current bid price.
+* **ask:** A string representing this option's current ask price.
+* **market:** A string representing this option's current market price.
+* **percentChange:** A string representing this option's current percent change on the day.
 * **volume:** An `int` representing this option's current volume on the day.
 * **optionType:** A string containing the option's type (either *"call"* or *"put"*)
 * **itm:** A boolean string that is *"true"* if this option is in-the-money, otherwise it's *"false"*.

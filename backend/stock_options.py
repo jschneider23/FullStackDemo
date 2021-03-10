@@ -86,14 +86,19 @@ def trulyApplyFilters(info, numStrikes, rng):
     if rng != "ALL" and numStrikes != "":
         dfCalls = info.get("dfCalls")
         dfPuts = info.get("dfPuts")
+        print("IN")
         if dfCalls is not None:
             newExp = None
             oldExp = None
-            strikesLeftForExp = numStrikes
+            print(type(numStrikes))
+            strikesLeftForExp = int(numStrikes)
+            print("HI")
             for ind in dfCalls.index:
+                print("LOOP")
                 if ind >= len(dfCalls.index):
                     break
                 newExp = dfCalls["Expiration"][ind]
+                #print(dfCalls.loc[ind])
                 if oldExp is not None and oldExp != newExp:
                     oldExp = None
                 if oldExp is None:
@@ -107,7 +112,7 @@ def trulyApplyFilters(info, numStrikes, rng):
         if dfPuts is not None:
             newExp = None
             oldExp = None
-            strikesLeftForExp = numStrikes
+            strikesLeftForExp = int(numStrikes)
             for ind in dfPuts.index:
                 if ind >= len(dfPuts.index):
                     break
