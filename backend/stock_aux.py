@@ -20,7 +20,7 @@ def attrFormat(sym, attr, value):
             return "No Dividends"
     # Attributes that need rounding (regardless of whether index or stock)
     if attr in cfg.roundedAttrs:
-        value = round(value, 2) if str(round(value, 2)) != "0.0" else "0.00"
+        value = "{:.2f}".format(float(value))
     # Attributes that need commas added between thousands for readability
     if attr in cfg.commaAttrs:
         if "." in str(value):

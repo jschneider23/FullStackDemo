@@ -817,12 +817,12 @@ The `Option` Class represents a **single option contract** and contains relevant
 * **optionID:** A string that uniquely identifies this `Option`.
 * **underlyingPrice:** A string representing the price of the underyling stock/security.
 * **expiration:** A string representing the option's expriation date in the format *"DEC 01 2021"*.
-* **strikePrice:** A string representing this option's strike price.
-* **bid:** A string representing this option's current bid price.
-* **ask:** A string representing this option's current ask price.
-* **market:** A string representing this option's current market price.
-* **percentChange:** A string representing this option's current percent change on the day.
-* **volume:** An `int` representing this option's current volume on the day.
+* **strikePrice:** A float string representing this option's strike price.
+* **bid:** A float string representing this option's current bid price.
+* **ask:** A float string representing this option's current ask price.
+* **market:** A float string representing this option's current market price.
+* **percentChange:** A float string representing this option's current percent change on the day.
+* **volume:** A string representing this option's current volume on the day.
 * **optionType:** A string containing the option's type (either *"call"* or *"put"*)
 * **itm:** A boolean string that is *"true"* if this option is in-the-money, otherwise it's *"false"*.
 * **name:** A string representing the full name of this option.

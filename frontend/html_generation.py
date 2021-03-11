@@ -92,17 +92,18 @@ def htmlModalData(sym):
     else:
         cardClr = "bg-success"
         arrow = "↑"
-        # This should adjust the heading size to h5 if over 57
-    if len(symData["description"]) > 57:
-        name = str(symData["description"])
-        nameDisplay = f"{name[:54]}..."
+
+    if "$" in sym:
+        valueDisplay = f"Last: {symData['lastPrice']}"
     else:
-        nameDisplay = symData["description"]
+        valueDisplay = f"Market Price: {symData['mark']}"
+    nameDisplay = symData["description"]
     quote = f"""
         <div class="card {cardClr} text-white">
             <div class="card-body">
                 <h4>{sym}: {nameDisplay}</h4>
                 <h6>
+                    {valueDisplay} | 
                     {arrow} {symData["netChange"]}
                     ({symData["netPercentChangeInDouble"]})
                 </h6>
@@ -492,16 +493,18 @@ def htmlModalContent(sym):
     else:
         cardClr = "bg-success"
         arrow = "↑"
-    if len(symData["description"]) > 57:
-        name = str(symData["description"])
-        nameDisplay = f"{name[:54]}..."
+
+    if "$" in sym:
+        valueDisplay = f"Last: {symData['lastPrice']}"
     else:
-        nameDisplay = symData["description"]
+        valueDisplay = f"Market Price: {symData['mark']}"
+    nameDisplay = symData["description"]
     quote = f"""
         <div class="card {cardClr} text-white">
             <div class="card-body">
                 <h4>{sym}: {nameDisplay}</h4>
                 <h6>
+                    {valueDisplay} | 
                     {arrow} {symData["netChange"]}
                     ({symData["netPercentChangeInDouble"]})
                 </h6>
