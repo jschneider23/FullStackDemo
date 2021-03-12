@@ -21,6 +21,8 @@ def attrFormat(sym, attr, value):
     # Attributes that need rounding (regardless of whether index or stock)
     if attr in cfg.roundedAttrs:
         value = "{:.2f}".format(float(value))
+        if len(value[value.index("."):]) == 2:
+            value = f"{value}0"
     # Attributes that need commas added between thousands for readability
     if attr in cfg.commaAttrs:
         if "." in str(value):
