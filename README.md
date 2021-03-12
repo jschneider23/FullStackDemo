@@ -1,8 +1,8 @@
 # TD Ameritrade Full-Stack Web App Demo: <br>*A Flask Web App with a Bootstrap Frontend Built on TD Ameritrade's (TDA) Stock Market Developer APIs*
 <h3>
-Web App Deployed on Heroku: <a href="https://tdafullstackapp.herokuapp.com/">v1.0-Production</a><br>
+Web App Deployed on Heroku: <a href="https://fullstackappdemo.herokuapp.com/">v1.0-Production</a><br>
 (Initial Deployment v1.0-Production on Date Here)<br><br>
-Developed by Jason Schneider <br>
+Developed by Jason Schneider<br>
 <i>Contact Me (for bug reports, professional opportunities, etc.): jasondukeschneider@gmail.com</i>
 </h3>
 
@@ -17,7 +17,7 @@ Developed by Jason Schneider <br>
 
 
 ## Quick Links
-* [***App Features, Use, and Demonstration Video***](https://videolinkplaceholder.com)
+* [***App Features, Use, and Demonstration Video (v1.0-Production)***]()
 * [**My LinkedIn**](https://www.linkedin.com/in/jason-schneider-772a19173/)
 * [TD Ameritrade Developer APIs and Documentation](https://developer.tdameritrade.com/apis)
 * [TD Ameritrade Symbol Lookup](https://research.tdameritrade.com/grid/public/symbollookup/symbollookup.asp)
@@ -992,6 +992,6 @@ def htmlOCAccordian(self):
 
 ### UI and Demonstration Video
 
-In addition to navigating through the app yourself, you can view all aspects of the UI and a demonstration of app features in **[this video](https://videolinkplaceholder.com)**.
+In addition to navigating through the app yourself, you can view all aspects of the UI and a demonstration of app features in **[this video (v1.0-Production)](https://videolinkplaceholder.com)**.
 
 The UI of this web app demo is powered by **[Bootstrap 4](https://getbootstrap.com/docs/5.0/getting-started/introduction/)** and makes heavy use of their card elements.  This provides an intuitive flow to the UI and helps divide content effectively.  In addition, coloring the cards helps provide context and also conveys quick information to the user.  It also uses modals, which allows for information to "pop up" and blurs the background to direct the user's focus right to where they should be looking.  Overall, the app boasts a minimal, clean design with straightforward navigation and supports screens of different sizes.  There is also room to add more UI features and elements in the case of future development.

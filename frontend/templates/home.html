@@ -27,7 +27,7 @@
             <div class="card-body">
                 <form name="form" method="post" onsubmit="{{url_for('home')}}">
                     <div class="form-group">
-                        <label for="search">Enter a Valid, Existing Stock or Index Symbol (Preceding $) Search by Name Fragment or Full Name:</label>
+                        <label for="search">Enter a Valid, Existing Stock (no starting $) or Index Symbol (with starting $) Search by Name Fragment or Full Name:</label>
                         <input type="text" class="form-control form-control-lg" placeholder="Ex: TSLA (Stock Symbol), $DJI (Index Symbol), Tesla (Fragment), or Tesla, Inc. - Common Stock (Full Name)" id="search" name="search" required autocomplete>
                     </div>
                     <button id="submit" type="submit" class="btn btn-dark w-25">Find</button>
