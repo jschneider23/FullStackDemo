@@ -1,6 +1,5 @@
 # Defines the api key used to interact with registered TD Ameritrade App
-# old key, new one generated after this due to commit error
-apikey = "HJWFXISXOMH3O1R8ZRQZJAOX68C6GHEV"
+apikey = "PGPYQUOPSCQIBQDDSFAGSLOBBXD7BKJL"
 
 # Defines the base url from which to do perform symbol lookup web-scraping
 gbnUrl = "https://research.tdameritrade.com/grid/public/symbollookup/symbollookup.asp"
