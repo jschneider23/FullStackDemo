@@ -19,6 +19,11 @@ def attrFormat(sym, attr, value):
         else:
             return "No Dividends"
     # Attributes that need rounding (regardless of whether index or stock)
+    # The nested if statement appends a 0 if a value has a decimal only to
+    # the tenths place so that the values make sense in context (ex: instead
+    # of $1,234.5 and 12.0%, they will be $1,234.50 and 12.00%).  The format
+    # function messes with the extra 0, so it is used twice to ensure proper
+    # display.
     if attr in cfg.roundedAttrs:
         value = "{:.2f}".format(float(value))
         if len(value[value.index("."):]) == 2:
@@ -28,6 +33,8 @@ def attrFormat(sym, attr, value):
         if "." in str(value):
             if str(value) != "0.00":
                 value = "{:,}".format(float(value))
+            if len(value[value.index("."):]) == 2:
+                value = f"{value}0"
         else:
             value = "{:,}".format(int(value))
     # Attributes that need a % afterhand
