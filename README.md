@@ -10,14 +10,17 @@ Developed by Jason Schneider<br>
 
 * **Heroku's free tier for web hosting will automatically put to sleep any free site/app after 30 minutes of inactivity, so the app may take around 15-20 seconds to initially wake and load if you are the first to navigate to the link in a while.  This is a result of the hosting service and not the app or its code.**
 
-* **The API Key in the bd_config.py file is intentionally visible for code review purposes (so you can get an idea as to what one may look like) *as it was only active during development and has since been deactivated and replaced by a new API Key on the Heroku repository*.**
+* **The API Key in the bd_config.py file is intentionally visible for code review purposes (so you can get an idea as to what one may look like) *as it was only active during development and has since been deactivated and replaced by a new API Key on the Heroku repository*.  Due to some .gitignore issues near the end of development, different API keys are viewable in the commit history but NONE of these are active or usable and the active one is only pushed to Heroku.**
 
 * **Please read the "FAQs" if you are a potential employer, recruiter, or organization representative!  Thank you!**
 
 
 
 ## Quick Links
-* [***App Features, Use, and Demonstration Video (v1.0-Production)***]()
+* [***Basic App Features, Use, and Demonstration Video***](https://drive.google.com/file/d/1pUNUVKcPKUCXqj943abGTFnDlc5wOxDl/view)
+	* *Current video shows app right before v1.0-Production (two very minor html changes made after filming)*
+	* *Recorded 3/19/21 around 3:30 PM EST (during market hours to show auto-refresh feature)*
+	* *Video is compressed to reduce file size and is hosted on Google Drive*
 * [**My LinkedIn**](https://www.linkedin.com/in/jason-schneider-772a19173/)
 * [TD Ameritrade Developer APIs and Documentation](https://developer.tdameritrade.com/apis)
 * [TD Ameritrade Symbol Lookup](https://research.tdameritrade.com/grid/public/symbollookup/symbollookup.asp)
@@ -992,6 +995,6 @@ def htmlOCAccordian(self):
 
 ### UI and Demonstration Video
 
-In addition to navigating through the app yourself, you can view all aspects of the UI and a demonstration of app features in **[this video (v1.0-Production)](https://videolinkplaceholder.com)**.
+In addition to navigating through the app yourself, you can view all aspects of the UI and a demonstration of app features in **[this video](https://drive.google.com/file/d/1pUNUVKcPKUCXqj943abGTFnDlc5wOxDl/view)**.
 
 The UI of this web app demo is powered by **[Bootstrap 4](https://getbootstrap.com/docs/5.0/getting-started/introduction/)** and makes heavy use of their card elements.  This provides an intuitive flow to the UI and helps divide content effectively.  In addition, coloring the cards helps provide context and also conveys quick information to the user.  It also uses modals, which allows for information to "pop up" and blurs the background to direct the user's focus right to where they should be looking.  Overall, the app boasts a minimal, clean design with straightforward navigation and supports screens of different sizes.  There is also room to add more UI features and elements in the case of future development.

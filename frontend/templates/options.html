@@ -189,6 +189,7 @@
     const numStrikesClear = document.getElementById("clearNumStrikes")
     const strikeInput = document.getElementById("strike")
     const rangeInput = document.getElementById("range")
+    const conType = document.getElementById("conType")
     const conTypeAll = document.getElementById("conTypeAll")
     const fromDateInput = document.getElementById("fromDate")
     const fromDateClear = document.getElementById("clearFromDate")
@@ -233,10 +234,13 @@
     }
 
     /* Disables strike field and calls & puts select option */
-    /* if range is anything but "ALL" */
+    /* if range is anything but "ALL" and sets contract type back to calls */
     rangeInput.oninput = function() {
         strikeInput.disabled = (this.value != "ALL")
         conTypeAll.disabled = (this.value == "ITM" || this.value == "OTM")
+        if (this.value == "ITM" || this.value == "OTM") {
+            conType.value = "CALL"
+        }
     }
 
     /* Re-enables numStrikes field if date is deleted and disables expMonth */
