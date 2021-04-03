@@ -6,7 +6,7 @@ import requests as rq
 import pandas as pd
 from backend import bd_config as cfg, stock_aux as aux
 from bs4 import BeautifulSoup as bs
-import datetime as dt\
+import datetime as dt
 
 # For added details on the purpose and functionality of this module, see the
 # README
