@@ -1,6 +1,6 @@
 # TD Ameritrade Full-Stack Web App Demo: <br>*A Flask Web App with a Bootstrap Frontend Built on TD Ameritrade's (TDA) Stock Market Developer APIs*
 <h3>
-Web App Deployed on Heroku: ~~<a href="https://fullstackappdemo.herokuapp.com/">v1.0-Production</a><br>
+Web App Deployed on Heroku: ~~<a href="https://fullstackappdemo.herokuapp.com/">v1.0-Production</a><br>~~
 <i>Web App is currently down as I look for a new hosting service.  Heroku discontinued its free tier of service.</i>
 (Initial Deployment v1.0-Production on 3/20/21)<br><br>
 Developed by Jason Schneider<br>
